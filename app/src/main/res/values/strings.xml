@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">ThreeStones</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_board_view">BoardView</string>
+    <string name="title_activity_Home">Home</string>
+
+    <string-array name="coinFaces">
+        <item>head</item>
+        <item>tail</item>
+    </string-array>
+
+    <string-array name="stoneColors">
+        <item>white</item>
+        <item>black</item>
+    </string-array>
+
+    <string-array name="stones">
+        <item>My stone</item>
+        <item>Opponent\'s stone</item>
+        <item>Clear stone</item>>
+    </string-array>
 </resources>
