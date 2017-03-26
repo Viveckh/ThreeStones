@@ -1,0 +1,35 @@
+package com.viveckh.threestones;
+
+/**
+ * This class inherits from the Player class and expands on the features needed to handle moves made by human
+ */
+public class Human extends Player {
+	//Constructor
+	public Human(char a_primaryColor) {
+		m_primaryColor = a_primaryColor;
+	}
+
+	public boolean Play(char a_stone, int a_row, int a_column, Board a_board) {
+		//If index out of bounds, move cannot be made
+		if (IndexOutOfBounds(a_row, a_column, a_board.GetBoardDimension())) {
+			return false;
+		}
+		//Attempt the move
+		if (PlaceAStone(a_stone, a_row, a_column, a_board)) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean IndexOutOfBounds(int a_row, int a_column, int a_dimension) {
+		//If row is out of dimensional bounds, return true
+		if (a_row < 0 || a_row >= a_dimension) {
+			return true;
+		}
+		//If column is out of dimensional bounds, return true
+		if (a_column < 0 || a_column >= a_dimension) {
+			return true;
+		}
+		return false;
+	}
+}

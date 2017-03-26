@@ -46,14 +46,15 @@ public class Player {
 	protected static int m_rowOfPreviousPlacement = -1;
 	protected static int m_columnOfPreviousPlacement = -1;
 
-	//Default Constructor
-	private Player() {
+	//Default Constructor. ATTENTION: Try to make this private as it doesn't intialize the primaryColor variable which will cause issues later
+	public Player() {
 		m_score = 0;
 		m_whiteStonesAvailable = 15;
 		m_blackStonesAvailable = 15;
 		m_clearStonesAvailable = 6;
 	}
 
+	//Constructor
 	public Player(char a_primaryColor) {
 		this();
 		m_primaryColor = a_primaryColor;
@@ -89,6 +90,7 @@ public class Player {
 							m_columnOfPreviousPlacement = a_column;
 							IncrementScore(CalculatePointsGained(m_primaryColor, a_board));
 							System.out.println("Inserting (" + a_row + ", " + a_column + ")");
+							return true;
 						}
 					}
 				}
@@ -98,7 +100,7 @@ public class Player {
 	}
 
 	//Verifies if the player has the right to place a stone in that row/column despite its vacancy at the moment
-	private boolean HasPermissionToOccupyVacantSpot(int a_row, int a_column, Board a_board) {
+	public boolean HasPermissionToOccupyVacantSpot(int a_row, int a_column, Board a_board) {
 		//Permission granted if not a single placement has been made so far
 		if (m_rowOfPreviousPlacement < 0 && m_columnOfPreviousPlacement < 0) {
 			return true;

@@ -16,11 +16,7 @@ package com.viveckh.threestones;
  */
 
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -31,48 +27,55 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
 public class GameActivity extends Activity {
 
 	//Declaring variables
 	final private Button[][] buttons = new Button[11][11];
-	final private Board gameSpace = new Board();
-	private Player humanPlayer = new Player();
-	private Player compPlayer = new Player();
-	private String[] stones;
-	private String human_stoneColor;
-	private String computer_stoneColor;
-	private String use_stone;
+	private Board m_board;
+	private Human m_human;
+	private Human m_computer;
+	private String[] m_stones;
+	private String m_humanStoneColor;
+	private String m_computerStoneColor;
+	private String m_stoneChoice;
 	private int turn;
-	private int lastX = 100, lastY = 100;
-	int blank_pic, white_pic, black_pic, clear_pic;
+	int m_blankPic, m_whitePic, m_blackPic, m_clearPic;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game);
 
+		//Initializing Variables
+		m_board = new Board();
+
 		//Getting the intent from previous activity
 		Bundle extras = getIntent().getExtras();
-		human_stoneColor = extras.getString("human_stoneColor");
-		computer_stoneColor = extras.getString("computer_stoneColor");
-		//Background for game board buttons
-		blank_pic = getResources().getIdentifier("blank_circle", "drawable", "com.viveckh.threestones");
-		white_pic = getResources().getIdentifier("white_circle", "drawable", "com.viveckh.threestones");
-		black_pic = getResources().getIdentifier("black_circle", "drawable", "com.viveckh.threestones");
-		clear_pic = getResources().getIdentifier("clear_circle", "drawable", "com.viveckh.threestones");
+		m_humanStoneColor = extras.getString("human_stoneColor");
+		m_computerStoneColor = extras.getString("computer_stoneColor");
 
-		final TextView turnMsg = (TextView)findViewById(R.id.turn);
+		TextView turnMsg = (TextView)findViewById(R.id.turn);
 
 		//Initializing turn value. 0 for computer, 1 for human
-		if (human_stoneColor.equals("black")) {
+		if (m_humanStoneColor.equals("black")) {
+			m_human = new Human('b');
+			m_computer = new Human('w');
 			turn = 1;
 			turnMsg.setText("It's YOUR turn.");
 		}
 		else {
+			m_human = new Human('w');
+			m_computer = new Human('b');
 			turn = 0;
 			turnMsg.setText("It's COMPUTER'S turn.");
 		}
+
+		//Background for game board buttons
+		m_blankPic = getResources().getIdentifier("blank_circle", "drawable", "com.viveckh.threestones");
+		m_whitePic = getResources().getIdentifier("white_circle", "drawable", "com.viveckh.threestones");
+		m_blackPic = getResources().getIdentifier("black_circle", "drawable", "com.viveckh.threestones");
+		m_clearPic = getResources().getIdentifier("clear_circle", "drawable", "com.viveckh.threestones");
+		
 		createBoard();
 	}
 
@@ -80,10 +83,10 @@ public class GameActivity extends Activity {
 
 		//Setting up java counterparts for the android layout objects
 		final Spinner stonePicker = (Spinner)findViewById(R.id.stonePicker);
-		stones = getResources().getStringArray(R.array.stones);
+		m_stones = getResources().getStringArray(R.array.stones);
 
 		//Setting up adapter for stone color picking dropdown
-		ArrayAdapter<String> stone_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, stones);
+		ArrayAdapter<String> stone_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, m_stones);
 		stone_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		stonePicker.setAdapter(stone_adapter);
 
@@ -112,7 +115,7 @@ public class GameActivity extends Activity {
 			for(int j=0;j<11;j++)
 			{
 				buttons[i][j]=new Button(this);
-				if (gameSpace.cell[i][j] == null) {
+				if (m_board.GetBlockAtLocation(i, j) == null) {
 					//Disable the unnecessary cells from the Multidimensional Board
 					buttons[i][j].setEnabled(false);
 					buttons[i][j].setBackgroundResource(R.drawable.disabled_buttons);
@@ -138,19 +141,19 @@ public class GameActivity extends Activity {
 					public void onItemSelected(AdapterView<?> parent, View view,
 									   int position, long id) {
 						if(stonePicker.getSelectedItemPosition() == 0) {
-							if (turn == 0) { use_stone = computer_stoneColor; }
-							if (turn == 1) { use_stone = human_stoneColor; }
+							if (turn == 0) { m_stoneChoice = m_computerStoneColor; }
+							if (turn == 1) { m_stoneChoice = m_humanStoneColor; }
 						}
 
 						else if (stonePicker.getSelectedItemPosition() == 1) {
-							if (turn == 0) { use_stone = human_stoneColor; }
-							if (turn == 1) { use_stone = computer_stoneColor; }
+							if (turn == 0) { m_stoneChoice = m_humanStoneColor; }
+							if (turn == 1) { m_stoneChoice = m_computerStoneColor; }
 						}
 
-						else { use_stone = "clear"; }
+						else { m_stoneChoice = "clear"; }
 
-						if (turn == 0) { turnMsg.setText("It's COMPUTER'S turn. Stone Choice: " + use_stone); }
-						if (turn == 1) { turnMsg.setText("It's YOUR turn. Stone Choice: " + use_stone); }
+						if (turn == 0) { turnMsg.setText("It's COMPUTER'S turn. Stone Choice: " + m_stoneChoice); }
+						if (turn == 1) { turnMsg.setText("It's YOUR turn. Stone Choice: " + m_stoneChoice); }
 					}
 
 					@Override
@@ -165,56 +168,55 @@ public class GameActivity extends Activity {
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
 						//
-						System.out.println("LastX " + lastX);
-						if ((lastX == 100) || (x == lastX) || (y == lastY)|| !available(buttons, lastX, lastY) ) {
+						//Either human or computer's function can be used to check permission
+						if (m_computer.HasPermissionToOccupyVacantSpot(x, y, m_board)) {
 							//Computer's turn
 							if (turn == 0) {
 
-								stoneFiller(buttons, gameSpace, compPlayer, x, y, use_stone);
+								stoneFiller(buttons, x, y, m_stoneChoice);
 								//Handing control to the other player
 								if (stonePicker.getSelectedItemPosition() == 0) {
-									use_stone = human_stoneColor;
+									m_stoneChoice = m_humanStoneColor;
 								} else if (stonePicker.getSelectedItemPosition() == 1) {
-									use_stone = computer_stoneColor;
+									m_stoneChoice = m_computerStoneColor;
 								} else {
-									use_stone = "clear";
+									m_stoneChoice = "clear";
 								}
 
 								turn = 1;
-								turnMsg.setText("It's YOUR turn. Stone Choice: " + use_stone);
-								remWhite.setText("Remaining White Stones: " + String.valueOf(humanPlayer.getWhite()));
-								remBlack.setText("Remaining Black Stones: " + String.valueOf(humanPlayer.getBlack()));
-								remClear.setText("Remaining Clear Stones: " + String.valueOf(humanPlayer.getClear()));
+								turnMsg.setText("It's YOUR turn. Stone Choice: " + m_stoneChoice);
+								remWhite.setText("Remaining White Stones: " + String.valueOf(m_human.GetWhiteStonesAvailable()));
+								remBlack.setText("Remaining Black Stones: " + String.valueOf(m_human.GetBlackStonesAvailable()));
+								remClear.setText("Remaining Clear Stones: " + String.valueOf(m_human.GetClearStonesAvailable()));
 
 								// return;
 							}
 							else {
 								//Human's turn
-								stoneFiller(buttons, gameSpace, humanPlayer, x, y, use_stone);
+								stoneFiller(buttons, x, y, m_stoneChoice);
 
 								//Handing control to the other player
 								if (stonePicker.getSelectedItemPosition() == 0) {
-									use_stone = computer_stoneColor;
+									m_stoneChoice = m_computerStoneColor;
 								} else if (stonePicker.getSelectedItemPosition() == 1) {
-									use_stone = human_stoneColor;
+									m_stoneChoice = m_humanStoneColor;
 								} else {
-									use_stone = "clear";
+									m_stoneChoice = "clear";
 								}
 
 								turn = 0;
 
-								turnMsg.setText("It's COMPUTER'S turn. Stone Choice: " + use_stone);
-								remWhite.setText("Remaining White Stones: " + String.valueOf(compPlayer.getWhite()));
-								remBlack.setText("Remaining Black Stones: " + String.valueOf(compPlayer.getBlack()));
-								remClear.setText("Remaining Clear Stones: " + String.valueOf(compPlayer.getClear()));
+								turnMsg.setText("It's COMPUTER'S turn. Stone Choice: " + m_stoneChoice);
+								remWhite.setText("Remaining White Stones: " + String.valueOf(m_computer.GetWhiteStonesAvailable()));
+								remBlack.setText("Remaining Black Stones: " + String.valueOf(m_computer.GetBlackStonesAvailable()));
+								remClear.setText("Remaining Clear Stones: " + String.valueOf(m_computer.GetClearStonesAvailable()));
 							}
-							//Updating the location where stone was last inserted
-							lastX = x;
-							lastY = y;
-							humanScore.setText("Human Score: " + String.valueOf(humanPlayer.getScore()));
-							computerScore.setText("Computer Score: " + String.valueOf(compPlayer.getScore()));
+							//NOTE: Job of updating the location where stone was last inserted is already done within Player class after insertion
+							humanScore.setText("Human Score: " + String.valueOf(m_human.GetScore()));
+							computerScore.setText("Computer Score: " + String.valueOf(m_computer.GetScore()));
 
 							// Game over
+							/*
 							if (humanPlayer.getWhite() == 0 && humanPlayer.getBlack() == 0 && humanPlayer.getClear() == 0
 								  && compPlayer.getWhite() == 0 && compPlayer.getBlack() == 0 && compPlayer.getClear() == 0) {
 								if (humanPlayer.getScore() > compPlayer.getScore()) {
@@ -227,6 +229,7 @@ public class GameActivity extends Activity {
 									turnMsg.setText("Game Over. It's a draw");
 								}
 							}
+							*/
 						}
 					}
 				});
@@ -237,7 +240,7 @@ public class GameActivity extends Activity {
 				serialize.setOnClickListener(new View.OnClickListener() {
 					public void onClick(View v) {
 						// Perform action on click
-						Serialize seri = new Serialize(gameSpace, compPlayer, humanPlayer, computer_stoneColor, human_stoneColor, turn, lastX, lastY);
+						Serialize seri = new Serialize(board, compPlayer, humanPlayer, m_computerStoneColor, m_humanStoneColor, turn, lastX, lastY);
 
 						Intent intent = new Intent(Intent.ACTION_MAIN);
 						intent.addCategory(Intent.CATEGORY_HOME);
@@ -253,34 +256,39 @@ public class GameActivity extends Activity {
 	}
 
 	// This function fills the chosen stone in the given pouch and updates the necessary properties in the model class.
-	public void stoneFiller(Button[][] buttons, Board board, Player player, int x, int y, String use_stone) {
-		//Setting up the necessary flags/values in the Model/View after filling stones
-		gameSpace.cell[x][y].setFilled();
-		buttons[x][y].setClickable(false);
-		if (use_stone.equals("white") && player.getWhite()!= 0) {
-			gameSpace.cell[x][y].setStone('w');
-			player.useWhite();
-			buttons[x][y].setBackgroundResource(white_pic);
+	public void stoneFiller(Button[][] a_buttons, int a_row, int a_column, String a_stoneChoice) {
+		//Retrieve the passed values and convert them in the proper form
+		char stone;
+		int newButtonBackground;
+		if (a_stoneChoice.equals("white")) {
+			stone = 'w';
+			newButtonBackground = m_whitePic;
 		}
-		if (use_stone.equals("black") && player.getBlack()!= 0) {
-			gameSpace.cell[x][y].setStone('b');
-			player.useBlack();
-			buttons[x][y].setBackgroundResource(black_pic);
+		else if (a_stoneChoice.equals("black")) {
+			stone = 'b';
+			newButtonBackground = m_blackPic;
 		}
-		if (use_stone.equals("clear") && player.getClear()!= 0) {
-			gameSpace.cell[x][y].setStone('c');
-			player.useClear();
-			buttons[x][y].setBackgroundResource(clear_pic);
+		//ATTENTION: Making the default case a clear stone (maybe don't do it?)
+		else {
+			stone = 'c';
+			newButtonBackground = m_clearPic;
 		}
 
-		//Scoring the move
-		if (human_stoneColor.equals("black")) {
-			humanPlayer.addScore(gameSpace.score(x, y, 'b'));
-			compPlayer.addScore(gameSpace.score(x, y, 'w'));
+		//Setting up the necessary flags/values in the view upon success in model
+		//The PlaceAStone function automatically handles score update, and update of available stones
+		//If Computer's turn
+		if (turn == 0) {
+			if (m_computer.PlaceAStone(stone, a_row, a_column, m_board)) {
+				a_buttons[a_row][a_column].setClickable(false);
+				a_buttons[a_row][a_column].setBackgroundResource(newButtonBackground);
+			}
 		}
+		//If Human's turn
 		else {
-			humanPlayer.addScore(gameSpace.score(x, y, 'w'));
-			compPlayer.addScore(gameSpace.score(x, y, 'b'));
+			if (m_human.PlaceAStone(stone, a_row, a_column, m_board)) {
+				a_buttons[a_row][a_column].setClickable(false);
+				a_buttons[a_row][a_column].setBackgroundResource(newButtonBackground);
+			}
 		}
 	}
 
