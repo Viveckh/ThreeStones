@@ -185,7 +185,7 @@ public class Player {
 	/*
 	* SCORING RELATED FUNCTIONS
 	* */
-	//THIS NEEDS TO BE CALLED BY EACH PLAYER AFTER EITHER OF THE PLAYERS MOVE. THE STONE PARAMETER REFERS TO PLAYER'S PRIMARY COLOR
+	//THIS NEEDS TO BE CALLED BY EACH PLAYER AFTER EITHER OF THE PLAYERS MOVE. THE STONE PARAMETER REFERS TO PLAYER'S PRIMARY COLO
 	//Calculates the change in points for a player after a move. Override by derived classes based on stone color picked at the start of the game
 	//Row and Column of previous placement must be updated for this function to perform correctly
 	public int UpdateScoreAfterMove(char a_stone, Board a_board) {
