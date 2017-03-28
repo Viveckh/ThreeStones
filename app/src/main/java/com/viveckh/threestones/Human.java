@@ -6,7 +6,8 @@ package com.viveckh.threestones;
 public class Human extends Player {
 	//Constructor
 	public Human(char a_primaryColor) {
-		m_primaryColor = a_primaryColor;
+		//m_primaryColor = a_primaryColor;
+		super(a_primaryColor);
 	}
 
 	public boolean Play(char a_stone, int a_row, int a_column, Board a_board) {

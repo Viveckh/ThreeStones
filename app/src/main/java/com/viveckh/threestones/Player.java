@@ -42,7 +42,7 @@ public class Player {
 	private int m_whiteStonesAvailable;
 	private int m_blackStonesAvailable;
 	private int m_clearStonesAvailable;
-	protected char m_primaryColor;
+	private char m_primaryColor;
 	protected static int m_rowOfPreviousPlacement = -1;
 	protected static int m_columnOfPreviousPlacement = -1;
 
@@ -61,6 +61,7 @@ public class Player {
 	}
 
 	// Number of available stone Getters
+	public char GetPlayerStoneColor() { return m_primaryColor; }
 	public int GetScore() { return m_score; }
 	public int GetWhiteStonesAvailable() { return m_whiteStonesAvailable; }
 	public int GetBlackStonesAvailable() { return m_blackStonesAvailable; }
@@ -88,8 +89,9 @@ public class Player {
 							UseAStone(a_stone);
 							m_rowOfPreviousPlacement = a_row;
 							m_columnOfPreviousPlacement = a_column;
-							IncrementScore(CalculatePointsGained(m_primaryColor, a_board));
-							System.out.println("Inserting (" + a_row + ", " + a_column + ")");
+							//IncrementScore(CalculatePointsGained('w', a_board));
+							//IncrementScore(CalculatePointsGained('b', a_board));
+							System.out.println("Inserting (" + a_row + ", " + a_column + ") " + a_stone);
 							return true;
 						}
 					}
@@ -163,11 +165,19 @@ public class Player {
 		{
 			case 'w':
 				m_whiteStonesAvailable--;
+				System.out.println("Decreased a white stone");
+				break;
 			case 'b':
 				m_blackStonesAvailable--;
+				System.out.println("Decreased a black stone");
+				break;
 			case 'c':
 				m_clearStonesAvailable--;
+				System.out.println("Decreased a clear stone");
+				break;
 			default:
+				System.out.println("Invalid stone");
+				break;
 				//NOTIFICATIONS: Not a valid stone
 		}
 	}
@@ -175,71 +185,91 @@ public class Player {
 	/*
 	* SCORING RELATED FUNCTIONS
 	* */
-
-	// Increments score by the value that is passed as parameter
-	protected boolean IncrementScore(int a_value) {
-		if (a_value > 0) {
-			m_score += a_value;
-			return true;
-		}
-		return false;
-	}
-
+	//THIS NEEDS TO BE CALLED BY EACH PLAYER AFTER EITHER OF THE PLAYERS MOVE. THE STONE PARAMETER REFERS TO PLAYER'S PRIMARY COLOR
 	//Calculates the change in points for a player after a move. Override by derived classes based on stone color picked at the start of the game
 	//Row and Column of previous placement must be updated for this function to perform correctly
-	public int CalculatePointsGained(char a_stone, Board a_board) {
+	public int UpdateScoreAfterMove(char a_stone, Board a_board) {
 		int points = 0;
 		
 		if (IsLeftFavorable(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, a_board) && IsRightFavorable(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, a_board)) {
-			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement - 1) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement + 1) == a_stone)
+			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement - 1) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement + 1) == a_stone) {
 				points++;
+				System.out.println("Left and Right favorable");
+			}
 		}
 		if (IsTopFavorable(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, a_board) && IsBottomFavorable(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, a_board)) {
-			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement - 1, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement + 1, m_columnOfPreviousPlacement) == a_stone)
+			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement - 1, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement + 1, m_columnOfPreviousPlacement) == a_stone) {
 				points++;
+				System.out.println("Top and Bottom favorable");
+			}
 		}
 		if (IsTopLeftFavorable(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, a_board) && IsBottomRightFavorable(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, a_board)) {
-			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement - 1, m_columnOfPreviousPlacement  - 1) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement + 1, m_columnOfPreviousPlacement  + 1) == a_stone)
+			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement - 1, m_columnOfPreviousPlacement  - 1) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement + 1, m_columnOfPreviousPlacement  + 1) == a_stone) {
 				points++;
+				System.out.println("TopLeft and BottomRight favorable");
+			}
 		}
 		if (IsTopRightFavorable(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, a_board) && IsBottomLeftFavorable(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, a_board)) {
-			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement - 1, m_columnOfPreviousPlacement  + 1) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement + 1, m_columnOfPreviousPlacement  - 1) == a_stone)
+			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement - 1, m_columnOfPreviousPlacement  + 1) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement + 1, m_columnOfPreviousPlacement  - 1) == a_stone) {
 				points++;
+				System.out.println("TopRight and BottomLeft favorable");
+			}
 		}
 
 
 		if (IsLeftFavorable(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, a_board) && IsLeftFavorable(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement - 1, a_board)) {
-			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement - 1) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement  - 2) == a_stone)
+			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement - 1) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement  - 2) == a_stone) {
 				points++;
+				System.out.println("Left and farLeft favorable");
+			}
+
 		}
 		if (IsRightFavorable(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, a_board) && IsRightFavorable(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement + 1, a_board)) {
-			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement + 1) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement  + 2) == a_stone)
+			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement + 1) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement  + 2) == a_stone) {
 				points++;
+				System.out.println("Right and farRight favorable");
+			}
 		}
 		if (IsTopFavorable(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, a_board) && IsTopFavorable(m_rowOfPreviousPlacement - 1, m_columnOfPreviousPlacement, a_board)) {
-			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement - 1, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement - 2, m_columnOfPreviousPlacement) == a_stone)
+			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement - 1, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement - 2, m_columnOfPreviousPlacement) == a_stone) {
 				points++;
+				System.out.println("Top and farTop favorable");
+			}
+
 		}
 		if (IsBottomFavorable(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, a_board) && IsBottomFavorable(m_rowOfPreviousPlacement + 1, m_columnOfPreviousPlacement, a_board)) {
-			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement + 1, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement + 2, m_columnOfPreviousPlacement) == a_stone)
+			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement + 1, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement + 2, m_columnOfPreviousPlacement) == a_stone) {
 				points++;
+				System.out.println("Bottom and farBottom favorable");
+			}
 		}
 		if (IsTopLeftFavorable(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, a_board) && IsTopLeftFavorable(m_rowOfPreviousPlacement - 1, m_columnOfPreviousPlacement - 1, a_board)) {
-			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement - 1, m_columnOfPreviousPlacement  - 1) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement - 2, m_columnOfPreviousPlacement  - 2) == a_stone)
+			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement - 1, m_columnOfPreviousPlacement  - 1) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement - 2, m_columnOfPreviousPlacement  - 2) == a_stone) {
 				points++;
+				System.out.println("TopLeft and farTopLeft favorable");
+			}
 		}
 		if (IsTopRightFavorable(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, a_board) && IsTopRightFavorable(m_rowOfPreviousPlacement - 1, m_columnOfPreviousPlacement + 1, a_board)) {
-			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement - 1, m_columnOfPreviousPlacement  + 1) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement - 2, m_columnOfPreviousPlacement  + 2) == a_stone)
+			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement - 1, m_columnOfPreviousPlacement  + 1) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement - 2, m_columnOfPreviousPlacement  + 2) == a_stone) {
 				points++;
+				System.out.println("TopRight and farTopRight favorable");
+			}
 		}
 		if (IsBottomLeftFavorable(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, a_board) && IsBottomLeftFavorable(m_rowOfPreviousPlacement + 1, m_columnOfPreviousPlacement - 1, a_board)) {
-			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement + 1, m_columnOfPreviousPlacement  - 1) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement + 2, m_columnOfPreviousPlacement  - 2) == a_stone)
+			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement + 1, m_columnOfPreviousPlacement  - 1) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement + 2, m_columnOfPreviousPlacement  - 2) == a_stone) {
 				points++;
+				System.out.println("BottomLeft and farBottomLeft favorable");
+			}
 		}
 		if (IsBottomRightFavorable(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, a_board) && IsBottomRightFavorable(m_rowOfPreviousPlacement + 1, m_columnOfPreviousPlacement + 1, a_board)) {
-			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement + 1, m_columnOfPreviousPlacement  + 1) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement + 2, m_columnOfPreviousPlacement  + 2) == a_stone)
+			if (a_board.GetStoneAtLocation(m_rowOfPreviousPlacement, m_columnOfPreviousPlacement) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement + 1, m_columnOfPreviousPlacement  + 1) == a_stone || a_board.GetStoneAtLocation(m_rowOfPreviousPlacement + 2, m_columnOfPreviousPlacement  + 2) == a_stone) {
 				points++;
+				System.out.println("BottomRight and farBottomRight favorable");
+			}
 		}
+		m_score += points;
+		//Return only the change in score
+		System.out.println("Points gained :" + points);
 		return points;
 	}
 
