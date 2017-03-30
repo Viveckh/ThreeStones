@@ -301,10 +301,10 @@ public class Player {
 		Block farLeft = (a_currentCol > 1) ? new Block(a_board.GetBlockAtLocation(a_currentRow, a_currentCol - 2)) : null;
 		Block right = (a_currentCol < a_board.GetBoardDimension() - 1) ? new Block(a_board.GetBlockAtLocation(a_currentRow, a_currentCol + 1)) : null;
 		
-		if (left != null) {
+		if (left != null && left.IsInitialized()) {
 			if (left.GetStone()!= 'n') {
 				if (current.GetStone() == 'c') {
-					if (right != null && right.GetStone() != 'n') {
+					if ((right != null && right.IsInitialized()) && right.GetStone() != 'n') {
 						if ((left.GetStone() == right.GetStone()) && (left.GetStone() != 'c' && right.GetStone() != 'c')) {
 							return true;
 						}
@@ -312,7 +312,7 @@ public class Player {
 							return true;
 						}
 					}
-					if (farLeft != null && farLeft.GetStone() != 'n') {
+					if ((farLeft != null && farLeft.IsInitialized()) && farLeft.GetStone() != 'n') {
 						if ((left.GetStone() == farLeft.GetStone()) && (left.GetStone() != 'c' && farLeft.GetStone() != 'c')) {
 							return true;
 						}
@@ -336,10 +336,10 @@ public class Player {
 		Block right = (a_currentCol < a_board.GetBoardDimension() - 1) ? new Block(a_board.GetBlockAtLocation(a_currentRow, a_currentCol + 1)) : null;
 		Block farRight = (a_currentCol < a_board.GetBoardDimension() - 2) ? new Block(a_board.GetBlockAtLocation(a_currentRow, a_currentCol + 2)) : null;
 		
-		if (right != null) {
+		if (right != null && right.IsInitialized()) {
 			if (right.GetStone() != 'n') {
 				if (current.GetStone() == 'c') {
-					if (left != null && left.GetStone() != 'n') {
+					if ((left != null && left.IsInitialized()) && left.GetStone() != 'n') {
 						if ((left.GetStone() == right.GetStone()) && (left.GetStone() != 'c' && right.GetStone() != 'c')) {
 							return true;
 						}
@@ -347,7 +347,7 @@ public class Player {
 							return true;
 						}
 					}
-					if (farRight != null && farRight.GetStone() != 'n') {
+					if ((farRight != null && farRight.IsInitialized()) && farRight.GetStone() != 'n') {
 						if ((farRight.GetStone() == right.GetStone()) && (farRight.GetStone() != 'c' && right.GetStone() != 'c')) {
 							return true;
 						}
@@ -371,10 +371,10 @@ public class Player {
 		Block farTop = (a_currentRow > 1) ? new Block(a_board.GetBlockAtLocation(a_currentRow - 2, a_currentCol)) : null;
 		Block bottom = (a_currentRow < a_board.GetBoardDimension() - 1) ? new Block(a_board.GetBlockAtLocation(a_currentRow + 1, a_currentCol)) : null;
 
-		if (top != null) {
+		if (top != null && top.IsInitialized()) {
 			if (top.GetStone() != 'n') {
 				if (current.GetStone() == 'c') {
-					if (bottom != null && bottom.GetStone() != 'n') {
+					if ((bottom != null && bottom.IsInitialized()) && bottom.GetStone() != 'n') {
 						if ((top.GetStone() == bottom.GetStone()) && (top.GetStone() != 'c' && bottom.GetStone() != 'c')) {
 							return true;
 						}
@@ -382,7 +382,7 @@ public class Player {
 							return true;
 						}
 					}
-					if (farTop != null && farTop.GetStone() != 'n') {
+					if ((farTop != null && farTop.IsInitialized()) && farTop.GetStone() != 'n') {
 						if ((top.GetStone() == farTop.GetStone()) && (top.GetStone() != 'c' && farTop.GetStone() != 'c')) {
 							return true;
 						}
@@ -405,10 +405,10 @@ public class Player {
 		Block bottom = (a_currentRow < a_board.GetBoardDimension() - 1) ? new Block(a_board.GetBlockAtLocation(a_currentRow + 1, a_currentCol)) : null;
 		Block farBottom = (a_currentRow < a_board.GetBoardDimension() - 2) ? new Block(a_board.GetBlockAtLocation(a_currentRow + 2, a_currentCol)) : null;
 		
-		if (bottom != null) {
+		if (bottom != null && bottom.IsInitialized()) {
 			if (bottom.GetStone() != 'n') {
 				if (current.GetStone() == 'c') {
-					if (top != null && top.GetStone() != 'n') {
+					if ((top != null && top.IsInitialized()) && top.GetStone() != 'n') {
 						if ((top.GetStone() == bottom.GetStone()) && (top.GetStone() != 'c' && bottom.GetStone() != 'c')) {
 							return true;
 						}
@@ -416,7 +416,7 @@ public class Player {
 							return true;
 						}
 					}
-					if (farBottom != null && farBottom.GetStone() != 'n') {
+					if ((farBottom != null && farBottom.IsInitialized()) && farBottom.GetStone() != 'n') {
 						if ((farBottom.GetStone() == bottom.GetStone()) && (farBottom.GetStone() != 'c' && bottom.GetStone() != 'c')) {
 							return true;
 						}
@@ -439,10 +439,10 @@ public class Player {
 		Block farTopLeft = (a_currentRow > 1 && a_currentCol > 1) ? new Block(a_board.GetBlockAtLocation(a_currentRow - 2, a_currentCol - 2)) : null;
 		Block bottomRight = (a_currentRow < a_board.GetBoardDimension() - 1 && a_currentCol < a_board.GetBoardDimension() - 1) ? new Block(a_board.GetBlockAtLocation(a_currentRow + 1, a_currentCol + 1)) : null;
 		
-		if (topLeft != null) {
+		if (topLeft != null && topLeft.IsInitialized()) {
 			if (topLeft.GetStone() != 'n') {
 				if (current.GetStone() == 'c') {
-					if (bottomRight != null && bottomRight.GetStone() != 'n') {
+					if ((bottomRight != null && bottomRight.IsInitialized()) && bottomRight.GetStone() != 'n') {
 						if ((topLeft.GetStone() == bottomRight.GetStone()) && (topLeft.GetStone() != 'c' && bottomRight.GetStone() != 'c')) {
 							return true;
 						}
@@ -450,7 +450,7 @@ public class Player {
 							return true;
 						}
 					}
-					if (farTopLeft != null && farTopLeft.GetStone() != 'n') {
+					if ((farTopLeft != null && farTopLeft.IsInitialized()) && farTopLeft.GetStone() != 'n') {
 						if ((topLeft.GetStone() == farTopLeft.GetStone()) && (topLeft.GetStone() != 'c' && farTopLeft.GetStone() != 'c')) {
 							return true;
 						}
@@ -473,10 +473,10 @@ public class Player {
 		Block farTopRight = (a_currentRow > 1 && a_currentCol < a_board.GetBoardDimension() - 2) ? new Block(a_board.GetBlockAtLocation(a_currentRow - 2, a_currentCol + 2)) : null;
 		Block bottomLeft = (a_currentRow < a_board.GetBoardDimension() - 1 && a_currentCol > 0) ? new Block(a_board.GetBlockAtLocation(a_currentRow + 1, a_currentCol - 1)) : null;
 
-		if (topRight != null) {
+		if (topRight != null && topRight.IsInitialized()) {
 			if (topRight.GetStone() != 'n') {
 				if (current.GetStone() == 'c') {
-					if (bottomLeft != null && bottomLeft.GetStone() != 'n') {
+					if ((bottomLeft != null && bottomLeft.IsInitialized()) && bottomLeft.GetStone() != 'n') {
 						if ((topRight.GetStone() == bottomLeft.GetStone()) && (topRight.GetStone() != 'c' && bottomLeft.GetStone() != 'c')) {
 							return true;
 						}
@@ -484,7 +484,7 @@ public class Player {
 							return true;
 						}
 					}
-					if (farTopRight != null && farTopRight.GetStone() != 'n') {
+					if ((farTopRight != null && farTopRight.IsInitialized()) && farTopRight.GetStone() != 'n') {
 						if ((topRight.GetStone() == farTopRight.GetStone()) && (topRight.GetStone() != 'c' && farTopRight.GetStone() != 'c')) {
 							return true;
 						}
@@ -507,10 +507,10 @@ public class Player {
 		Block bottomLeft = (a_currentRow < a_board.GetBoardDimension() - 1 && a_currentCol > 0) ? new Block(a_board.GetBlockAtLocation(a_currentRow + 1, a_currentCol - 1)) : null;
 		Block farBottomLeft = (a_currentRow < a_board.GetBoardDimension() - 2 && a_currentCol > 1) ? new Block(a_board.GetBlockAtLocation(a_currentRow + 2, a_currentCol - 2)) : null;
 		
-		if (bottomLeft != null) {
+		if (bottomLeft != null && bottomLeft.IsInitialized()) {
 			if (bottomLeft.GetStone() != 'n') {
 				if (current.GetStone() == 'c') {
-					if (topRight != null && topRight.GetStone() != 'n') {
+					if ((topRight != null && topRight.IsInitialized()) && topRight.GetStone() != 'n') {
 						if ((topRight.GetStone() == bottomLeft.GetStone()) && (topRight.GetStone() != 'c' && bottomLeft.GetStone() != 'c')) {
 							return true;
 						}
@@ -518,7 +518,7 @@ public class Player {
 							return true;
 						}
 					}
-					if (farBottomLeft != null && farBottomLeft.GetStone() != 'n') {
+					if ((farBottomLeft != null && farBottomLeft.IsInitialized()) && farBottomLeft.GetStone() != 'n') {
 						if ((farBottomLeft.GetStone() == bottomLeft.GetStone()) && (farBottomLeft.GetStone() != 'c' && bottomLeft.GetStone() != 'c')) {
 							return true;
 						}
@@ -542,10 +542,10 @@ public class Player {
 		Block bottomRight = (a_currentRow < a_board.GetBoardDimension() - 1 && a_currentCol < a_board.GetBoardDimension() - 1) ? new Block(a_board.GetBlockAtLocation(a_currentRow + 1, a_currentCol + 1)) : null;
 		Block farBottomRight = (a_currentRow < a_board.GetBoardDimension() - 2 && a_currentCol < a_board.GetBoardDimension() - 2) ? new Block(a_board.GetBlockAtLocation(a_currentRow + 2, a_currentCol + 2)) : null;
 		
-		if (bottomRight != null) {
+		if (bottomRight != null && bottomRight.IsInitialized()) {
 			if (bottomRight.GetStone() != 'n') {
 				if (current.GetStone() == 'c') {
-					if (topLeft != null && topLeft.GetStone() != 'n') {
+					if ((topLeft != null && topLeft.IsInitialized()) && topLeft.GetStone() != 'n') {
 						if ((topLeft.GetStone() == bottomRight.GetStone()) && (topLeft.GetStone() != 'c' && bottomRight.GetStone() != 'c')) {
 							return true;
 						}
@@ -553,7 +553,7 @@ public class Player {
 							return true;
 						}
 					}
-					if (farBottomRight != null && farBottomRight.GetStone() != 'n') {
+					if ((farBottomRight != null && farBottomRight.IsInitialized()) && farBottomRight.GetStone() != 'n') {
 						if ((farBottomRight.GetStone() == bottomRight.GetStone()) && (farBottomRight.GetStone() != 'c' && bottomRight.GetStone() != 'c')) {
 							return true;
 						}
