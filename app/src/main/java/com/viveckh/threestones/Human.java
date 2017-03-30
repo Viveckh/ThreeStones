@@ -15,8 +15,10 @@ public class Human extends Player {
 		if (IndexOutOfBounds(a_row, a_column, a_board.GetBoardDimension())) {
 			return false;
 		}
-		//Attempt the move
+
+		//Attempt the move and update the score if successful
 		if (PlaceAStone(a_stone, a_row, a_column, a_board)) {
+			UpdateScoreAfterMove(m_primaryColor, m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, a_board);
 			return true;
 		}
 		return false;

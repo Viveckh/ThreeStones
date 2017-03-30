@@ -33,7 +33,7 @@ public class GameActivity extends Activity {
 	final private Button[][] buttons = new Button[11][11];
 	private Board m_board;
 	private Human m_human;
-	private Human m_computer;
+	private Computer m_computer;
 	private String[] m_stones;
 	private String m_humanStoneColor;
 	private String m_computerStoneColor;
@@ -54,20 +54,18 @@ public class GameActivity extends Activity {
 		m_humanStoneColor = extras.getString("human_stoneColor");
 		m_computerStoneColor = extras.getString("computer_stoneColor");
 
-		TextView turnMsg = (TextView)findViewById(R.id.turn);
-
 		//Initializing turn value. 0 for computer, 1 for human
 		if (m_humanStoneColor.equals("black")) {
 			m_human = new Human('b');
-			m_computer = new Human('w');
+			m_computer = new Computer('w');
 			m_turn = 1;
-			turnMsg.setText("It's YOUR turn.");
+			UpdateGameStatusView();
 		}
 		else {
 			m_human = new Human('w');
-			m_computer = new Human('b');
+			m_computer = new Computer('b');
 			m_turn = 0;
-			turnMsg.setText("It's COMPUTER'S turn.");
+			UpdateGameStatusView();
 		}
 
 		//Background for game board buttons
@@ -152,8 +150,7 @@ public class GameActivity extends Activity {
 
 						else { m_stoneChoice = "clear"; }
 
-						if (m_turn == 0) { turnMsg.setText("It's COMPUTER'S turn. Stone Choice: " + m_stoneChoice); }
-						if (m_turn == 1) { turnMsg.setText("It's YOUR turn. Stone Choice: " + m_stoneChoice); }
+						UpdateGameStatusView();
 					}
 
 					@Override
@@ -169,33 +166,14 @@ public class GameActivity extends Activity {
 						// TODO Auto-generated method stub
 						//
 						//Either human or computer's function can be used to check permission
-						if (m_computer.HasPermissionToOccupyVacantSpot(x, y, m_board)) {
-							//Computer's turn
-							if (m_turn == 0) {
+						if (m_human.HasPermissionToOccupyVacantSpot(x, y, m_board)) {
 
-								if (stoneFiller(buttons, x, y, m_stoneChoice)) {
-									//Handing control to the other player
-									if (stonePicker.getSelectedItemPosition() == 0) {
-										m_stoneChoice = m_humanStoneColor;
-									} else if (stonePicker.getSelectedItemPosition() == 1) {
-										m_stoneChoice = m_computerStoneColor;
-									} else {
-										m_stoneChoice = "clear";
-									}
-
-									m_turn = 1;
-									turnMsg.setText("It's YOUR turn. Stone Choice: " + m_stoneChoice);
-									remWhite.setText("Remaining White Stones: " + String.valueOf(m_human.GetWhiteStonesAvailable()));
-									remBlack.setText("Remaining Black Stones: " + String.valueOf(m_human.GetBlackStonesAvailable()));
-									remClear.setText("Remaining Clear Stones: " + String.valueOf(m_human.GetClearStonesAvailable()));
-								}
-								// return;
-							}
-							else {
+							if (m_turn == 1) {
 								//Human's turn
 								if (stoneFiller(buttons, x, y, m_stoneChoice)) {
 
 									//Handing control to the other player
+									m_turn = 0;
 									if (stonePicker.getSelectedItemPosition() == 0) {
 										m_stoneChoice = m_computerStoneColor;
 									} else if (stonePicker.getSelectedItemPosition() == 1) {
@@ -203,18 +181,10 @@ public class GameActivity extends Activity {
 									} else {
 										m_stoneChoice = "clear";
 									}
-
-									m_turn = 0;
-
-									turnMsg.setText("It's COMPUTER'S turn. Stone Choice: " + m_stoneChoice);
-									remWhite.setText("Remaining White Stones: " + String.valueOf(m_computer.GetWhiteStonesAvailable()));
-									remBlack.setText("Remaining Black Stones: " + String.valueOf(m_computer.GetBlackStonesAvailable()));
-									remClear.setText("Remaining Clear Stones: " + String.valueOf(m_computer.GetClearStonesAvailable()));
+									UpdateGameStatusView();
 								}
 							}
 							//NOTE: Job of updating the location where stone was last inserted is already done within Player class after insertion
-							humanScore.setText("Human Score: " + String.valueOf(m_human.GetScore()));
-							computerScore.setText("Computer Score: " + String.valueOf(m_computer.GetScore()));
 
 							// Game over
 							/*
@@ -235,23 +205,48 @@ public class GameActivity extends Activity {
 					}
 				});
 
-				/*
-				//Serialize the game to a text file
+				//If computer's play button is pressed
 				Button serialize = (Button)findViewById(R.id.serialize);
 				serialize.setOnClickListener(new View.OnClickListener() {
 					public void onClick(View v) {
-						// Perform action on click
-						Serialize seri = new Serialize(board, compPlayer, humanPlayer, m_computerStoneColor, m_humanStoneColor, turn, lastX, lastY);
+						//Computer's turn
+						if (m_turn == 0) {
+							int rowOfPlacement = 0, columnOfPlacement = 0;
+							char stoneOfPlacement = 'x';
+							if (m_computer.Play(false, stoneOfPlacement, rowOfPlacement, columnOfPlacement, m_board)) {
+								rowOfPlacement = m_computer.GetRowOfPreviousPlacement();
+								columnOfPlacement = m_computer.GetColumnOfPreviousPlacement();
+								stoneOfPlacement = m_computer.GetStoneOfPreviousPlacement();
 
-						Intent intent = new Intent(Intent.ACTION_MAIN);
-						intent.addCategory(Intent.CATEGORY_HOME);
-						intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						startActivity(intent);
-						finish();
+								//Update Opponent's score as well
+								m_human.UpdateScoreAfterMove(m_human.GetPlayerStoneColor(), rowOfPlacement, columnOfPlacement, m_board);
+								buttons[rowOfPlacement][columnOfPlacement].setClickable(false);
+
+								if (stoneOfPlacement == 'w') {
+									buttons[rowOfPlacement][columnOfPlacement].setBackgroundResource(m_whitePic);
+								}
+								if (stoneOfPlacement == 'b') {
+									buttons[rowOfPlacement][columnOfPlacement].setBackgroundResource(m_blackPic);
+								}
+								if (stoneOfPlacement == 'c') {
+									buttons[rowOfPlacement][columnOfPlacement].setBackgroundResource(m_clearPic);
+								}
+							}
+
+							//Handing control to the other player
+							//ATTENTION: Do this only upon successful move, not default as now
+							m_turn = 1;
+							if (stonePicker.getSelectedItemPosition() == 0) {
+								m_stoneChoice = m_humanStoneColor;
+							} else if (stonePicker.getSelectedItemPosition() == 1) {
+								m_stoneChoice = m_computerStoneColor;
+							} else {
+								m_stoneChoice = "clear";
+							}
+							UpdateGameStatusView();
+						}
 					}
 				});
-				*/
-
 			}
 		}
 	}
@@ -277,26 +272,44 @@ public class GameActivity extends Activity {
 
 		//Setting up the necessary flags/values in the view upon success in model
 		//THE PLACEASTONE FUNCTION SHOULD BE CALLED IN CONJUNCTION WITH THE UPDATESCORESAFTERMOVE FUNCTION FOR EACH PLAYER
-		//If Computer's turn
-		if (m_turn == 0) {
-			if (m_computer.PlaceAStone(stone, a_row, a_column, m_board)) {
-				m_computer.UpdateScoreAfterMove(m_computer.GetPlayerStoneColor(), m_board);
-				m_human.UpdateScoreAfterMove(m_human.GetPlayerStoneColor(), m_board);
-				a_buttons[a_row][a_column].setClickable(false);
-				a_buttons[a_row][a_column].setBackgroundResource(newButtonBackground);
-				return true;
-			}
-		}
 		//If Human's turn
-		else {
-			if (m_human.PlaceAStone(stone, a_row, a_column, m_board)) {
-				m_computer.UpdateScoreAfterMove(m_computer.GetPlayerStoneColor(), m_board);
-				m_human.UpdateScoreAfterMove(m_human.GetPlayerStoneColor(), m_board);
+		if (m_turn == 1) {
+			if (m_human.Play(stone, a_row, a_column, m_board)) {
+				//Update Opponent's score as well
+				m_computer.UpdateScoreAfterMove(m_computer.GetPlayerStoneColor(), a_row, a_column, m_board);
 				a_buttons[a_row][a_column].setClickable(false);
 				a_buttons[a_row][a_column].setBackgroundResource(newButtonBackground);
 				return true;
 			}
 		}
 		return false;
+	}
+
+	private void UpdateGameStatusView() {
+		TextView turnMsg = (TextView)findViewById(R.id.turn);
+		TextView humanScore = (TextView)findViewById(R.id.humanScore);
+		TextView computerScore = (TextView)findViewById(R.id.computerScore);
+		TextView remWhite = (TextView)findViewById(R.id.remWhite);
+		TextView remBlack = (TextView)findViewById(R.id.remBlack);
+		TextView remClear = (TextView)findViewById(R.id.remClear);
+
+		//If computer's turn
+		if (m_turn == 0) {
+			turnMsg.setText("It's COMPUTER'S turn. Stone Choice: " + m_stoneChoice);
+			remWhite.setText("Remaining White Stones: " + String.valueOf(m_computer.GetWhiteStonesAvailable()));
+			remBlack.setText("Remaining Black Stones: " + String.valueOf(m_computer.GetBlackStonesAvailable()));
+			remClear.setText("Remaining Clear Stones: " + String.valueOf(m_computer.GetClearStonesAvailable()));
+		}
+		//If human's turn
+		else {
+			turnMsg.setText("It's YOUR turn. Stone Choice: " + m_stoneChoice);
+			remWhite.setText("Remaining White Stones: " + String.valueOf(m_human.GetWhiteStonesAvailable()));
+			remBlack.setText("Remaining Black Stones: " + String.valueOf(m_human.GetBlackStonesAvailable()));
+			remClear.setText("Remaining Clear Stones: " + String.valueOf(m_human.GetClearStonesAvailable()));
+		}
+
+		//Score board update
+		humanScore.setText("Human Score: " + String.valueOf(m_human.GetScore()));
+		computerScore.setText("Computer Score: " + String.valueOf(m_computer.GetScore()));
 	}
 }

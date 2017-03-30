@@ -13,6 +13,7 @@ package com.viveckh.threestones;
 public class Block {
 
     // Variables
+    private int m_initialized;
     private int m_xAxis, m_yAxis;
     private boolean m_occupied;
     private char m_stone;    // w for white, b for black, c for clear, n for none
@@ -21,6 +22,7 @@ public class Block {
     // assigns the passed coordinates, sets occupied state to false.
     // Sets the default stone to 'n' i.e. none
     public Block(int a_xAxis, int a_yAxis) {
+        m_initialized = 1;
         m_xAxis = a_xAxis;
         m_yAxis = a_yAxis;
         m_occupied = false;
@@ -32,6 +34,7 @@ public class Block {
         //Copying the variables from passed block object
         //Handling null cases so that issues don't come up while trying to copy construct Block using null object references
         if (a_block != null) {
+            m_initialized = a_block.m_initialized;
             m_xAxis = a_block.m_xAxis;
             m_yAxis = a_block.m_yAxis;
             m_occupied = a_block.m_occupied;
@@ -46,6 +49,13 @@ public class Block {
 
     public int GetY() {
         return m_yAxis;
+    }
+
+    public boolean IsInitialized() {
+        if (m_initialized == 1) {
+            return true;
+        }
+        return false;
     }
 
     public boolean IsOccupied() {

@@ -60,10 +60,10 @@ public class Board {
 				if (a_board.m_gameBoard[row][column] != null) {
 					//Copy construct a block object on the corresponding index in this board
 					m_gameBoard[row][column] = new Block(a_board.m_gameBoard[row][column]);
-					System.out.print(m_gameBoard[row][column].GetY() + " ");
+					//System.out.print(m_gameBoard[row][column].GetY() + " ");
 				}
 			}
-			System.out.println();
+			//System.out.println();
 		}
 	}
 
@@ -109,7 +109,12 @@ public class Board {
 
 	//Gets block at a given location in board, returns null if trying to attempt invalid coordinates
 	public Block GetBlockAtLocation(int a_row, int a_column) {
-		return m_gameBoard[a_row][a_column];
+		if (m_gameBoard[a_row][a_column] == null) {
+			return null;
+		}
+		else {
+			return m_gameBoard[a_row][a_column];
+		}
 	}
 
 	//Gets the stone of a particular location on the board
