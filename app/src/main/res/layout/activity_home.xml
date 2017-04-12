@@ -62,7 +62,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/humanStone"
+        android:id="@+id/imgHumanStone"
         android:text="Human stone"
         android:layout_below="@+id/pick_stoneColor"
         android:layout_alignParentLeft="true"
@@ -75,11 +75,11 @@
         android:layout_height="wrap_content"
         android:text="Computer Stone"
         android:id="@+id/computerStone"
-        android:layout_alignLeft="@+id/humanStone"
-        android:layout_alignStart="@+id/humanStone"
-        android:layout_below="@+id/humanStone"
-        android:layout_alignRight="@+id/humanStone"
-        android:layout_alignEnd="@+id/humanStone" />
+        android:layout_alignLeft="@+id/imgHumanStone"
+        android:layout_alignStart="@+id/imgHumanStone"
+        android:layout_below="@+id/imgHumanStone"
+        android:layout_alignRight="@+id/imgHumanStone"
+        android:layout_alignEnd="@+id/imgHumanStone" />
 
     <Button
         android:layout_width="wrap_content"

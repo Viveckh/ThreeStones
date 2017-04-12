@@ -16,6 +16,7 @@ package com.viveckh.threestones;
  */
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -27,6 +28,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Spinner;
@@ -46,10 +48,22 @@ public class GameActivity extends Activity {
 	private int m_turn;		//0 refers to computer's turn, 1 refers to human's turn
 	int m_blankPic, m_whitePic, m_blackPic, m_clearPic;
 
+	//View objects
+	Button btnComputerPlay;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_results);
+
+		//Background for game board buttons
+		m_blankPic = getResources().getIdentifier("blank_circle", "drawable", "com.viveckh.threestones");
+		m_whitePic = getResources().getIdentifier("white_circle", "drawable", "com.viveckh.threestones");
+		m_blackPic = getResources().getIdentifier("black_circle", "drawable", "com.viveckh.threestones");
+		m_clearPic = getResources().getIdentifier("clear_circle", "drawable", "com.viveckh.threestones");
+
+		//Initializing view objects
+		btnComputerPlay = (Button)findViewById(R.id.btnComputerPlay);
 
 		//Initializing Variables
 		m_board = new Board();
@@ -64,21 +78,15 @@ public class GameActivity extends Activity {
 			m_human = new Human('b');
 			m_computer = new Computer('w');
 			m_turn = 1;
-			UpdateGameStatusView();
+
 		}
 		else {
 			m_human = new Human('w');
 			m_computer = new Computer('b');
 			m_turn = 0;
-			UpdateGameStatusView();
 		}
-
-		//Background for game board buttons
-		m_blankPic = getResources().getIdentifier("blank_circle", "drawable", "com.viveckh.threestones");
-		m_whitePic = getResources().getIdentifier("white_circle", "drawable", "com.viveckh.threestones");
-		m_blackPic = getResources().getIdentifier("black_circle", "drawable", "com.viveckh.threestones");
-		m_clearPic = getResources().getIdentifier("clear_circle", "drawable", "com.viveckh.threestones");
-		
+		UpdatePlayerImages();
+		UpdateGameStatusView();
 		createBoard();
 	}
 
@@ -144,8 +152,8 @@ public class GameActivity extends Activity {
 
 				//Getting reference from xml for Scores and available stone displays
 				final TextView turnMsg = (TextView)findViewById(R.id.turn);
-				final TextView humanScore = (TextView)findViewById(R.id.humanScore);
-				final TextView computerScore = (TextView)findViewById(R.id.computerScore);
+				final Button btnHumanScore = (Button)findViewById(R.id.btnHumanScore);
+				final Button btnComputerScore = (Button)findViewById(R.id.btnComputerScore);
 				final TextView remWhite = (TextView)findViewById(R.id.remWhite);
 				final TextView remBlack = (TextView)findViewById(R.id.remBlack);
 				final TextView remClear = (TextView)findViewById(R.id.remClear);
@@ -223,8 +231,7 @@ public class GameActivity extends Activity {
 				});
 
 				//If computer's play button is pressed
-				Button serialize = (Button)findViewById(R.id.serialize);
-				serialize.setOnClickListener(new View.OnClickListener() {
+				btnComputerPlay.setOnClickListener(new View.OnClickListener() {
 					public void onClick(View v) {
 						//Computer's turn
 						if (m_turn == 0) {
@@ -302,32 +309,71 @@ public class GameActivity extends Activity {
 		return false;
 	}
 
+	//Sets the stone images for each player in the scoreboard. Supposed to be called once the stone values read from previous intent
+	private void UpdatePlayerImages() {
+		ImageButton imgHumanStone = (ImageButton)findViewById(R.id.imgHumanStone);
+		ImageButton imgComputerStone = (ImageButton)findViewById(R.id.imgComputerStone);
+
+		if (m_humanStoneColor.equals("black")) {
+			imgHumanStone.setBackgroundResource(m_blackPic);
+			imgComputerStone.setBackgroundResource(m_whitePic);
+		}
+		else {
+			imgHumanStone.setBackgroundResource(m_whitePic);
+			imgComputerStone.setBackgroundResource(m_blackPic);
+		}
+	}
+
 	private void UpdateGameStatusView() {
-		TextView turnMsg = (TextView)findViewById(R.id.turn);
-		TextView humanScore = (TextView)findViewById(R.id.humanScore);
-		TextView computerScore = (TextView)findViewById(R.id.computerScore);
+		Button btnHumanScore = (Button)findViewById(R.id.btnHumanScore);
+		Button btnComputerScore = (Button)findViewById(R.id.btnComputerScore);
+		TextView labelHumanScore = (TextView)findViewById(R.id.labelHumanScore);
+		TextView labelComputerScore = (TextView)findViewById(R.id.labelComputerScore);
 		TextView remWhite = (TextView)findViewById(R.id.remWhite);
 		TextView remBlack = (TextView)findViewById(R.id.remBlack);
 		TextView remClear = (TextView)findViewById(R.id.remClear);
 
+		//Setting up animations for turns
+		Animation turnHighlighter = new AlphaAnimation(1, 0.2f);
+		turnHighlighter.setDuration(200);
+		turnHighlighter.setInterpolator(new AccelerateDecelerateInterpolator()); // do not alter animation rate
+		turnHighlighter.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
+		turnHighlighter.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
+
+		//Setting the fonts
+		Typeface scoresFont = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
+		remWhite.setTypeface(scoresFont);
+		remBlack.setTypeface(scoresFont);
+		remClear.setTypeface(scoresFont);
+
 		//If computer's turn
 		if (m_turn == 0) {
-			turnMsg.setText("It's COMPUTER'S turn. Stone Choice: " + m_stoneChoice);
-			remWhite.setText("Remaining White Stones: " + String.valueOf(m_computer.GetWhiteStonesAvailable()));
-			remBlack.setText("Remaining Black Stones: " + String.valueOf(m_computer.GetBlackStonesAvailable()));
-			remClear.setText("Remaining Clear Stones: " + String.valueOf(m_computer.GetClearStonesAvailable()));
+			//turnMsg.setText("It's COMPUTER'S turn. Stone Choice: " + m_stoneChoice);
+			labelHumanScore.clearAnimation();
+			labelComputerScore.startAnimation(turnHighlighter);
+
+			btnComputerPlay.setVisibility(View.VISIBLE);
+
+			remWhite.setText("White Stones: " + String.valueOf(m_computer.GetWhiteStonesAvailable()));
+			remBlack.setText("Black Stones: " + String.valueOf(m_computer.GetBlackStonesAvailable()));
+			remClear.setText("Clear Stones: " + String.valueOf(m_computer.GetClearStonesAvailable()));
 		}
 		//If human's turn
 		else {
-			turnMsg.setText("It's YOUR turn. Stone Choice: " + m_stoneChoice);
-			remWhite.setText("Remaining White Stones: " + String.valueOf(m_human.GetWhiteStonesAvailable()));
-			remBlack.setText("Remaining Black Stones: " + String.valueOf(m_human.GetBlackStonesAvailable()));
-			remClear.setText("Remaining Clear Stones: " + String.valueOf(m_human.GetClearStonesAvailable()));
+			//turnMsg.setText("It's YOUR turn. Stone Choice: " + m_stoneChoice);
+			labelComputerScore.clearAnimation();
+			labelHumanScore.startAnimation(turnHighlighter);
+
+			btnComputerPlay.setVisibility(View.INVISIBLE);
+
+			remWhite.setText("White Stones: " + String.valueOf(m_human.GetWhiteStonesAvailable()));
+			remBlack.setText("Black Stones: " + String.valueOf(m_human.GetBlackStonesAvailable()));
+			remClear.setText("Clear Stones: " + String.valueOf(m_human.GetClearStonesAvailable()));
 		}
 
 		//Score board update
-		humanScore.setText("Human Score: " + String.valueOf(m_human.GetScore()));
-		computerScore.setText("Computer Score: " + String.valueOf(m_computer.GetScore()));
+		btnHumanScore.setText(String.valueOf(m_human.GetScore()));
+		btnComputerScore.setText(String.valueOf(m_computer.GetScore()));
 
 		//Animate the buttons
 		AnimateValidCells(m_computer.GetRowOfPreviousPlacement(), m_computer.GetColumnOfPreviousPlacement());
@@ -339,14 +385,14 @@ public class GameActivity extends Activity {
 			if (a_row >= 0 && a_column >= 0) {
 				// Prepare the animation for highlighting latest placement
 				Animation moveHighlighter = new AlphaAnimation(1, 0.2f);
-				moveHighlighter.setDuration(600);
+				moveHighlighter.setDuration(1000);
 				moveHighlighter.setInterpolator(new AccelerateDecelerateInterpolator()); // do not alter animation rate
 				moveHighlighter.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
 				moveHighlighter.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
 
 				//Prepare the animation for blurring invalid buttons
 				Animation animation = new AlphaAnimation(0.3f, 0.3f);     // Change alpha from fully visible to invisible
-				animation.setDuration(600); // duration - half a second
+				animation.setDuration(10000); // duration - half a second
 				animation.setInterpolator(new AccelerateDecelerateInterpolator()); // do not alter animation rate
 				animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
 				animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in

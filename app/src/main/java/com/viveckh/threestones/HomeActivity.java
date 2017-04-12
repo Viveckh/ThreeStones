@@ -50,7 +50,7 @@ public class HomeActivity extends Activity {
         startGame = (Button) findViewById(R.id.start_game);
         tossResult = (TextView) findViewById(R.id.result_of_toss);
         computerStone = (TextView) findViewById(R.id.computerStone);
-        humanStone = (TextView) findViewById(R.id.humanStone);
+        humanStone = (TextView) findViewById(R.id.imgHumanStone);
 
         //Setting the dropdown of picking color to invisible until human wins the toss.
         pick_stoneColor.setVisibility(View.INVISIBLE);
