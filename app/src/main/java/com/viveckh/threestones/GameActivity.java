@@ -17,8 +17,13 @@ package com.viveckh.threestones;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -75,6 +80,18 @@ public class GameActivity extends Activity {
 		m_clearPic = getResources().getIdentifier("clear_circle", "drawable", "com.viveckh.threestones");
 		
 		createBoard();
+	}
+
+	//Kill activity on pressing back button
+	public boolean onKeyDown(int keyCode, KeyEvent event)
+	{
+		if ((keyCode == KeyEvent.KEYCODE_BACK))
+		{
+			m_computer.ResetPreviousPlacements();
+			finish();
+
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	public void createBoard() {
@@ -311,5 +328,51 @@ public class GameActivity extends Activity {
 		//Score board update
 		humanScore.setText("Human Score: " + String.valueOf(m_human.GetScore()));
 		computerScore.setText("Computer Score: " + String.valueOf(m_computer.GetScore()));
+
+		//Animate the buttons
+		AnimateValidCells(m_computer.GetRowOfPreviousPlacement(), m_computer.GetColumnOfPreviousPlacement());
+	}
+
+	private void AnimateValidCells(int a_row, int a_column) {
+		//If buttons on the board are initialized
+		if (buttons[0][0] != null) {
+			if (a_row >= 0 && a_column >= 0) {
+				// Prepare the animation for highlighting latest placement
+				Animation moveHighlighter = new AlphaAnimation(1, 0.2f);
+				moveHighlighter.setDuration(600);
+				moveHighlighter.setInterpolator(new AccelerateDecelerateInterpolator()); // do not alter animation rate
+				moveHighlighter.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
+				moveHighlighter.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
+
+				//Prepare the animation for blurring invalid buttons
+				Animation animation = new AlphaAnimation(0.3f, 0.3f);     // Change alpha from fully visible to invisible
+				animation.setDuration(600); // duration - half a second
+				animation.setInterpolator(new AccelerateDecelerateInterpolator()); // do not alter animation rate
+				animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
+				animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
+
+				for (int row = 0; row < 11; row++) {
+					for (int col = 0; col < 11; col++) {
+						//First blur all the buttons on the board
+						buttons[row][col].startAnimation(animation);
+
+						//Now, clear blur effect from valid row and column for next move
+						if (row == a_row || col == a_column) {
+							buttons[row][col].clearAnimation();
+						}
+
+						//Now, clear blur effect from already occupied blocks as well
+						if (m_board.GetBlockAtLocation(row, col) != null && m_board.GetBlockAtLocation(row, col).IsInitialized() && m_board.GetBlockAtLocation(row, col).IsOccupied()) {
+							buttons[row][col].clearAnimation();
+						}
+
+						//Now, start move highlighting animation in the block where stone was lsat placed
+						if (row == a_row && col == a_column) {
+							buttons[row][col].startAnimation(moveHighlighter);
+						}
+					}
+				}
+			}
+		}
 	}
 }
