@@ -49,7 +49,7 @@ public class GameActivity extends Activity {
 	int m_blankPic, m_whitePic, m_blackPic, m_clearPic;
 
 	//View objects
-	Button btnComputerPlay;
+	Button btnComputerPlay, btnHelp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +64,7 @@ public class GameActivity extends Activity {
 
 		//Initializing view objects
 		btnComputerPlay = (Button)findViewById(R.id.btnComputerPlay);
+		btnHelp = (Button)findViewById(R.id.btnHelp);
 
 		//Initializing Variables
 		m_board = new Board();
@@ -341,10 +342,21 @@ public class GameActivity extends Activity {
 		turnHighlighter.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
 
 		//Setting the fonts
-		Typeface scoresFont = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
-		remWhite.setTypeface(scoresFont);
-		remBlack.setTypeface(scoresFont);
-		remClear.setTypeface(scoresFont);
+		Typeface tfRoboto = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
+		Typeface tfCaviar = Typeface.createFromAsset(getAssets(), "fonts/CaviarDreams_Bold.ttf");
+		Typeface tfSeaside = Typeface.createFromAsset(getAssets(), "fonts/SeasideResortNF.ttf");
+
+		//Set fonts for the score board
+		labelHumanScore.setTypeface(tfCaviar);
+		labelComputerScore.setTypeface(tfCaviar);
+		btnHumanScore.setTypeface(tfCaviar);
+		btnComputerScore.setTypeface(tfCaviar);
+		btnComputerPlay.setTypeface(tfSeaside);
+		btnHelp.setTypeface(tfSeaside);
+
+		remWhite.setTypeface(tfRoboto);
+		remBlack.setTypeface(tfRoboto);
+		remClear.setTypeface(tfRoboto);
 
 		//If computer's turn
 		if (m_turn == 0) {
@@ -353,6 +365,7 @@ public class GameActivity extends Activity {
 			labelComputerScore.startAnimation(turnHighlighter);
 
 			btnComputerPlay.setVisibility(View.VISIBLE);
+			btnHelp.setVisibility(View.INVISIBLE);
 
 			remWhite.setText("White Stones: " + String.valueOf(m_computer.GetWhiteStonesAvailable()));
 			remBlack.setText("Black Stones: " + String.valueOf(m_computer.GetBlackStonesAvailable()));
@@ -364,6 +377,7 @@ public class GameActivity extends Activity {
 			labelComputerScore.clearAnimation();
 			labelHumanScore.startAnimation(turnHighlighter);
 
+			btnHelp.setVisibility(View.VISIBLE);
 			btnComputerPlay.setVisibility(View.INVISIBLE);
 
 			remWhite.setText("White Stones: " + String.valueOf(m_human.GetWhiteStonesAvailable()));

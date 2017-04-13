@@ -29,35 +29,37 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:columnCount="9"
-        android:background="@drawable/skygrass">
+        android:columnCount="32"
+        >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="YOU"
             android:id="@+id/labelHumanScore"
-            android:layout_row="0"
-            android:layout_column="2"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_row="1"
+            android:layout_column="3"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="COMP"
+            android:text="BOT"
             android:id="@+id/labelComputerScore"
             android:layout_gravity="center_horizontal"
-            android:layout_row="0"
-            android:layout_column="3" />
+            android:layout_row="1"
+            android:layout_column="4"
+            android:layout_marginTop="10dp"/>
 
         <Spinner
             android:layout_width="221dp"
             android:layout_height="wrap_content"
             android:id="@+id/stonePicker"
             android:spinnerMode="dropdown"
-            android:layout_row="5"
-            android:layout_column="1"
-            android:layout_columnSpan="4"/>
+            android:layout_row="7"
+            android:layout_column="2"
+            android:layout_columnSpan="5"/>
 
         <TextView android:text="Game Status"
                   android:id="@+id/gameStatus"
@@ -67,36 +69,51 @@
                   android:gravity="center"
                   android:textAlignment="center"
                   android:textColor="@android:color/black"
-                  android:layout_row="6"
-                  android:layout_column="1"
-                  android:layout_columnSpan="4"/>
+                  android:layout_row="8"
+                  android:layout_column="2"
+                  android:layout_columnSpan="5"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pick a Stone"
             android:id="@+id/displayMsg"
-            android:layout_row="8"
-            android:layout_column="6" />
+            android:layout_row="10"
+            android:layout_column="7" />
 
         <ImageButton
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:id="@+id/imgHumanStone"
-            android:layout_row="1"
-            android:layout_column="1"
+            android:layout_row="2"
+            android:layout_column="2"
             android:scaleType="fitCenter"
             android:background="@drawable/white_circle"
             android:layout_gravity="center"
-            />
+            android:layout_marginLeft="20dp"/>
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="HELP"
+            android:id="@+id/btnHelp"
+            android:layout_gravity="center"
+            android:layout_row="3"
+            android:layout_column="2"
+            android:background="@drawable/notify_panel_notification_icon_bg"
+            android:textColor="#ffffff"
+            android:layout_columnSpan="2"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"/>
 
         <Button
             android:layout_width="68dp"
             android:layout_height="wrap_content"
             android:text="0"
             android:id="@+id/btnHumanScore"
-            android:layout_row="1"
-            android:layout_column="2"
+            android:layout_row="2"
+            android:layout_column="3"
             android:layout_gravity="center"
             android:background="@android:drawable/picture_frame"/>
 
@@ -106,8 +123,8 @@
             android:layout_height="wrap_content"
             android:text="0"
             android:id="@+id/btnComputerScore"
-            android:layout_row="1"
-            android:layout_column="3"
+            android:layout_row="2"
+            android:layout_column="4"
             android:layout_gravity="center"
             android:background="@android:drawable/picture_frame"
             />
@@ -116,50 +133,53 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:id="@+id/imgComputerStone"
-            android:layout_row="1"
-            android:layout_column="4"
+            android:layout_row="2"
+            android:layout_column="5"
             android:scaleType="fitCenter"
             android:background="@drawable/black_circle"
             />
 
         <Button
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="68dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:text="PLAY"
             android:id="@+id/btnComputerPlay"
             android:layout_gravity="center"
-            android:layout_row="1"
-            android:layout_column="5"
-            android:background="@drawable/notification_tile_bg"
-            android:textColor="#ffffff"/>
+            android:layout_row="3"
+            android:layout_column="4"
+            android:background="@drawable/notify_panel_notification_icon_bg"
+            android:textColor="#ffffff"
+            android:layout_columnSpan="2"
+            android:layout_marginTop="10dp"
+            />
 
         <TextView
             android:layout_width="196dp"
             android:layout_height="wrap_content"
             android:text="Remaining White Stones: 15"
             android:id="@+id/remWhite"
-            android:layout_row="2"
-            android:layout_column="1"
-            android:layout_columnSpan="4"/>
+            android:layout_row="4"
+            android:layout_column="2"
+            android:layout_columnSpan="5"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Remaining Black Stones: 15"
             android:id="@+id/remBlack"
-            android:layout_row="3"
-            android:layout_column="1"
-            android:layout_columnSpan="4"/>
+            android:layout_row="5"
+            android:layout_column="2"
+            android:layout_columnSpan="5"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Remaining Clear Stones: 6"
             android:id="@+id/remClear"
-            android:layout_row="4"
-            android:layout_column="1"
-            android:layout_columnSpan="4"/>
+            android:layout_row="6"
+            android:layout_column="2"
+            android:layout_columnSpan="5"/>
 
     </GridLayout>
 
