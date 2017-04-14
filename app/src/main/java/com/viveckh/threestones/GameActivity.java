@@ -16,8 +16,12 @@ package com.viveckh.threestones;
  */
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,8 +35,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 public class GameActivity extends Activity {
 
@@ -46,10 +54,11 @@ public class GameActivity extends Activity {
 	private String m_computerStoneColor;
 	private String m_stoneChoice;
 	private int m_turn;		//0 refers to computer's turn, 1 refers to human's turn
-	int m_blankPic, m_whitePic, m_blackPic, m_clearPic;
+	private int m_blankPic, m_whitePic, m_blackPic, m_clearPic;
 
 	//View objects
-	Button btnComputerPlay, btnHelp;
+	private Button btnComputerPlay, btnHelp;
+	private RadioGroup radioStonePicker;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +74,8 @@ public class GameActivity extends Activity {
 		//Initializing view objects
 		btnComputerPlay = (Button)findViewById(R.id.btnComputerPlay);
 		btnHelp = (Button)findViewById(R.id.btnHelp);
+		radioStonePicker = (RadioGroup)findViewById(R.id.radioStonePicker);
+		SetStoneChoiceUsingRadioGroupListener();
 
 		//Initializing Variables
 		m_board = new Board();
@@ -79,12 +90,16 @@ public class GameActivity extends Activity {
 			m_human = new Human('b');
 			m_computer = new Computer('w');
 			m_turn = 1;
+			//Selecting black stone choice by default for the human using the radio button
+			radioStonePicker.check(R.id.radioButton2);
 
 		}
 		else {
 			m_human = new Human('w');
 			m_computer = new Computer('b');
 			m_turn = 0;
+			//Selecting white stone choice by default for the human using the radio button
+			radioStonePicker.check(R.id.radioButton1);
 		}
 		UpdatePlayerImages();
 		UpdateGameStatusView();
@@ -105,6 +120,7 @@ public class GameActivity extends Activity {
 
 	public void createBoard() {
 
+		/*
 		//Setting up java counterparts for the android layout objects
 		final Spinner stonePicker = (Spinner)findViewById(R.id.stonePicker);
 		m_stones = getResources().getStringArray(R.array.stones);
@@ -113,6 +129,7 @@ public class GameActivity extends Activity {
 		ArrayAdapter<String> stone_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, m_stones);
 		stone_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		stonePicker.setAdapter(stone_adapter);
+		*/
 
 		//Setting up layouts
 		LinearLayout layoutVertical = (LinearLayout) findViewById(R.id.linear_layout1);
@@ -151,14 +168,7 @@ public class GameActivity extends Activity {
 
 				rowLayout.addView(buttons[i][j], p);
 
-				//Getting reference from xml for Scores and available stone displays
-				final TextView turnMsg = (TextView)findViewById(R.id.turn);
-				final Button btnHumanScore = (Button)findViewById(R.id.btnHumanScore);
-				final Button btnComputerScore = (Button)findViewById(R.id.btnComputerScore);
-				final TextView remWhite = (TextView)findViewById(R.id.remWhite);
-				final TextView remBlack = (TextView)findViewById(R.id.remBlack);
-				final TextView remClear = (TextView)findViewById(R.id.remClear);
-
+				/*
 				//Listening to which colored stone to use
 				stonePicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 					@Override
@@ -183,6 +193,7 @@ public class GameActivity extends Activity {
 					public void onNothingSelected(AdapterView<?> arg0) {
 					}
 				});
+				*/
 
 				//Setting onclicklistener for buttons in the gameBoard
 				final int x = i;
@@ -196,10 +207,11 @@ public class GameActivity extends Activity {
 
 							if (m_turn == 1) {
 								//Human's turn
-								if (stoneFiller(buttons, x, y, m_stoneChoice)) {
+								if (StoneFiller(buttons, x, y, m_stoneChoice)) {
 
 									//Handing control to the other player
 									m_turn = 0;
+									/*
 									if (stonePicker.getSelectedItemPosition() == 0) {
 										m_stoneChoice = m_computerStoneColor;
 									} else if (stonePicker.getSelectedItemPosition() == 1) {
@@ -207,6 +219,7 @@ public class GameActivity extends Activity {
 									} else {
 										m_stoneChoice = "clear";
 									}
+									*/
 									UpdateGameStatusView();
 								}
 							}
@@ -261,6 +274,7 @@ public class GameActivity extends Activity {
 							//Handing control to the other player
 							//ATTENTION: Do this only upon successful move, not default as now
 							m_turn = 1;
+							/*
 							if (stonePicker.getSelectedItemPosition() == 0) {
 								m_stoneChoice = m_humanStoneColor;
 							} else if (stonePicker.getSelectedItemPosition() == 1) {
@@ -268,6 +282,7 @@ public class GameActivity extends Activity {
 							} else {
 								m_stoneChoice = "clear";
 							}
+							*/
 							UpdateGameStatusView();
 						}
 					}
@@ -276,8 +291,27 @@ public class GameActivity extends Activity {
 		}
 	}
 
+	private void SetStoneChoiceUsingRadioGroupListener() {
+		radioStonePicker.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				switch (checkedId) {
+					case R.id.radioButton1:
+						m_stoneChoice = "white";
+						break;
+					case R.id.radioButton2:
+						m_stoneChoice = "black";
+						break;
+					case R.id.radioButton3:
+						m_stoneChoice = "clear";
+						break;
+				}
+			}
+		});
+	}
+
 	// This function fills the chosen stone in the given pouch and updates the necessary properties in the model class.
-	public boolean stoneFiller(Button[][] a_buttons, int a_row, int a_column, String a_stoneChoice) {
+	public boolean StoneFiller(Button[][] a_buttons, int a_row, int a_column, String a_stoneChoice) {
 		//Retrieve the passed values and convert them in the proper form
 		char stone;
 		int newButtonBackground;
@@ -330,9 +364,17 @@ public class GameActivity extends Activity {
 		Button btnComputerScore = (Button)findViewById(R.id.btnComputerScore);
 		TextView labelHumanScore = (TextView)findViewById(R.id.labelHumanScore);
 		TextView labelComputerScore = (TextView)findViewById(R.id.labelComputerScore);
-		TextView remWhite = (TextView)findViewById(R.id.remWhite);
-		TextView remBlack = (TextView)findViewById(R.id.remBlack);
-		TextView remClear = (TextView)findViewById(R.id.remClear);
+
+		TextView labelScoreBoard = (TextView) findViewById(R.id.labelScoreBoard);
+		TextView labelControls = (TextView) findViewById(R.id.labelControls);
+		TextView labelNotifications = (TextView) findViewById(R.id.labelNotifications);
+
+		//Retrieve stone picker components from the view
+		TextView labelStonePicker = (TextView)findViewById(R.id.labelStonePicker);
+		RadioGroup radioStonePicker = (RadioGroup)findViewById(R.id.radioStonePicker);
+		RadioButton radioButton1 = (RadioButton)findViewById(R.id.radioButton1);
+		RadioButton radioButton2 = (RadioButton)findViewById(R.id.radioButton2);
+		RadioButton radioButton3 = (RadioButton)findViewById(R.id.radioButton3);
 
 		//Setting up animations for turns
 		Animation turnHighlighter = new AlphaAnimation(1, 0.2f);
@@ -341,48 +383,73 @@ public class GameActivity extends Activity {
 		turnHighlighter.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
 		turnHighlighter.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
 
+		//Displaying images next to the radiobuttons
+		Drawable resized_white_circle = getResources().getDrawable(m_whitePic);
+		Drawable resized_black_circle = getResources().getDrawable(m_blackPic);
+		Drawable resized_clear_circle = getResources().getDrawable(m_clearPic);
+		resized_white_circle.setBounds(0, 0, 50, 50);
+		resized_black_circle.setBounds(0, 0, 50, 50);
+		resized_clear_circle.setBounds(0, 0, 50, 50);
+		radioButton1.setCompoundDrawables(resized_white_circle, null, null, null);
+		radioButton2.setCompoundDrawables(resized_black_circle, null, null, null);
+		radioButton3.setCompoundDrawables(resized_clear_circle, null, null, null);
+
 		//Setting the fonts
 		Typeface tfRoboto = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
 		Typeface tfCaviar = Typeface.createFromAsset(getAssets(), "fonts/CaviarDreams_Bold.ttf");
 		Typeface tfSeaside = Typeface.createFromAsset(getAssets(), "fonts/SeasideResortNF.ttf");
+
+		//Set fonts of section headers
+		labelScoreBoard.setTypeface(tfCaviar);
+		labelControls.setTypeface(tfCaviar);
+		labelNotifications.setTypeface(tfCaviar);
 
 		//Set fonts for the score board
 		labelHumanScore.setTypeface(tfCaviar);
 		labelComputerScore.setTypeface(tfCaviar);
 		btnHumanScore.setTypeface(tfCaviar);
 		btnComputerScore.setTypeface(tfCaviar);
+
+		//Set font of gameplay controls
 		btnComputerPlay.setTypeface(tfSeaside);
 		btnHelp.setTypeface(tfSeaside);
-
-		remWhite.setTypeface(tfRoboto);
-		remBlack.setTypeface(tfRoboto);
-		remClear.setTypeface(tfRoboto);
+		labelStonePicker.setTypeface(tfCaviar);
+		radioButton1.setTypeface(tfCaviar);
+		radioButton2.setTypeface(tfCaviar);
+		radioButton3.setTypeface(tfCaviar);
 
 		//If computer's turn
 		if (m_turn == 0) {
-			//turnMsg.setText("It's COMPUTER'S turn. Stone Choice: " + m_stoneChoice);
 			labelHumanScore.clearAnimation();
 			labelComputerScore.startAnimation(turnHighlighter);
 
 			btnComputerPlay.setVisibility(View.VISIBLE);
 			btnHelp.setVisibility(View.INVISIBLE);
 
-			remWhite.setText("White Stones: " + String.valueOf(m_computer.GetWhiteStonesAvailable()));
-			remBlack.setText("Black Stones: " + String.valueOf(m_computer.GetBlackStonesAvailable()));
-			remClear.setText("Clear Stones: " + String.valueOf(m_computer.GetClearStonesAvailable()));
+			//Disable radiobuttons for stone picking
+			for(int i = 0; i < radioStonePicker.getChildCount(); i++){
+				radioStonePicker.getChildAt(i).setEnabled(false);
+			}
+
+			radioButton1.setText(String.valueOf(m_computer.GetWhiteStonesAvailable()));
+			radioButton2.setText(String.valueOf(m_computer.GetBlackStonesAvailable()));
+			radioButton3.setText(String.valueOf(m_computer.GetClearStonesAvailable()));
 		}
 		//If human's turn
 		else {
-			//turnMsg.setText("It's YOUR turn. Stone Choice: " + m_stoneChoice);
 			labelComputerScore.clearAnimation();
 			labelHumanScore.startAnimation(turnHighlighter);
 
 			btnHelp.setVisibility(View.VISIBLE);
 			btnComputerPlay.setVisibility(View.INVISIBLE);
 
-			remWhite.setText("White Stones: " + String.valueOf(m_human.GetWhiteStonesAvailable()));
-			remBlack.setText("Black Stones: " + String.valueOf(m_human.GetBlackStonesAvailable()));
-			remClear.setText("Clear Stones: " + String.valueOf(m_human.GetClearStonesAvailable()));
+			for(int i = 0; i < radioStonePicker.getChildCount(); i++){
+				radioStonePicker.getChildAt(i).setEnabled(true);
+			}
+
+			radioButton1.setText(String.valueOf(m_human.GetWhiteStonesAvailable()));
+			radioButton2.setText(String.valueOf(m_human.GetBlackStonesAvailable()));
+			radioButton3.setText(String.valueOf(m_human.GetClearStonesAvailable()));
 		}
 
 		//Score board update
@@ -411,22 +478,46 @@ public class GameActivity extends Activity {
 				animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
 				animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
 
-				for (int row = 0; row < 11; row++) {
-					for (int col = 0; col < 11; col++) {
-						//First blur all the buttons on the board
-						buttons[row][col].startAnimation(animation);
-
-						//Now, clear blur effect from valid row and column for next move
+				//Check if all the blocks in the row/column of last placement are occupied.
+				//If so, the player has the option to place stone anywhere on board
+				boolean doNotOpenEntireBoardForPlacement = false;
+				for (int row = 0; row < m_board.GetBoardDimension(); row++) {
+					for (int col = 0; col < m_board.GetBoardDimension(); col++) {
+						//if at least one spot is vacant in the row/column of last placement
 						if (row == a_row || col == a_column) {
+							if (m_board.GetBlockAtLocation(row, col) != null && m_board.GetBlockAtLocation(row, col).IsInitialized() && !m_board.GetBlockAtLocation(row, col).IsOccupied()) {
+								doNotOpenEntireBoardForPlacement = true;
+							}
+						}
+					}
+				}
+
+				//Start animations
+				for (int row = 0; row < m_board.GetBoardDimension(); row++) {
+					for (int col = 0; col < m_board.GetBoardDimension(); col++) {
+
+						//If 'doNotOpenEntireBoardForPlacement' is true, then only enable blocks in 1 row and column for placement
+						//Else open everything
+						if (doNotOpenEntireBoardForPlacement) {
+							//First blur all the buttons on the board
+							buttons[row][col].startAnimation(animation);
+
+							//Now, clear blur effect from valid row and column for next move
+							if (row == a_row || col == a_column) {
+								buttons[row][col].clearAnimation();
+							}
+
+							//Now, clear blur effect from already occupied blocks as well
+							if (m_board.GetBlockAtLocation(row, col) != null && m_board.GetBlockAtLocation(row, col).IsInitialized() && m_board.GetBlockAtLocation(row, col).IsOccupied()) {
+								buttons[row][col].clearAnimation();
+							}
+						}
+						else {
+							//Clear all forms of previous animations
 							buttons[row][col].clearAnimation();
 						}
 
-						//Now, clear blur effect from already occupied blocks as well
-						if (m_board.GetBlockAtLocation(row, col) != null && m_board.GetBlockAtLocation(row, col).IsInitialized() && m_board.GetBlockAtLocation(row, col).IsOccupied()) {
-							buttons[row][col].clearAnimation();
-						}
-
-						//Now, start move highlighting animation in the block where stone was lsat placed
+						//Now, start move highlighting animation in the block where stone was last placed
 						if (row == a_row && col == a_column) {
 							buttons[row][col].startAnimation(moveHighlighter);
 						}
