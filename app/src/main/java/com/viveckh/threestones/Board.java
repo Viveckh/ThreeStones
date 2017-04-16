@@ -30,10 +30,10 @@ public class Board {
 					// Leave the center blank
 				} else {
 					m_gameBoard[row][column] = new Block(row, column);
-					System.out.print(m_gameBoard[row][column].GetY() + " ");
+					//System.out.print(m_gameBoard[row][column].GetY() + " ");
 				}
 			}
-			System.out.println();
+			//System.out.println();
 			// Updating variables to build the top half of the board
 			if (row < (m_DIMENSION / 2 - 1)) {
 				startingColumn--;
@@ -70,18 +70,18 @@ public class Board {
 	//Draw board
 	public void DrawBoard() {
 		//Copy all the indexes from the board passed as parameter
-		System.out.println("List of Occupied indexes");
+		//System.out.println("List of Occupied indexes");
 		for (int row = 0; row < m_DIMENSION; row++) {
 			for (int column = 0; column < m_DIMENSION; column++) {
 				//If an index in the passed gameboard isn't null
 				if (m_gameBoard[row][column] != null) {
 					//Mention it is occupied
 					if (m_gameBoard[row][column].IsOccupied()) {
-						System.out.println("(" + m_gameBoard[row][column].GetX() + ", " + m_gameBoard[row][column].GetY() + ")");
+						//System.out.println("(" + m_gameBoard[row][column].GetX() + ", " + m_gameBoard[row][column].GetY() + ")");
 					}
 				}
 			}
-			System.out.println();
+			//System.out.println();
 		}
 	}
 

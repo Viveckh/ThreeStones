@@ -17,6 +17,7 @@ public class Computer extends Player{
 	//Calculate and display the best movement for the computer based on the calculations
 	//The stone, row, and column parameters are actually meant for pass by reference purposes so that the caller knows what move the computer made
 	public boolean Play(Boolean a_helpModeOn, char a_stone, int a_row, int a_column, Board a_board) {
+		printNotifications = false;
 		
 		//STEP 1: SET THE CLASS VARIABLES TO PROPER STONES BASED ON WHO IS CALLING THE PLAY FUNCTION
 		//If help mode is off, pick computer's stone as ownStone. If help mode is on, pick computer's stone as opponentStone
@@ -60,13 +61,13 @@ public class Computer extends Player{
 						//Place the stone in this temp board and calculate what would the score look like
 						if (tempBoard1.SetStoneAtLocation(row, column, m_ownStoneColor)) {
 							points = CalculateScoreAfterMove(m_ownStoneColor, row, column, tempBoard1) - CalculateScoreAfterMove(m_opponentStoneColor, row, column, tempBoard1);
-							System.out.println("Going through (" + row + ", " + column + ") " + m_ownStoneColor + " " + points);
 							//If this is the best move so far, make a note of it
 							if (points > highestScoreDifference) {
 								highestScoreDifference = points;
 								bestRowForPlacement = row;
 								bestColumnForPlacement = column;
 								bestStoneForPlacement = m_ownStoneColor;
+								Notifications.BotsThink_FoundAPlacementToWinPoints(points, "own");
 							}
 						}
 					}
@@ -76,13 +77,13 @@ public class Computer extends Player{
 						//Place the stone in this temp board and calculate what would the score look like
 						if (tempBoard2.SetStoneAtLocation(row, column, m_opponentStoneColor)) {
 							points = CalculateScoreAfterMove(m_ownStoneColor, row, column, tempBoard2) - CalculateScoreAfterMove(m_opponentStoneColor, row, column, tempBoard2);
-							System.out.println("Going through (" + row + ", " + column + ") " + m_opponentStoneColor + " " + points);
 							//If this is the best move so far, make a note of it
 							if (points > highestScoreDifference) {
 								highestScoreDifference = points;
 								bestRowForPlacement = row;
 								bestColumnForPlacement = column;
 								bestStoneForPlacement = m_opponentStoneColor;
+								Notifications.BotsThink_FoundAPlacementToWinPoints(points, "opponent");
 							}
 						}
 					}
@@ -92,7 +93,6 @@ public class Computer extends Player{
 						//Place the stone in this temp board and calculate what would the score look like
 						if (tempBoard3.SetStoneAtLocation(row, column, m_commonStoneColor)) {
 							points = CalculateScoreAfterMove(m_ownStoneColor, row, column, tempBoard3) - CalculateScoreAfterMove(m_opponentStoneColor, row, column, tempBoard3);
-							System.out.println("Going through (" + row + ", " + column + ") " + m_commonStoneColor + " " + points);
 
 							//If this is the best move so far, make a note of it
 							if (points > highestScoreDifference) {
@@ -100,12 +100,16 @@ public class Computer extends Player{
 								bestRowForPlacement = row;
 								bestColumnForPlacement = column;
 								bestStoneForPlacement = m_commonStoneColor;
+								Notifications.BotsThink_FoundAPlacementToWinPoints(points, "magic");
 							}
 						}
 					}
 				}
 			}
 		}
+
+		//Now that the computer has calculated its move, it is safe to print notifications
+		printNotifications = true;
 
 
 		//Minimax(a_board, m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, 3, 0, 0, true, 0);

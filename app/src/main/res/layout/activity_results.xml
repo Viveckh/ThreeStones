@@ -19,7 +19,8 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        >
 
     </LinearLayout>
 
@@ -127,15 +128,6 @@
             android:layout_marginTop="5dp"
             android:background="#397e87"/>
 
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/stonePicker"
-            android:spinnerMode="dropdown"
-            android:layout_row="10"
-            android:layout_column="2"
-            android:layout_columnSpan="5"/>
-
         <ImageButton
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -224,6 +216,21 @@
             android:layout_columnSpan="2"
             android:layout_marginTop="5dp"
             android:clickable="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/txtViewNotifications"
+            android:layout_row="8"
+            android:layout_column="2"
+            android:layout_columnSpan="4"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:textSize="10dp"
+            android:textColor="#fa0808"
+            android:scrollIndicators="bottom|right"
+            android:layout_rowSpan="8"/>
 
     </GridLayout>
 

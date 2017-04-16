@@ -59,6 +59,7 @@ public class GameActivity extends Activity {
 	//View objects
 	private Button btnComputerPlay, btnHelp;
 	private RadioGroup radioStonePicker;
+	TextView txtViewNotifications;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,7 @@ public class GameActivity extends Activity {
 		//Initializing view objects
 		btnComputerPlay = (Button)findViewById(R.id.btnComputerPlay);
 		btnHelp = (Button)findViewById(R.id.btnHelp);
+		txtViewNotifications = (TextView)findViewById(R.id.txtViewNotifications);
 		radioStonePicker = (RadioGroup)findViewById(R.id.radioStonePicker);
 		SetStoneChoiceUsingRadioGroupListener();
 
@@ -203,14 +205,14 @@ public class GameActivity extends Activity {
 						// TODO Auto-generated method stub
 						//
 						//Either human or computer's function can be used to check permission
-						if (m_human.HasPermissionToOccupyVacantSpot(x, y, m_board)) {
-
+						//if (m_human.HasPermissionToOccupyVacantSpot(x, y, m_board)) {
 							if (m_turn == 1) {
 								//Human's turn
 								if (StoneFiller(buttons, x, y, m_stoneChoice)) {
 
 									//Handing control to the other player
 									m_turn = 0;
+									UpdateGameStatusView();
 									/*
 									if (stonePicker.getSelectedItemPosition() == 0) {
 										m_stoneChoice = m_computerStoneColor;
@@ -220,9 +222,9 @@ public class GameActivity extends Activity {
 										m_stoneChoice = "clear";
 									}
 									*/
-									UpdateGameStatusView();
 								}
 							}
+							DisplayNotifications();
 							//NOTE: Job of updating the location where stone was last inserted is already done within Player class after insertion
 
 							// Game over
@@ -241,7 +243,7 @@ public class GameActivity extends Activity {
 							}
 							*/
 						}
-					}
+					//}
 				});
 
 				//If computer's play button is pressed
@@ -274,6 +276,8 @@ public class GameActivity extends Activity {
 							//Handing control to the other player
 							//ATTENTION: Do this only upon successful move, not default as now
 							m_turn = 1;
+							UpdateGameStatusView();
+							DisplayNotifications();
 							/*
 							if (stonePicker.getSelectedItemPosition() == 0) {
 								m_stoneChoice = m_humanStoneColor;
@@ -283,7 +287,6 @@ public class GameActivity extends Activity {
 								m_stoneChoice = "clear";
 							}
 							*/
-							UpdateGameStatusView();
 						}
 					}
 				});
@@ -342,6 +345,19 @@ public class GameActivity extends Activity {
 			}
 		}
 		return false;
+	}
+
+	private void DisplayNotifications() {
+		String msgToDisplay;
+		// If the msg vector is not empty, print out the msges that have been stored in it
+		if (!Notifications.GetNotificationsList().isEmpty()) {
+			msgToDisplay = Notifications.GetNotificationsList().toString()
+				  .replace(",", "")
+				  .replace("[", "")
+				  .replace("]", "");
+			txtViewNotifications.setText(msgToDisplay);
+		}
+		Notifications.ClearNotificationsList();
 	}
 
 	//Sets the stone images for each player in the scoreboard. Supposed to be called once the stone values read from previous intent
@@ -417,6 +433,9 @@ public class GameActivity extends Activity {
 		radioButton1.setTypeface(tfCaviar);
 		radioButton2.setTypeface(tfCaviar);
 		radioButton3.setTypeface(tfCaviar);
+
+		//Set font for notifications board
+		txtViewNotifications.setTypeface(tfRoboto);
 
 		//If computer's turn
 		if (m_turn == 0) {

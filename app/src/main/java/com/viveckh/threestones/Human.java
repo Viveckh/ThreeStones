@@ -11,8 +11,10 @@ public class Human extends Player {
 	}
 
 	public boolean Play(char a_stone, int a_row, int a_column, Board a_board) {
+		printNotifications = true;
 		//If index out of bounds, move cannot be made
 		if (IndexOutOfBounds(a_row, a_column, a_board.GetBoardDimension())) {
+			printStatus = printNotifications ? Notifications.Msg_InputOutOfBounds() : Notifications.Msg_NoMsg();
 			return false;
 		}
 
