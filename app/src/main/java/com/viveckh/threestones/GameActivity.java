@@ -84,22 +84,27 @@ public class GameActivity extends Activity {
 
 		//Getting the intent from previous activity
 		Bundle extras = getIntent().getExtras();
-		m_humanStoneColor = extras.getString("human_stoneColor");
-		m_computerStoneColor = extras.getString("computer_stoneColor");
+		m_humanStoneColor = extras.getString("humanStone");
+		m_computerStoneColor = extras.getString("computerStone");
 
 		//Initializing turn value. 0 for computer, 1 for human
+		if (Tournament.GetNextPlayer().equals("computer")) {
+			m_turn = 0;
+		}
+		else {
+			m_turn = 1;
+		}
+
+		//Initializing players
 		if (m_humanStoneColor.equals("black")) {
 			m_human = new Human('b');
 			m_computer = new Computer('w');
-			m_turn = 1;
-			//Selecting black stone choice by default for the human using the radio button
+			//Selecting black stone choice by default for the human using radio button.
 			radioStonePicker.check(R.id.radioButton2);
-
 		}
 		else {
 			m_human = new Human('w');
 			m_computer = new Computer('b');
-			m_turn = 0;
 			//Selecting white stone choice by default for the human using the radio button
 			radioStonePicker.check(R.id.radioButton1);
 		}

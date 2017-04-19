@@ -1,94 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-                android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                tools:context="com.viveckh.threestones.HomeActivity">
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+            android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            tools:context="com.viveckh.threestones.HomeActivity"
+            android:background="@drawable/skygrass">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView4"
-        android:layout_marginTop="56dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:text="Choose a Coin Face" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="T      H      R      E      E      S      T      O      N      E      S"
+        android:id="@+id/labelGameName"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:layout_gravity="center_horizontal"
+        android:layout_columnSpan="7"/>
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/pick_coinFace"
-        android:layout_below="@+id/textView4"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+    <ListView
+        android:layout_width="200dp"
+        android:layout_height="223dp"
+        android:id="@+id/listView_SerializationFiles"
+        android:layout_row="2"
+        android:layout_column="6"
+        android:layout_rowSpan="6"
+        android:choiceMode="singleChoice"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Choose a Stone Color"
-        android:id="@+id/textView5"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+    <ImageButton
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/btnStartNewGame"
+        android:background="@drawable/coin_toss"
+        android:layout_row="1"
+        android:layout_column="1"
+        android:layout_columnSpan="4"
+        android:layout_marginTop="10dp"/>
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/pick_stoneColor"
-        android:layout_below="@+id/textView5"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Toss the Coin!"
-        android:id="@+id/toss_the_coin"
-        android:layout_below="@+id/pick_coinFace"
-        android:layout_centerHorizontal="true" />
+    <ImageButton
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/btnRestoreGame"
+        android:background="@drawable/saved_games"
+        android:clickable="false"
+        android:layout_row="1"
+        android:layout_column="6"
+        android:layout_marginTop="10dp"/>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Result of toss"
-        android:id="@+id/result_of_toss"
-        android:layout_below="@+id/toss_the_coin"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="39dp" />
+        android:layout_width="270dp"
+        android:layout_height="70dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Tap the button above for toss."
+        android:id="@+id/txtView_TossResults"
+        android:layout_row="2"
+        android:layout_column="2"
+        android:layout_columnSpan="3"
+        android:layout_marginTop="10dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imgHumanStone"
-        android:text="Human stone"
-        android:layout_below="@+id/pick_stoneColor"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/result_of_toss"
-        android:layout_alignEnd="@+id/result_of_toss" />
+    <RadioGroup
+        android:layout_width="281dp"
+        android:layout_height="54dp"
+        android:layout_row="3"
+        android:layout_column="1"
+        android:orientation="horizontal"
+        android:layout_columnSpan="3"
+        android:weightSum="1"
+        android:id="@+id/radioGrp_Teams"
+        android:layout_gravity="center_horizontal|right"
+        android:layout_rowSpan="3"
+        android:layout_marginTop="10dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Computer Stone"
-        android:id="@+id/computerStone"
-        android:layout_alignLeft="@+id/imgHumanStone"
-        android:layout_alignStart="@+id/imgHumanStone"
-        android:layout_below="@+id/imgHumanStone"
-        android:layout_alignRight="@+id/imgHumanStone"
-        android:layout_alignEnd="@+id/imgHumanStone" />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radio_teamWhite"
+            android:checked="true"
+            android:text="GDrive"
+            android:layout_weight="0.50"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Proceed to the Game!"
-        android:id="@+id/start_game"
-        android:layout_below="@+id/computerStone"
-        android:layout_alignLeft="@+id/toss_the_coin"
-        android:layout_alignStart="@+id/toss_the_coin"
-        android:layout_marginTop="36dp"
-        android:onClick="onClick"/>
-</RelativeLayout>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radio_teamBlack"
+            android:checked="false"
+            android:layout_weight="0.5"
+            android:text="Dropbox"/>
+    </RadioGroup>
+
+    <ImageButton
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/btnProceedToGame"
+        android:background="@drawable/proceed_to_game"
+        android:layout_row="7"
+        android:layout_column="1"
+        android:layout_gravity="center_horizontal"
+        android:layout_columnSpan="4"/>
+</GridLayout>

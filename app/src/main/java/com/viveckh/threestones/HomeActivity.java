@@ -11,126 +11,183 @@ Depending on the toss, appropriate colors are assigned to the Computer & Human P
 to Home activity.
 */
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Random;
 import android.app.Activity;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.content.Intent;
 
-public class HomeActivity extends Activity {
-    private Spinner pick_coinFace;
-    private Spinner pick_stoneColor;
-    private Button toss_the_coin;
-    private Button startGame;
-    private TextView computerStone;
-    private TextView humanStone;
-    private TextView tossResult;
+import org.w3c.dom.Text;
 
-    private String[] coinFaces;
-    private String[] stoneColors;
-    private String tossWinner;
-    private String human_stoneColor;
-    private String computer_stoneColor;
+public class HomeActivity extends Activity {
+    private ImageButton m_btnStartNewGame;
+    private ImageButton m_btnProceedToGame;
+    private ImageButton m_btnRestoreGame;
+    private TextView m_labelGameName;
+    private TextView m_txtViewTossResults;
+    private String m_dataStoragePath;
+    private RadioGroup m_radioGrpTeams;
+    private RadioButton m_radioWhite;
+    private RadioButton m_radioBlack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        //Initializing DropDown objects in java by getting reference from xml
-        pick_coinFace = (Spinner) findViewById(R.id.pick_coinFace);
-        pick_stoneColor = (Spinner) findViewById(R.id.pick_stoneColor);
-        toss_the_coin = (Button) findViewById(R.id.toss_the_coin);
-        startGame = (Button) findViewById(R.id.start_game);
-        tossResult = (TextView) findViewById(R.id.result_of_toss);
-        computerStone = (TextView) findViewById(R.id.computerStone);
-        humanStone = (TextView) findViewById(R.id.imgHumanStone);
+        m_dataStoragePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/ThreeStones Data";
+        m_btnStartNewGame = (ImageButton)findViewById(R.id.btnStartNewGame);
+        m_btnProceedToGame = (ImageButton) findViewById(R.id.btnProceedToGame);
+        m_btnRestoreGame = (ImageButton) findViewById(R.id.btnRestoreGame);
+        m_labelGameName = (TextView) findViewById(R.id.labelGameName);
+        m_txtViewTossResults = (TextView) findViewById(R.id.txtView_TossResults);
+        m_radioGrpTeams = (RadioGroup)findViewById(R.id.radioGrp_Teams);
+        m_radioWhite = (RadioButton)findViewById(R.id.radio_teamWhite);
+        m_radioBlack = (RadioButton)findViewById(R.id.radio_teamBlack);
 
-        //Setting the dropdown of picking color to invisible until human wins the toss.
-        pick_stoneColor.setVisibility(View.INVISIBLE);
-        humanStone.setVisibility(View.INVISIBLE);
-        computerStone.setVisibility(View.INVISIBLE);
+        m_btnProceedToGame.setVisibility(View.INVISIBLE);
+        m_radioGrpTeams.setVisibility(View.INVISIBLE);
 
-        //Initializing string arrays of coin faces and stone colors in java by getting reference from xml
-        coinFaces = getResources().getStringArray(R.array.coinFaces);
-        stoneColors = getResources().getStringArray(R.array.stoneColors);
-
-        //Setting up adapter for coin face picking dropdown
-        ArrayAdapter<String> coin_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, coinFaces);
-        coin_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        pick_coinFace.setAdapter(coin_adapter);
-
-        //Setting up adapter for stone color picking dropdown
-        ArrayAdapter<String> stone_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, stoneColors);
-        stone_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        pick_stoneColor.setAdapter(stone_adapter);
-
-        toss_the_coin.setOnClickListener(new View.OnClickListener() {
+        UpdateControlViews();
+        //If user chooses to start a new game, conduct toss and activate the proceed to game button
+        m_btnStartNewGame.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                humanStone.setVisibility(View.VISIBLE);
-                computerStone.setVisibility(View.VISIBLE);
-                if (randomNum(2) == pick_coinFace.getSelectedItemPosition()) {
-                    //Human wins the toss
-                    tossResult.setText("You win the Toss");
-                    pick_stoneColor.setVisibility(View.VISIBLE);
-                }
-                else {
-                    //Computer wins the toss
-                    tossResult.setText("The Computer wins the Toss");
-                    pick_stoneColor.setVisibility(View.INVISIBLE);
-                    human_stoneColor = stoneColors[0];
-                    humanStone.setText("Your stone : " + human_stoneColor);
-                    computer_stoneColor = stoneColors[1];
-                    computerStone.setText("Computer's stone : " + computer_stoneColor);
-                }
+                //Show only components necessary to view toss results and to proceed to a new game
+                m_radioGrpTeams.setVisibility(View.VISIBLE);
+                m_btnProceedToGame.setVisibility(View.VISIBLE);
+                Tournament.ResetScores();
+                TossToBegin();
             }
         });
 
-        //Listening to stone selection
-        pick_stoneColor.setOnItemSelectedListener(new OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                human_stoneColor = stoneColors[pick_stoneColor.getSelectedItemPosition()];
-                humanStone.setText("Your stone : " + human_stoneColor);
-
-                if (human_stoneColor == stoneColors[0]) {
-                    computer_stoneColor = stoneColors[1];
-                }
-                else {
-                    computer_stoneColor = stoneColors[0];
-                }
-                computerStone.setText("Computer's stone : " + computer_stoneColor);
+        //If user chooses to proceed to the game after the toss
+        m_btnProceedToGame.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                ProceedToGame(m_btnProceedToGame);
             }
+        });
 
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
+        // Get the files in the given folder and display in the ListView (For restoring saved game)
+        ArrayList<String> filesInFolder = GetFiles(m_dataStoragePath);
+        final ListView listView_SerializationFiles = (ListView) findViewById(R.id.listView_SerializationFiles);
+        listView_SerializationFiles.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, filesInFolder));
+
+        listView_SerializationFiles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                // Clicking on items
+                String selectedItem = (String) (listView_SerializationFiles.getItemAtPosition(position));
+                //RestoreGame(selectedItem);
             }
         });
     }
 
-    // Checks the input values and passes intent to create the next view once
-    // the button is pressed.
-    public void onClick(View view) {
+    /**
+     * Gets the names of files in a given directory and puts them into an array list
+     *
+     * @param a_directoryPath Directory whose files are to be listed
+     * @return ArrayList that consists of all the names of files in the directory
+     */
+    public ArrayList<String> GetFiles(String a_directoryPath) {
+        ArrayList<String> dataFiles = new ArrayList<String>();
 
-        if ((humanStone.getVisibility() != View.VISIBLE) || (computerStone.getVisibility() != View.VISIBLE)) {
-            return;
+        //Create the data storage folder if it doesn't exist yet
+        File folder = new File(a_directoryPath);
+        boolean success = false;
+        if (!folder.exists()) {
+            success = folder.mkdirs();
+        }
+        else {
+            success = true;
         }
 
-        Intent i = new Intent(this, GameActivity.class);
-        i.putExtra("human_stoneColor", human_stoneColor);
-        i.putExtra("computer_stoneColor", computer_stoneColor);
-        startActivity(i);
+        if (success) {
+            File[] files = folder.listFiles();
+            if (files != null) {
+                for (int i = 0; i < files.length; i++)
+                    dataFiles.add(files[i].getName());
+            }
+        }
+        return dataFiles;
     }
 
-    public int randomNum(int size) {
+    /**
+     * Starts next activity and passes necessary intents to start a fresh game
+     *
+     * @param view button whose click instigates the function
+     */
+    public void ProceedToGame(View view) {
+        Intent intent = new Intent(this, GameActivity.class);
+        //Next player is already passed through Tournament's static variable
+        //Whichever radio button is checked is human's choice of stone
+        if (m_radioWhite.isChecked()) {
+            intent.putExtra("humanStone", "white");
+            intent.putExtra("computerStone", "black");
+        }
+        else {
+            intent.putExtra("humanStone", "black");
+            intent.putExtra("computerStone", "white");
+        }
+        startActivity(intent);
+    }
+
+    /**
+     * Does a toss until one side wins, refreshes view with the toss result and sets the necessary values in static Tournament class regarding which side is the next player
+     */
+    private void TossToBegin() {
         Random rand = new Random();
-        return rand.nextInt(size);
+        int humanDieToss, botDieToss;
+
+        // Continue until both have different Toss results
+        do {
+            humanDieToss = rand.nextInt(2);
+            botDieToss = rand.nextInt(2);
+        } while (humanDieToss == botDieToss);
+
+        // Whoever has the highest number on top - wins the toss
+        if (humanDieToss > botDieToss) {
+            Tournament.SetNextPlayer("human");
+            m_txtViewTossResults.setText("Toss Results:\nBot: " + botDieToss + ", You: " + humanDieToss + "\nYou won the toss.");
+        } else {
+            Tournament.SetNextPlayer("computer");
+            m_txtViewTossResults.setText("Toss Results:\nBot: " + botDieToss + ", You: " + humanDieToss + "\nComputer won the toss.");
+        }
+    }
+
+    private void UpdateControlViews() {
+        //Initializing fonts
+        Typeface tfRoboto = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
+        Typeface tfCaviar = Typeface.createFromAsset(getAssets(), "fonts/CaviarDreams_Bold.ttf");
+        Typeface tfSeaside = Typeface.createFromAsset(getAssets(), "fonts/SeasideResortNF.ttf");
+
+        //Setting the fonts
+        m_labelGameName.setTypeface(tfSeaside);
+        m_txtViewTossResults.setTypeface(tfCaviar);
+        m_radioBlack.setTypeface(tfCaviar);
+        m_radioWhite.setTypeface(tfCaviar);
+
+        //Displaying images next to the radiobuttons
+        Drawable resized_white_circle = getResources().getDrawable(R.drawable.white_circle);
+        Drawable resized_black_circle = getResources().getDrawable(R.drawable.black_circle);
+        resized_white_circle.setBounds(0, 0, 110, 110);
+        resized_black_circle.setBounds(0, 0, 110, 110);
+        m_radioWhite.setCompoundDrawables(resized_white_circle, null, null, null);
+        m_radioBlack.setCompoundDrawables(resized_black_circle, null, null, null);
     }
 }
