@@ -15,6 +15,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
@@ -42,7 +43,7 @@ public class HomeActivity extends Activity {
     private ImageButton m_btnRestoreGame;
     private TextView m_labelGameName;
     private TextView m_txtViewTossResults;
-    private String m_dataStoragePath;
+    private String m_dataStorageDirectory;
     private RadioGroup m_radioGrpTeams;
     private RadioButton m_radioWhite;
     private RadioButton m_radioBlack;
@@ -52,7 +53,7 @@ public class HomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        m_dataStoragePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/ThreeStones Data";
+        m_dataStorageDirectory = "ThreestonesData";
         m_btnStartNewGame = (ImageButton)findViewById(R.id.btnStartNewGame);
         m_btnProceedToGame = (ImageButton) findViewById(R.id.btnProceedToGame);
         m_btnRestoreGame = (ImageButton) findViewById(R.id.btnRestoreGame);
@@ -85,7 +86,7 @@ public class HomeActivity extends Activity {
         });
 
         // Get the files in the given folder and display in the ListView (For restoring saved game)
-        ArrayList<String> filesInFolder = GetFiles(m_dataStoragePath);
+        ArrayList<String> filesInFolder = GetFiles(m_dataStorageDirectory);
         final ListView listView_SerializationFiles = (ListView) findViewById(R.id.listView_SerializationFiles);
         listView_SerializationFiles.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, filesInFolder));
 
@@ -104,11 +105,12 @@ public class HomeActivity extends Activity {
      * @param a_directoryPath Directory whose files are to be listed
      * @return ArrayList that consists of all the names of files in the directory
      */
-    public ArrayList<String> GetFiles(String a_directoryPath) {
+    public ArrayList<String> GetFiles(String a_directoryName) {
         ArrayList<String> dataFiles = new ArrayList<String>();
 
+        Context context = getApplicationContext();
         //Create the data storage folder if it doesn't exist yet
-        File folder = new File(a_directoryPath);
+        File folder = context.getDir(a_directoryName, Context.MODE_PRIVATE);
         boolean success = false;
         if (!folder.exists()) {
             success = folder.mkdirs();

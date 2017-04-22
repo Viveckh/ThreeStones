@@ -47,7 +47,7 @@ public final class Notifications {
 	 * @return true when the msg is added to the vector
 	 */
 	public static boolean Msg_AlreadyOccupied() {
-		m_notificationsList.add("->ERROR: You can't be tapping on those occupied pouches, man!\n");
+		m_notificationsList.add("\u2022ERROR: You can't be tapping on those occupied pouches, man!\n");
 		return true;
 	}
 
@@ -57,7 +57,7 @@ public final class Notifications {
 	 * @return true when the msg is added to the vector
 	 */
 	public static boolean Msg_ImproperInput() {
-		m_notificationsList.add("->ERROR: Why you annoying me with improper inputs? Go, Try again!\n");
+		m_notificationsList.add("\u2022ERROR: Why you annoying me with improper inputs? Go, Try again!\n");
 		return true;
 	}
 
@@ -67,7 +67,7 @@ public final class Notifications {
 	 * @return true when the msg is added to the vector
 	 */
 	public static boolean Msg_InputOutOfBounds() {
-		m_notificationsList.add("->ERROR: Input co-ordinates out of bound. *Rolls eyes* Try again!\n");
+		m_notificationsList.add("\u2022ERROR: Input co-ordinates out of bound. *Rolls eyes* Try again!\n");
 		return true;
 	}
 
@@ -77,7 +77,7 @@ public final class Notifications {
 	 * @return true when the msg is added to the vector
 	 */
 	public static boolean Msg_NoStonesToMove() {
-		m_notificationsList.add("->ERROR: No more stones of selected color\n");
+		m_notificationsList.add("\u2022ERROR: No more stones of selected color\n");
 		return true;
 	}
 
@@ -87,7 +87,7 @@ public final class Notifications {
 	 * @return true when the msg is added to the vector
 	 */
 	public static boolean Msg_InvalidMove() {
-		m_notificationsList.add("->ERROR: Disabled pouches aren't available at the moment\n");
+		m_notificationsList.add("\u2022ERROR: Disabled pouches aren't available at the moment\n");
 		return true;
 	}
 
@@ -97,7 +97,7 @@ public final class Notifications {
 	 * @return true when the msg is added to the vector
 	 */
 	public static boolean Msg_TapOnGameBoard() {
-		m_notificationsList.add("->FOCUS bud! Tap on the board, not on white spaces! \n");
+		m_notificationsList.add("\u2022FOCUS bud! Tap on the board, not on white spaces! \n");
 		return true;
 	}
 
@@ -108,7 +108,7 @@ public final class Notifications {
 	 * @return true after the crash msg is added to the vector
 	 */
 	public static boolean Msg_CrashedWhileMakingTheMove() {
-		m_notificationsList.add("->ERROR: Whoopsie Daisy! The program crashed while making the move.\n");
+		m_notificationsList.add("\u2022ERROR: Whoopsie Daisy! The program crashed while making the move.\n");
 		return true;
 	}
 
@@ -123,26 +123,26 @@ public final class Notifications {
 
 	public static boolean Msg_PointsGained(char a_stone, int a_points) {
 		if (a_stone == 'w') {
-			m_notificationsList.add("->POINTS GAINED BY TEAM GDRIVE:\t" + a_points + "\n\n");
+			m_notificationsList.add("\u2022POINTS GAINED BY TEAM GDRIVE:\t" + a_points + "\n\n");
 		}
 		if (a_stone == 'b') {
-			m_notificationsList.add("->POINTS GAINED BY TEAM DROPBOX:\t" + a_points + "\n\n");
+			m_notificationsList.add("\u2022POINTS GAINED BY TEAM DROPBOX:\t" + a_points + "\n\n");
 		}
 		return true;
 	}
 
 	public static boolean Msg_CompletedArrangement(String a_position1, String a_position2) {
-		m_notificationsList.add("->1 POINT: " + a_position1 + "-" + a_position2 + "\n");
+		m_notificationsList.add("\u20221 POINT: " + a_position1 + "-" + a_position2 + "\n");
 		return true;
 	}
 
 	public static boolean Msg_MoveDescription(char a_stone) {
 		if (a_stone == 'w') {
-			m_notificationsList.add("->MOVE: A GDrive stone was placed at the blinking location.\n\n");
+			m_notificationsList.add("\u2022MOVE: A GDrive stone was placed at the blinking location.\n\n");
 		} else if (a_stone == 'b') {
-			m_notificationsList.add("->MOVE: A Dropbox stone was placed at the blinking location.\n\n");
+			m_notificationsList.add("\u2022MOVE: A Dropbox stone was placed at the blinking location.\n\n");
 		} else {
-			m_notificationsList.add("->MOVE: A Github stone was placed at the blinking location.\n\n");
+			m_notificationsList.add("\u2022MOVE: A Github stone was placed at the blinking location.\n\n");
 		}
 		return true;
 	}
@@ -190,7 +190,7 @@ public final class Notifications {
 	 * @return true once the msg is added to vector
 	 */
 	public static boolean BotsThink_FoundAPlacementToWinPoints(int a_points, String a_stone) {
-		m_notificationsList.add("->Best move so far is gaining " + a_points + " net points by using " + a_stone + "stone...\n");
+		m_notificationsList.add("\u2022Best move so far is gaining " + a_points + " net points by using " + a_stone + "stone...\n");
 		return true;
 	}
 

@@ -67,7 +67,7 @@ public class Computer extends Player{
 								bestRowForPlacement = row;
 								bestColumnForPlacement = column;
 								bestStoneForPlacement = m_ownStoneColor;
-								Notifications.BotsThink_FoundAPlacementToWinPoints(points, "own");
+								//Notifications.BotsThink_FoundAPlacementToWinPoints(points, "own");
 							}
 						}
 					}
@@ -83,7 +83,7 @@ public class Computer extends Player{
 								bestRowForPlacement = row;
 								bestColumnForPlacement = column;
 								bestStoneForPlacement = m_opponentStoneColor;
-								Notifications.BotsThink_FoundAPlacementToWinPoints(points, "opponent");
+								//Notifications.BotsThink_FoundAPlacementToWinPoints(points, "opponent");
 							}
 						}
 					}
@@ -100,7 +100,7 @@ public class Computer extends Player{
 								bestRowForPlacement = row;
 								bestColumnForPlacement = column;
 								bestStoneForPlacement = m_commonStoneColor;
-								Notifications.BotsThink_FoundAPlacementToWinPoints(points, "magic");
+								//Notifications.BotsThink_FoundAPlacementToWinPoints(points, "magic");
 							}
 						}
 					}
