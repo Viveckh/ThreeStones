@@ -22,12 +22,14 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -258,7 +260,7 @@ public class GameActivity extends Activity {
 						if (m_turn == 0) {
 							int rowOfPlacement = 0, columnOfPlacement = 0;
 							char stoneOfPlacement = 'x';
-							if (m_computer.Play(false, stoneOfPlacement, rowOfPlacement, columnOfPlacement, m_board)) {
+							if (m_computer.Play(false, m_board, m_human)) {
 								rowOfPlacement = m_computer.GetRowOfPreviousPlacement();
 								columnOfPlacement = m_computer.GetColumnOfPreviousPlacement();
 								stoneOfPlacement = m_computer.GetStoneOfPreviousPlacement();
@@ -292,6 +294,17 @@ public class GameActivity extends Activity {
 								m_stoneChoice = "clear";
 							}
 							*/
+						}
+					}
+				});
+
+				btnHelp.setOnClickListener(new View.OnClickListener() {
+					public void onClick(View v) {
+						if (m_computer.Play(true, m_board, m_human)) {
+							Notifications.Msg_HelpModeRecommendedMove(m_computer.GetRecommendedStone(), m_computer.GetHighestScorePossible());
+							DisplayNotifications();
+							Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_around_center_point);
+							buttons[m_computer.GetRecommendedRow()][m_computer.GetRecommendedColumn()].startAnimation(animation);
 						}
 					}
 				});
@@ -521,7 +534,6 @@ public class GameActivity extends Activity {
 					for (int col = 0; col < m_board.GetBoardDimension(); col++) {
 
 						//If 'doNotOpenEntireBoardForPlacement' is true, then only enable blocks in 1 row and column for placement
-						//Else open everything
 						if (doNotOpenEntireBoardForPlacement) {
 							//First blur all the buttons on the board
 							buttons[row][col].startAnimation(animation);

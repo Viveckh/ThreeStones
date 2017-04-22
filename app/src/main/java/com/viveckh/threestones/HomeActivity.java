@@ -168,7 +168,7 @@ public class HomeActivity extends Activity {
             m_txtViewTossResults.setText("Toss Results:\nBot: " + botDieToss + ", You: " + humanDieToss + "\nYou won the toss.");
         } else {
             Tournament.SetNextPlayer("computer");
-            m_txtViewTossResults.setText("Toss Results:\nBot: " + botDieToss + ", You: " + humanDieToss + "\nComputer won the toss.");
+            m_txtViewTossResults.setText("Toss Results:\nBot: " + botDieToss + ", You: " + humanDieToss + "\nBot won the toss.");
         }
     }
 

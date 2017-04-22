@@ -4,7 +4,10 @@ package com.viveckh.threestones;
  * This class implements the functionality to perform moves on behalf of the computer
  */
 public class Computer extends Player{
-	char m_ownStoneColor, m_opponentStoneColor, m_commonStoneColor;
+	private char m_ownStoneColor, m_opponentStoneColor, m_commonStoneColor;
+	private char m_recommendedStoneColor;
+	private int m_recommendedRow, m_recommendedColumn;
+	private int m_highestScorePossible;
 	//int bestRowForPlacement = 0, bestColumnForPlacement = 0;
 	//char bestStoneForPlacement = 'x';	//Default value
 	
@@ -14,9 +17,31 @@ public class Computer extends Player{
 		super(a_primaryColor);
 	}
 
+
+	/*
+		To get recommended move info. But gotta call the play function first before asking for recommended moves
+	 */
+	public char GetRecommendedStone() {
+		return m_recommendedStoneColor;
+	}
+
+	public int GetRecommendedRow() {
+		return m_recommendedRow;
+	}
+
+	public int GetRecommendedColumn() {
+		return m_recommendedColumn;
+	}
+
+	public int GetHighestScorePossible() {
+		return m_highestScorePossible;
+	}
+
+
+
 	//Calculate and display the best movement for the computer based on the calculations
 	//The stone, row, and column parameters are actually meant for pass by reference purposes so that the caller knows what move the computer made
-	public boolean Play(Boolean a_helpModeOn, char a_stone, int a_row, int a_column, Board a_board) {
+	public boolean Play(Boolean a_helpModeOn, Board a_board, Human a_human) {
 		printNotifications = false;
 		
 		//STEP 1: SET THE CLASS VARIABLES TO PROPER STONES BASED ON WHO IS CALLING THE PLAY FUNCTION
@@ -52,12 +77,15 @@ public class Computer extends Player{
 				if (a_board.GetBlockAtLocation(row, column) != null && !a_board.IsLocationOccupied(row, column)) {
 					//Temporary variables for calculations purposes
 					int points = 0;      //Storing temporary score calculation
+					boolean isValidMove = false;	//storing move validation temporary results
 					Board tempBoard1 = new Board(a_board);
 					Board tempBoard2 = new Board(a_board);
 					Board tempBoard3 = new Board(a_board);
 
 					//Check best possible coordinate to place own stone
-					if (IsValidMove(m_ownStoneColor, row, column, tempBoard1)) {
+					//If helpMode is on, check move validation for human, otherwise, check move validation for computer
+					isValidMove = a_helpModeOn ? a_human.IsValidMove(m_ownStoneColor, row, column, tempBoard1) : IsValidMove(m_ownStoneColor, row, column, tempBoard1);
+					if (isValidMove) {
 						//Place the stone in this temp board and calculate what would the score look like
 						if (tempBoard1.SetStoneAtLocation(row, column, m_ownStoneColor)) {
 							points = CalculateScoreAfterMove(m_ownStoneColor, row, column, tempBoard1) - CalculateScoreAfterMove(m_opponentStoneColor, row, column, tempBoard1);
@@ -73,7 +101,9 @@ public class Computer extends Player{
 					}
 
 					//Check best possible coordinate to place opponent stone
-					if (IsValidMove(m_opponentStoneColor, row, column, tempBoard2)) {
+					//If helpMode is on, check move validation for human, otherwise, check move validation for computer
+					isValidMove = a_helpModeOn ? a_human.IsValidMove(m_opponentStoneColor, row, column, tempBoard1) : IsValidMove(m_opponentStoneColor, row, column, tempBoard1);
+					if (isValidMove) {
 						//Place the stone in this temp board and calculate what would the score look like
 						if (tempBoard2.SetStoneAtLocation(row, column, m_opponentStoneColor)) {
 							points = CalculateScoreAfterMove(m_ownStoneColor, row, column, tempBoard2) - CalculateScoreAfterMove(m_opponentStoneColor, row, column, tempBoard2);
@@ -89,7 +119,9 @@ public class Computer extends Player{
 					}
 
 					//Check best possible coordinate to place clear stone
-					if (IsValidMove(m_commonStoneColor, row, column, tempBoard3)) {
+					//If helpMode is on, check move validation for human, otherwise, check move validation for computer
+					isValidMove = a_helpModeOn ? a_human.IsValidMove(m_commonStoneColor, row, column, tempBoard1) : IsValidMove(m_commonStoneColor, row, column, tempBoard1);
+					if (isValidMove) {
 						//Place the stone in this temp board and calculate what would the score look like
 						if (tempBoard3.SetStoneAtLocation(row, column, m_commonStoneColor)) {
 							points = CalculateScoreAfterMove(m_ownStoneColor, row, column, tempBoard3) - CalculateScoreAfterMove(m_opponentStoneColor, row, column, tempBoard3);
@@ -114,18 +146,20 @@ public class Computer extends Player{
 
 		//Minimax(a_board, m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, 3, 0, 0, true, 0);
 		//If the value of bestStone has been changed from default invalid one to something else, we have a move
-		if (bestStoneForPlacement != 'x') {
-			System.out.println("You should place a " + bestStoneForPlacement + " stone at (" + bestRowForPlacement + ", " + bestColumnForPlacement + ")");
+		if (!a_helpModeOn && bestStoneForPlacement != 'x') {
 			//Attempt the move and update the score if successful
 			if (PlaceAStone(bestStoneForPlacement, bestRowForPlacement, bestColumnForPlacement, a_board)) {
 				UpdateScoreAfterMove(m_primaryColor, m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, a_board);
-
-				//Updating these values so that the caller knows what move the computer made
-				a_stone = bestStoneForPlacement;
-				a_row = bestRowForPlacement;
-				a_column = bestColumnForPlacement;
 				return true;
 			}
+		}
+
+		if (a_helpModeOn && bestStoneForPlacement != 'x') {
+			m_recommendedStoneColor = bestStoneForPlacement;
+			m_recommendedRow = bestRowForPlacement;
+			m_recommendedColumn = bestColumnForPlacement;
+			m_highestScorePossible = highestScoreDifference;
+			return true;
 		}
 		return false;
 	}

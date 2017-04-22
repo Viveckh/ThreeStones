@@ -147,6 +147,22 @@ public final class Notifications {
 		return true;
 	}
 
+	public static boolean Msg_HelpModeRecommendedMove(char a_stone, int a_pointsToEarn) {
+		m_notificationsList.add("•HELP MODE ACTIVATED\n");
+		if (a_stone == 'w') {
+			m_notificationsList.add("\u2022Place a GDrive stone at rotating location.\n");
+		} else if (a_stone == 'b') {
+			m_notificationsList.add("\u2022Place a Dropbox stone at rotating location.\n");
+		} else {
+			m_notificationsList.add("\u2022Place a Github stone at rotating location.\n");
+		}
+
+		if (a_pointsToEarn > 0) {
+			m_notificationsList.add("•You will earn " + a_pointsToEarn + " net points.");
+		}
+		return true;
+	}
+
 	/**
 	 * Displays results of the tournament
 	 *
@@ -332,37 +348,6 @@ public final class Notifications {
 	 */
 	public static boolean Msg_HelpModeOn() {
 		m_notificationsList.add("HELP MODE ACTIVATED!\n");
-		return true;
-	}
-
-	/**
-	 * Prints the move recommended by the computer
-	 * @param startRow The row of the dice to move
-	 * @param startCol The column of the dice to move
-	 * @param endRow The destination row in the board where dice should be moved
-	 * @param endCol The destination column in the board where dice should be moved
-	 * @param pathChoice 1 if Vertical then Lateral, 2 if Lateral then Vertical, 3 if vertical only and 4 if lateral only
-	 * @return true after the msg is added to the vector
-	 */
-	public static boolean Msg_HelpModeRecommendedMove(int startRow, int startCol, int endRow, int endCol, int pathChoice) {
-		m_notificationsList.add("\nRECOMMENDED:\t Move the dice in square (" + startRow + ", " + startCol + ") to (" + endRow + ", " + endCol + ") using a ");
-		switch (pathChoice) {
-			case 1:
-				m_notificationsList.add("Vertical then Lateral Path\n");
-				break;
-			case 2:
-				m_notificationsList.add("Lateral then Vertical Path\n");
-				break;
-			case 3:
-				m_notificationsList.add("Vertical Path\n");
-				break;
-			case 4:
-				m_notificationsList.add("Lateral Path\n");
-				break;
-			default:
-				break;
-		}
-		m_notificationsList.add("\nHELP MODE DEACTIVATED!\n");
 		return true;
 	}
 }
