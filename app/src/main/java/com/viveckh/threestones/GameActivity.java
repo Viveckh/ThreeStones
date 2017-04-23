@@ -55,8 +55,8 @@ public class GameActivity extends Activity {
 	private Human m_human;
 	private Computer m_computer;
 	private String[] m_stones;
-	private String m_humanStoneColor;
-	private String m_computerStoneColor;
+	private char m_humanStoneColor;
+	private char m_computerStoneColor;
 	private String m_stoneChoice;
 	private int m_turn;		//0 refers to computer's turn, 1 refers to human's turn
 	private int m_blankPic, m_whitePic, m_blackPic, m_clearPic;
@@ -90,8 +90,8 @@ public class GameActivity extends Activity {
 
 		//Getting the intent from previous activity
 		Bundle extras = getIntent().getExtras();
-		m_humanStoneColor = extras.getString("humanStone");
-		m_computerStoneColor = extras.getString("computerStone");
+		m_humanStoneColor = extras.getChar("humanStone");
+		m_computerStoneColor = extras.getChar("computerStone");
 
 		//Initializing turn value. 0 for computer, 1 for human
 		if (Tournament.GetNextPlayer().equals("computer")) {
@@ -102,7 +102,7 @@ public class GameActivity extends Activity {
 		}
 
 		//Initializing players
-		if (m_humanStoneColor.equals("black")) {
+		if (m_humanStoneColor == 'b') {
 			m_human = new Human('b');
 			m_computer = new Computer('w');
 			//Selecting black stone choice by default for the human using radio button.
@@ -156,8 +156,7 @@ public class GameActivity extends Activity {
 
 		btnSave.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-			Serializer serializer = new Serializer(HomeActivity.m_internalStorage);
-			serializer.WriteToFile("LastGame.txt", m_board);
+				SaveGame();
 			}
 		});
 
@@ -322,6 +321,21 @@ public class GameActivity extends Activity {
 		}
 	}
 
+	private void SaveGame() {
+		//Saving current game status to the Tournament variables
+		Tournament.SaveCurrentGameStatus(m_humanStoneColor, m_computerStoneColor, m_human.GetWhiteStonesAvailable(), m_human.GetBlackStonesAvailable(), m_human.GetClearStonesAvailable(), m_computer.GetWhiteStonesAvailable(), m_computer.GetBlackStonesAvailable(), m_computer.GetClearStonesAvailable(), m_human.GetScore(), m_computer.GetScore());
+		if (m_turn == 0) {
+			Tournament.SetNextPlayer("computer");
+		}
+		else {
+			Tournament.SetNextPlayer("human");
+		}
+
+		//Write to the file
+		Serializer serializer = new Serializer(HomeActivity.m_internalStorage);
+		serializer.WriteToFile("LastGame.txt", m_board);
+	}
+
 	private void SetStoneChoiceUsingRadioGroupListener() {
 		radioStonePicker.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 			@Override
@@ -393,7 +407,7 @@ public class GameActivity extends Activity {
 		ImageButton imgHumanStone = (ImageButton)findViewById(R.id.imgHumanStone);
 		ImageButton imgComputerStone = (ImageButton)findViewById(R.id.imgComputerStone);
 
-		if (m_humanStoneColor.equals("black")) {
+		if (m_humanStoneColor == 'b') {
 			imgHumanStone.setBackgroundResource(m_blackPic);
 			imgComputerStone.setBackgroundResource(m_whitePic);
 		}

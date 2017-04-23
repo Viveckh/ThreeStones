@@ -69,9 +69,21 @@ public class Serializer {
 
 			// Writing the number of wins and next Player
 			outputStream.write("\n".getBytes());
-			outputStream.write(("Computer Score: " + Tournament.GetComputerScore() + "\n").getBytes());
-			outputStream.write(("Human Score: " + Tournament.GetHumanScore() + "\n").getBytes());
-			//outputStream.write(("Next Player: " + Tournament.GetNextPlayer() + "\n").getBytes());
+			outputStream.write(("computer stone: " + Tournament.GetComputerStone() + "\n").getBytes());
+			outputStream.write(("computer score: " + Tournament.GetComputerScore() + "\n").getBytes());
+			outputStream.write(("computer wins: " + Tournament.GetComputerWins() + "\n").getBytes());
+			outputStream.write(("computer white stones: " + Tournament.GetComputerWhiteStonesCount() + "\n").getBytes());
+			outputStream.write(("computer black stones: " + Tournament.GetComputerBlackStonesCount() + "\n").getBytes());
+			outputStream.write(("computer clear stones: " + Tournament.GetComputerClearStonesCount() + "\n").getBytes());
+
+			outputStream.write(("human stone: " + Tournament.GetHumanStone() + "\n").getBytes());
+			outputStream.write(("human score: " + Tournament.GetHumanScore() + "\n").getBytes());
+			outputStream.write(("human wins: " + Tournament.GetHumanWins() + "\n").getBytes());
+			outputStream.write(("human white stone: " + Tournament.GetHumanWhiteStonesCount() + "\n").getBytes());
+			outputStream.write(("human black score: " + Tournament.GetHumanBlackStonesCount() + "\n").getBytes());
+			outputStream.write(("human clear wins: " + Tournament.GetHumanClearStonesCount() + "\n").getBytes());
+
+			outputStream.write(("Next Player: " + Tournament.GetNextPlayer() + "\n").getBytes());
 			outputStream.close();
 			return true;
 		} catch(Exception e) {

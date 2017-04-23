@@ -8,6 +8,17 @@ package com.viveckh.threestones;
  */
 public final class Tournament {
 	// VARIABLES
+	//Primary stone color in current game
+	private static char humanStone;
+	private static char computerStone;
+
+	private static int humanWhiteStonesCount;
+	private static int humanBlackStonesCount;
+	private static int humanClearStonesCount;
+	private static int computerWhiteStonesCount;
+	private static int computerBlackStonesCount;
+	private static int computerClearStonesCount;
+
 	//Scores in current game in progress
 	private static int humanScore;
 	private static int computerScore;
@@ -24,15 +35,42 @@ public final class Tournament {
 		computerScore = 0;
 		humanWins = 0;
 		computerWins = 0;
+		humanStone = 'w';
+		computerStone = 'b';
 	}
 
 	//CONSTRUCTOR
-	private Tournament(int a_humanScore, int a_computerScore, int a_humanWins, int a_computerWins) {
+	private Tournament(char a_humanStone, char a_computerStone, int a_humanWhiteStonesCount, int a_humanBlackStonesCount, int a_humanClearStonesCount, int a_computerWhiteStonesCount, int a_computerBlackStonesCount, int a_computerClearStonesCount, int a_humanScore, int a_computerScore, int a_humanWins, int a_computerWins) {
+		humanWhiteStonesCount = a_humanWhiteStonesCount;
+		humanBlackStonesCount = a_humanBlackStonesCount;
+		humanClearStonesCount = a_humanClearStonesCount;
+		computerWhiteStonesCount = a_computerWhiteStonesCount;
+		computerBlackStonesCount = a_computerBlackStonesCount;
+		computerClearStonesCount = a_computerClearStonesCount;
+
+		humanStone = a_humanStone;
+		computerStone = a_computerStone;
 		humanScore = a_humanScore;
 		computerScore = a_computerScore;
 		humanWins = a_humanWins;
 		computerWins = a_computerWins;
 	}
+
+	public static int GetHumanWhiteStonesCount() { return humanWhiteStonesCount; }
+
+	public static int GetHumanBlackStonesCount() { return humanBlackStonesCount; }
+
+	public static int GetHumanClearStonesCount() { return humanClearStonesCount; }
+
+	public static int GetComputerWhiteStonesCount() { return computerWhiteStonesCount; }
+
+	public static int GetComputerBlackStonesCount() { return computerBlackStonesCount; }
+
+	public static int GetComputerClearStonesCount() { return computerClearStonesCount; }
+
+	public static char GetHumanStone() { return humanStone; }
+
+	public static char GetComputerStone() { return computerStone; }
 
 	/**
 	 * Gets Human Score in the tournament
@@ -74,11 +112,19 @@ public final class Tournament {
 		return nextPlayer;
 	}
 
-	public static void SetGameScores(int a_humanScore, int a_computerScore) {
+	public static void SaveCurrentGameStatus(char a_humanStone, char a_computerStone, int a_humanWhiteStonesCount, int a_humanBlackStonesCount, int a_humanClearStonesCount, int a_computerWhiteStonesCount, int a_computerBlackStonesCount, int a_computerClearStonesCount, int a_humanScore, int a_computerScore) {
+		humanWhiteStonesCount = a_humanWhiteStonesCount;
+		humanBlackStonesCount = a_humanBlackStonesCount;
+		humanClearStonesCount = a_humanClearStonesCount;
+		computerWhiteStonesCount = a_computerWhiteStonesCount;
+		computerBlackStonesCount = a_computerBlackStonesCount;
+		computerClearStonesCount = a_computerClearStonesCount;
+
+		humanStone = a_humanStone;
+		computerStone = a_computerStone;
 		humanScore = a_humanScore;
 		computerScore = a_computerScore;
 	}
-
 
 	/**
 	 * Increments Human Wins by certain points
@@ -94,14 +140,6 @@ public final class Tournament {
 	 */
 	public static void IncrementComputerWinsBy(int a_bumpWinsBy) {
 		computerWins += a_bumpWinsBy;
-	}
-
-	/**
-	 * Set game scores
-	 */
-	public static void SetScores(int a_humanScore, int a_computerScore) {
-		humanScore = a_humanScore;
-		computerScore = a_computerScore;
 	}
 
 	/**

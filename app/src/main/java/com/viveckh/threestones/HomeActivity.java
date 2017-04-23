@@ -144,12 +144,12 @@ public class HomeActivity extends Activity {
         //Next player is already passed through Tournament's static variable
         //Whichever radio button is checked is human's choice of stone
         if (m_radioWhite.isChecked()) {
-            intent.putExtra("humanStone", "white");
-            intent.putExtra("computerStone", "black");
+            intent.putExtra("humanStone", 'w');
+            intent.putExtra("computerStone", 'b');
         }
         else {
-            intent.putExtra("humanStone", "black");
-            intent.putExtra("computerStone", "white");
+            intent.putExtra("humanStone", 'b');
+            intent.putExtra("computerStone", 'w');
         }
         startActivity(intent);
     }
