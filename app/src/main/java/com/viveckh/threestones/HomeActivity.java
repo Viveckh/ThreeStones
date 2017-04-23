@@ -102,14 +102,17 @@ public class HomeActivity extends Activity {
         });
     }
 
-    private boolean RestoreGame(String a_fileName) {
+    private void RestoreGame(String a_fileName) {
         //Read from file
         Board board = new Board();
         Serializer serializer = new Serializer(HomeActivity.m_internalStorage);
+        Tournament.ResetScores();
         if (serializer.ReadFromFile("LastGame.txt", board)) {
-            return true;
+            Intent intent = new Intent(this, GameActivity.class);
+            intent.putExtra("startMode", "restore");
+            intent.putExtra("gameBoard", board);
+            startActivity(intent);
         }
-        return false;
     }
 
 
@@ -152,6 +155,7 @@ public class HomeActivity extends Activity {
      */
     public void ProceedToGame(View view) {
         Intent intent = new Intent(this, GameActivity.class);
+        intent.putExtra("startMode", "new");
         //Next player is already passed through Tournament's static variable
         //Whichever radio button is checked is human's choice of stone
         if (m_radioWhite.isChecked()) {

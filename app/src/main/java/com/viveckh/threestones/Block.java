@@ -10,7 +10,9 @@ package com.viveckh.threestones;
 * C) Its surrounding pouches - left, right, top, bottom, topLeft, topRight, bottomLeft, bottomRight.
 */
 
-public class Block {
+import java.io.Serializable;
+
+public class Block implements Serializable {
 
     // Variables
     private int m_initialized;

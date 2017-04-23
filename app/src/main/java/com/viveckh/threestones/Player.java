@@ -61,6 +61,9 @@ public class Player {
 		m_clearStonesAvailable = (a_clearStonesAvailable  <= 6) ? a_clearStonesAvailable : 6;
 	}
 
+	public void SetScore(int a_score) {
+		m_score = a_score;
+	}
 
 	/*
 	 *	MOVE VALIDATION AND PLACEMENT RELATED FUNCTIONS

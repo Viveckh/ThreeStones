@@ -85,13 +85,22 @@ public class GameActivity extends Activity {
 		radioStonePicker = (RadioGroup)findViewById(R.id.radioStonePicker);
 		SetStoneChoiceUsingRadioGroupListener();
 
-		//Initializing Variables
-		m_board = new Board();
-
 		//Getting the intent from previous activity
 		Bundle extras = getIntent().getExtras();
-		m_humanStoneColor = extras.getChar("humanStone");
-		m_computerStoneColor = extras.getChar("computerStone");
+
+		//If starting the game in restore mode, get content from Tournament static class, otherwise start a fresh game
+		if (extras.getString("startMode").equals("restore")) {
+			//If restoring the game, get contents from tournament class
+			m_board = new Board((Board)extras.getSerializable("gameBoard"));
+			m_humanStoneColor = Tournament.GetHumanStone();
+			m_computerStoneColor = Tournament.GetComputerStone();
+		}
+		else {
+			//Initializing Variables for fresh game
+			m_board = new Board();
+			m_humanStoneColor = extras.getChar("humanStone");
+			m_computerStoneColor = extras.getChar("computerStone");
+		}
 
 		//Initializing turn value. 0 for computer, 1 for human
 		if (Tournament.GetNextPlayer().equals("computer")) {
@@ -114,9 +123,19 @@ public class GameActivity extends Activity {
 			//Selecting white stone choice by default for the human using the radio button
 			radioStonePicker.check(R.id.radioButton1);
 		}
+
+		//Update the available stones count if the game is being restored
+		if (extras.getString("startMode").equals("restore")) {
+			m_computer.SetStonesAvailability(Tournament.GetComputerWhiteStonesCount(), Tournament.GetComputerBlackStonesCount(), Tournament.GetComputerClearStonesCount());
+			m_computer.SetScore(Tournament.GetComputerScore());
+			m_human.SetStonesAvailability(Tournament.GetHumanWhiteStonesCount(), Tournament.GetHumanBlackStonesCount(), Tournament.GetHumanClearStonesCount());
+			m_human.SetScore(Tournament.GetHumanScore());
+		}
+
 		UpdatePlayerImages();
 		UpdateGameStatusView();
-		createBoard();
+		CreateBoard();
+
 	}
 
 	//Kill activity on pressing back button
@@ -131,7 +150,7 @@ public class GameActivity extends Activity {
 		return super.onKeyDown(keyCode, event);
 	}
 
-	public void createBoard() {
+	public void CreateBoard() {
 
 		/*
 		//Setting up java counterparts for the android layout objects
@@ -191,7 +210,18 @@ public class GameActivity extends Activity {
 					buttons[i][j].setBackgroundResource(R.drawable.disabled_buttons);
 				}
 				else {
-					buttons[i][j].setBackgroundResource(R.drawable.blank_circle);
+					if (m_board.GetStoneAtLocation(i, j) == 'w') {
+						buttons[i][j].setBackgroundResource(R.drawable.white_circle);
+					}
+					else if (m_board.GetStoneAtLocation(i, j) == 'b') {
+						buttons[i][j].setBackgroundResource(R.drawable.black_circle);
+					}
+					else if (m_board.GetStoneAtLocation(i, j) == 'c') {
+						buttons[i][j].setBackgroundResource(R.drawable.clear_circle);
+					}
+					else {
+						buttons[i][j].setBackgroundResource(R.drawable.blank_circle);
+					}
 				}
 
 

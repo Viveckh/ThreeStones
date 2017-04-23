@@ -10,7 +10,9 @@ package com.viveckh.threestones;
 * The score function calculates and returns the change in score after each stone insertion in the board.
 */
 
-public class Board {
+import java.io.Serializable;
+
+public class Board implements Serializable {
 	//Variables
 	private static final int m_DIMENSION = 11;
 	Block[][] m_gameBoard; //Package Public
