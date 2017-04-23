@@ -16,6 +16,7 @@ package com.viveckh.threestones;
  */
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -44,6 +45,8 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+
 public class GameActivity extends Activity {
 
 	//Declaring variables
@@ -59,7 +62,7 @@ public class GameActivity extends Activity {
 	private int m_blankPic, m_whitePic, m_blackPic, m_clearPic;
 
 	//View objects
-	private Button btnComputerPlay, btnHelp;
+	private Button btnComputerPlay, btnHelp, btnSave;
 	private RadioGroup radioStonePicker;
 	TextView txtViewNotifications;
 
@@ -77,6 +80,7 @@ public class GameActivity extends Activity {
 		//Initializing view objects
 		btnComputerPlay = (Button)findViewById(R.id.btnComputerPlay);
 		btnHelp = (Button)findViewById(R.id.btnHelp);
+		btnSave = (Button)findViewById(R.id.btnSave);
 		txtViewNotifications = (TextView)findViewById(R.id.txtViewNotifications);
 		radioStonePicker = (RadioGroup)findViewById(R.id.radioStonePicker);
 		SetStoneChoiceUsingRadioGroupListener();
@@ -139,6 +143,23 @@ public class GameActivity extends Activity {
 		stone_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		stonePicker.setAdapter(stone_adapter);
 		*/
+		btnHelp.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+			if (m_computer.Play(true, m_board, m_human)) {
+				Notifications.Msg_HelpModeRecommendedMove(m_computer.GetRecommendedStone(), m_computer.GetHighestScorePossible());
+				DisplayNotifications();
+				Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_around_center_point);
+				buttons[m_computer.GetRecommendedRow()][m_computer.GetRecommendedColumn()].startAnimation(animation);
+			}
+			}
+		});
+
+		btnSave.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+			Serializer serializer = new Serializer(HomeActivity.m_internalStorage);
+			serializer.WriteToFile("LastGame.txt", m_board);
+			}
+		});
 
 		//Setting up layouts
 		LinearLayout layoutVertical = (LinearLayout) findViewById(R.id.linear_layout1);
@@ -297,17 +318,6 @@ public class GameActivity extends Activity {
 						}
 					}
 				});
-
-				btnHelp.setOnClickListener(new View.OnClickListener() {
-					public void onClick(View v) {
-						if (m_computer.Play(true, m_board, m_human)) {
-							Notifications.Msg_HelpModeRecommendedMove(m_computer.GetRecommendedStone(), m_computer.GetHighestScorePossible());
-							DisplayNotifications();
-							Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_around_center_point);
-							buttons[m_computer.GetRecommendedRow()][m_computer.GetRecommendedColumn()].startAnimation(animation);
-						}
-					}
-				});
 			}
 		}
 	}
@@ -447,6 +457,7 @@ public class GameActivity extends Activity {
 		//Set font of gameplay controls
 		btnComputerPlay.setTypeface(tfSeaside);
 		btnHelp.setTypeface(tfSeaside);
+		btnSave.setTypeface(tfSeaside);
 		labelStonePicker.setTypeface(tfCaviar);
 		radioButton1.setTypeface(tfCaviar);
 		radioButton2.setTypeface(tfCaviar);

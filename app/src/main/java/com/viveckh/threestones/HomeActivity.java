@@ -48,12 +48,15 @@ public class HomeActivity extends Activity {
     private RadioButton m_radioWhite;
     private RadioButton m_radioBlack;
 
+    //Package public, location of internal storage
+    public static File m_internalStorage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        m_dataStorageDirectory = "ThreestonesData";
+        m_dataStorageDirectory = "DataFiles";
         m_btnStartNewGame = (ImageButton)findViewById(R.id.btnStartNewGame);
         m_btnProceedToGame = (ImageButton) findViewById(R.id.btnProceedToGame);
         m_btnRestoreGame = (ImageButton) findViewById(R.id.btnRestoreGame);
@@ -102,7 +105,7 @@ public class HomeActivity extends Activity {
     /**
      * Gets the names of files in a given directory and puts them into an array list
      *
-     * @param a_directoryPath Directory whose files are to be listed
+     * @param a_directoryName Directory whose files are to be listed
      * @return ArrayList that consists of all the names of files in the directory
      */
     public ArrayList<String> GetFiles(String a_directoryName) {
@@ -118,6 +121,8 @@ public class HomeActivity extends Activity {
         else {
             success = true;
         }
+        m_internalStorage = folder;
+        m_dataStorageDirectory = folder.getAbsolutePath();
 
         if (success) {
             File[] files = folder.listFiles();
