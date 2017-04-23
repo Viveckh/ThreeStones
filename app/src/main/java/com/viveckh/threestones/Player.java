@@ -55,6 +55,13 @@ public class Player {
 		m_stoneOfPreviousPlacement = 'x';
 	}
 
+	public void SetStonesAvailability( int a_whiteStonesAvailable, int a_blackStonesAvailable, int a_clearStonesAvailable) {
+		m_whiteStonesAvailable = (a_whiteStonesAvailable  <= 15) ? a_whiteStonesAvailable : 15;
+		m_blackStonesAvailable = (a_blackStonesAvailable  <= 15) ? a_blackStonesAvailable : 15;
+		m_clearStonesAvailable = (a_clearStonesAvailable  <= 6) ? a_clearStonesAvailable : 6;
+	}
+
+
 	/*
 	 *	MOVE VALIDATION AND PLACEMENT RELATED FUNCTIONS
 	 */

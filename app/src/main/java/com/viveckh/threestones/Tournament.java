@@ -31,29 +31,19 @@ public final class Tournament {
 	 * PRIVATE CONSTRUCTOR
 	 */
 	private Tournament() {
+		humanWhiteStonesCount = 15;
+		humanBlackStonesCount = 15;
+		humanClearStonesCount = 6;
+		computerWhiteStonesCount = 15;
+		computerBlackStonesCount = 15;
+		computerClearStonesCount = 6;
+
 		humanScore = 0;
 		computerScore = 0;
 		humanWins = 0;
 		computerWins = 0;
 		humanStone = 'w';
 		computerStone = 'b';
-	}
-
-	//CONSTRUCTOR
-	private Tournament(char a_humanStone, char a_computerStone, int a_humanWhiteStonesCount, int a_humanBlackStonesCount, int a_humanClearStonesCount, int a_computerWhiteStonesCount, int a_computerBlackStonesCount, int a_computerClearStonesCount, int a_humanScore, int a_computerScore, int a_humanWins, int a_computerWins) {
-		humanWhiteStonesCount = a_humanWhiteStonesCount;
-		humanBlackStonesCount = a_humanBlackStonesCount;
-		humanClearStonesCount = a_humanClearStonesCount;
-		computerWhiteStonesCount = a_computerWhiteStonesCount;
-		computerBlackStonesCount = a_computerBlackStonesCount;
-		computerClearStonesCount = a_computerClearStonesCount;
-
-		humanStone = a_humanStone;
-		computerStone = a_computerStone;
-		humanScore = a_humanScore;
-		computerScore = a_computerScore;
-		humanWins = a_humanWins;
-		computerWins = a_computerWins;
 	}
 
 	public static int GetHumanWhiteStonesCount() { return humanWhiteStonesCount; }
@@ -130,7 +120,7 @@ public final class Tournament {
 	 * Increments Human Wins by certain points
 	 * @param a_bumpWinsBy Value to bump Human wins by
 	 */
-	public static void IncrementHumanWins(int a_bumpWinsBy) {
+	public static void IncrementHumanWinsBy(int a_bumpWinsBy) {
 		humanWins += a_bumpWinsBy;
 	}
 

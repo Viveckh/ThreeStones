@@ -97,10 +97,21 @@ public class HomeActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 // Clicking on items
                 String selectedItem = (String) (listView_SerializationFiles.getItemAtPosition(position));
-                //RestoreGame(selectedItem);
+                RestoreGame(selectedItem);
             }
         });
     }
+
+    private boolean RestoreGame(String a_fileName) {
+        //Read from file
+        Board board = new Board();
+        Serializer serializer = new Serializer(HomeActivity.m_internalStorage);
+        if (serializer.ReadFromFile("LastGame.txt", board)) {
+            return true;
+        }
+        return false;
+    }
+
 
     /**
      * Gets the names of files in a given directory and puts them into an array list
@@ -108,7 +119,7 @@ public class HomeActivity extends Activity {
      * @param a_directoryName Directory whose files are to be listed
      * @return ArrayList that consists of all the names of files in the directory
      */
-    public ArrayList<String> GetFiles(String a_directoryName) {
+    private ArrayList<String> GetFiles(String a_directoryName) {
         ArrayList<String> dataFiles = new ArrayList<String>();
 
         Context context = getApplicationContext();

@@ -48,9 +48,9 @@ public class Serializer {
 	public boolean WriteToFile(String a_fileName, Board a_board) {
 		// Setup the proper location to write the game state to
 		m_fileName = a_fileName;
-		File writeToDir =  new File (m_storageLocation.getAbsoluteFile().toString());
-		writeToDir.mkdirs();
-		File file = new File(writeToDir, m_fileName);
+		File dir =  new File (m_storageLocation.getAbsoluteFile().toString());
+		dir.mkdirs();
+		File file = new File(dir, m_fileName);
 
 		// Update the multidimensional string array for serialization first
 		UpdateSerializedBoard(a_board);
@@ -79,17 +79,189 @@ public class Serializer {
 			outputStream.write(("human stone: " + Tournament.GetHumanStone() + "\n").getBytes());
 			outputStream.write(("human score: " + Tournament.GetHumanScore() + "\n").getBytes());
 			outputStream.write(("human wins: " + Tournament.GetHumanWins() + "\n").getBytes());
-			outputStream.write(("human white stone: " + Tournament.GetHumanWhiteStonesCount() + "\n").getBytes());
-			outputStream.write(("human black score: " + Tournament.GetHumanBlackStonesCount() + "\n").getBytes());
-			outputStream.write(("human clear wins: " + Tournament.GetHumanClearStonesCount() + "\n").getBytes());
+			outputStream.write(("human white stones: " + Tournament.GetHumanWhiteStonesCount() + "\n").getBytes());
+			outputStream.write(("human black stones: " + Tournament.GetHumanBlackStonesCount() + "\n").getBytes());
+			outputStream.write(("human clear stones: " + Tournament.GetHumanClearStonesCount() + "\n").getBytes());
 
-			outputStream.write(("Next Player: " + Tournament.GetNextPlayer() + "\n").getBytes());
+			outputStream.write(("next player: " + Tournament.GetNextPlayer() + "\n").getBytes());
 			outputStream.close();
 			return true;
 		} catch(Exception e) {
 			return false;
 		}
 	}
+
+
+	/**
+	 * Reads a serialization file, stores tournament and game state into a multidimensional string array and sets the provided board accordingly
+	 * @param a_fileName The name of the file from which the game and tournament state should be read from
+	 * @param a_board The game board that needs to be set based on the contents from file
+	 * @return true if the restoration is successful; false otherwise
+	 */
+	public boolean ReadFromFile(String a_fileName, Board a_board) {
+		File dir =  new File (m_storageLocation.getAbsoluteFile().toString());
+		File file = new File(dir, a_fileName);
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			String line;
+
+			//Step 1: Reading the line with the "Board" text
+			reader.readLine();
+
+			//Step 2: Reading the gameboard and populating the multidimensional string array
+			// The topmost row in the file is actually the 8th row in the model, so read inverted
+			int row = 0;
+			while (((line = reader.readLine()) != null) && (row < m_DIMENSION)) {
+				line = line.trim();       // To get rid of all the leading and trailing spaces in the read string
+				String temp[] = line.split("\\s+");	//Storing values in a string array, even though they're actually chars
+				for (int col = 0; col < m_DIMENSION; col++) {
+					if (col < temp.length) {
+						m_serializedGameBoard[row][col] = temp[col].charAt(0);	//Getting the zero index of string because the string is actually just a char
+					}
+				}
+				row++;
+			}
+			SetBoard(a_board);
+
+			Tournament.ResetScores();
+
+			char computerPrimaryStone = 'b';
+			char humanPrimaryStone = 'w';
+			int computerScore = 0;
+			int humanScore = 0;
+			int computerWhiteStones = 15;
+			int computerBlackStones = 15;
+			int computerClearStones = 6;
+			int humanWhiteStones = 15;
+			int humanBlackStones = 15;
+			int humanClearStones = 6;
+
+			//Step 3: Reading the human and computer stones, scores, wins and the next player
+			while (((line = reader.readLine()) != null)) {
+				// Continue if the line is not empty
+				if (!line.trim().isEmpty()) {
+
+					//Parse computer's and human's choice of stone
+					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Ss]tone(.*)")) {
+						if (line.matches("(.*):(.*)[Ww](.*)")) {
+							computerPrimaryStone = 'w';
+							humanPrimaryStone = 'b';
+						}
+						else {
+							computerPrimaryStone = 'b';
+							humanPrimaryStone = 'w';
+						}
+					}
+
+					//Parse number of available white stones for computer
+					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Ww]hite(\\s+)[Ss]tones(.*)")) {
+						computerWhiteStones = Integer.parseInt(line.replaceAll("[\\D]", ""));
+					}
+
+					//Parse number of available black stones for computer
+					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Bb]lack(\\s+)[Ss]tones(.*)")) {
+						computerBlackStones = Integer.parseInt(line.replaceAll("[\\D]", ""));
+					}
+
+					//Parse number of available clear stones for computer
+					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Cc]lear(\\s+)[Ss]tones(.*)")) {
+						computerClearStones = Integer.parseInt(line.replaceAll("[\\D]", ""));
+					}
+
+					//Parse number of available white stones for human
+					if (line.matches("(\\s*)[Hh]uman(\\s+)[Ww]hite(\\s+)[Ss]tones(.*)")) {
+						humanWhiteStones = Integer.parseInt(line.replaceAll("[\\D]", ""));
+					}
+
+					//Parse number of available black stones for human
+					if (line.matches("(\\s*)[Hh]uman(\\s+)[Bb]lack(\\s+)[Ss]tones(.*)")) {
+						humanBlackStones = Integer.parseInt(line.replaceAll("[\\D]", ""));
+					}
+
+					//Parse number of available clear stones for human
+					if (line.matches("(\\s*)[Hh]uman(\\s+)[Cc]lear(\\s+)[Ss]tones(.*)")) {
+						humanClearStones = Integer.parseInt(line.replaceAll("[\\D]", ""));
+					}
+
+					// Parse computer score in running game
+					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Ss]core(.*)")) {
+						computerScore = Integer.parseInt(line.replaceAll("[\\D]", ""));
+					}
+
+					// Parse human score in running game
+					if (line.matches("(\\s*)[Hh]uman(\\s+)[Ss]core(.*)")) {
+						humanScore = Integer.parseInt(line.replaceAll("[\\D]", ""));
+					}
+
+					// Parse number of computer wins
+					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Ww]ins(.*)")) {
+						int botWins = Integer.parseInt(line.replaceAll("[\\D]", ""));
+						Tournament.IncrementComputerWinsBy(botWins);   //assuming if we are reading a file, the score is initially set to zero
+					}
+
+					// Parse number of human wins
+					if (line.matches("(\\s*)[Hh]uman(\\s+)[Ww]ins(.*)")) {
+						int humanWins = Integer.parseInt(line.replaceAll("[\\D]", ""));
+						Tournament.IncrementHumanWinsBy(humanWins); //assuming if we are reading a file, the score is initially set to zero
+					}
+
+					// Parse the next player
+					if (line.matches("(\\s*)[Nn]ext(\\s+)[Pp]layer(.*)")) {
+						if (line.matches("(.*):(.*)[Cc]omputer(.*)")) {
+							Tournament.SetNextPlayer("computer");
+						}
+						else {
+							Tournament.SetNextPlayer("human");
+						}
+					}
+				}
+			}
+
+			Tournament.SaveCurrentGameStatus(humanPrimaryStone, computerPrimaryStone, humanWhiteStones, humanBlackStones, humanClearStones, computerWhiteStones, computerBlackStones, computerClearStones, humanScore, computerScore);
+			reader.close();
+		}
+		catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Sets the given board based on the contents of the string array restored by reading file
+	 * @param a_board The game board that needs to be set using the contents in the string multidimensional array
+	 */
+	private void SetBoard(Board a_board) {
+		// Go through every index of the m_serializedGameBoard stored in the string array and update the actual game board
+		for (int row = 0; row < m_DIMENSION; row++) {
+			for (int col = 0; col < m_DIMENSION; col++) {
+				switch (m_serializedGameBoard[row][col])
+				{
+					case 'x':
+						//Since this refers to an uninitialized index in board
+						break;
+					case 'w':
+						//Occupied by White stone
+						a_board.SetStoneAtLocation(row, col, 'w');
+						break;
+					case 'b':
+						//Occupied by Black stone
+						a_board.SetStoneAtLocation(row, col, 'b');
+						break;
+					case 'c':
+						//Occupied by Clear stone
+						a_board.SetStoneAtLocation(row, col, 'c');
+						break;
+					default:
+						//Empty
+						a_board.SetStoneAtLocation(row, col, 'n');
+						break;
+				}
+			}
+		}
+	}
+
+
+
 
 	/**
 	 * Stores the game state in a multidimensional string array.
