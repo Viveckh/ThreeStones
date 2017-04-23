@@ -184,10 +184,10 @@ public class HomeActivity extends Activity {
 
         // Whoever has the highest number on top - wins the toss
         if (humanDieToss > botDieToss) {
-            Tournament.SetNextPlayer("human");
+            Tournament.SetControls(-1, -1, "human");
             m_txtViewTossResults.setText("Toss Results:\nBot: " + botDieToss + ", You: " + humanDieToss + "\nYou won the toss.");
         } else {
-            Tournament.SetNextPlayer("computer");
+            Tournament.SetControls(-1, -1, "computer");
             m_txtViewTossResults.setText("Toss Results:\nBot: " + botDieToss + ", You: " + humanDieToss + "\nBot won the toss.");
         }
     }

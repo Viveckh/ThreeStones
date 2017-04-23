@@ -74,15 +74,17 @@ public class Serializer {
 			outputStream.write(("computer wins: " + Tournament.GetComputerWins() + "\n").getBytes());
 			outputStream.write(("computer white stones: " + Tournament.GetComputerWhiteStonesCount() + "\n").getBytes());
 			outputStream.write(("computer black stones: " + Tournament.GetComputerBlackStonesCount() + "\n").getBytes());
-			outputStream.write(("computer clear stones: " + Tournament.GetComputerClearStonesCount() + "\n").getBytes());
+			outputStream.write(("computer clear stones: " + Tournament.GetComputerClearStonesCount() + "\n\n").getBytes());
 
 			outputStream.write(("human stone: " + Tournament.GetHumanStone() + "\n").getBytes());
 			outputStream.write(("human score: " + Tournament.GetHumanScore() + "\n").getBytes());
 			outputStream.write(("human wins: " + Tournament.GetHumanWins() + "\n").getBytes());
 			outputStream.write(("human white stones: " + Tournament.GetHumanWhiteStonesCount() + "\n").getBytes());
 			outputStream.write(("human black stones: " + Tournament.GetHumanBlackStonesCount() + "\n").getBytes());
-			outputStream.write(("human clear stones: " + Tournament.GetHumanClearStonesCount() + "\n").getBytes());
+			outputStream.write(("human clear stones: " + Tournament.GetHumanClearStonesCount() + "\n\n").getBytes());
 
+			outputStream.write(("last placement row: " + Tournament.GetRowOfLastPlacement() + "\n").getBytes());
+			outputStream.write(("last placement column: " + Tournament.GetColumnOfLastPlacement() + "\n").getBytes());
 			outputStream.write(("next player: " + Tournament.GetNextPlayer() + "\n").getBytes());
 			outputStream.close();
 			return true;
@@ -135,6 +137,9 @@ public class Serializer {
 			int humanWhiteStones = 15;
 			int humanBlackStones = 15;
 			int humanClearStones = 6;
+			int lastRow = -1;
+			int lastColumn = -1;
+			String nextPlayer = "human";
 
 			//Step 3: Reading the human and computer stones, scores, wins and the next player
 			while (((line = reader.readLine()) != null)) {
@@ -205,19 +210,33 @@ public class Serializer {
 						Tournament.IncrementHumanWinsBy(humanWins); //assuming if we are reading a file, the score is initially set to zero
 					}
 
+
+					//Parse row of last placement
+					if (line.matches("(\\s*)[Ll]ast(\\s+)[Pp]lacement(\\s+)[Rr]ow(.*)")) {
+						//Regex pattern gets rid of "Any character except a digit or a '-' "
+						lastRow = Integer.parseInt(line.replaceAll("[^\\d-]", ""));
+					}
+
+					//Parse column of last placement
+					if (line.matches("(\\s*)[Ll]ast(\\s+)[Pp]lacement(\\s+)[Cc]olumn(.*)")) {
+						//Regex pattern gets rid of "Any character except a digit or a '-' "
+						lastColumn = Integer.parseInt(line.replaceAll("[^\\d-]", ""));
+					}
+
 					// Parse the next player
 					if (line.matches("(\\s*)[Nn]ext(\\s+)[Pp]layer(.*)")) {
 						if (line.matches("(.*):(.*)[Cc]omputer(.*)")) {
-							Tournament.SetNextPlayer("computer");
+							nextPlayer = "computer";
 						}
 						else {
-							Tournament.SetNextPlayer("human");
+							nextPlayer = "human";
 						}
 					}
 				}
 			}
 
 			Tournament.SaveCurrentGameStatus(humanPrimaryStone, computerPrimaryStone, humanWhiteStones, humanBlackStones, humanClearStones, computerWhiteStones, computerBlackStones, computerClearStones, humanScore, computerScore);
+			Tournament.SetControls(lastRow, lastColumn, nextPlayer);
 			reader.close();
 		}
 		catch (Exception e) {

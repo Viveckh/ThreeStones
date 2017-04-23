@@ -130,12 +130,12 @@ public class GameActivity extends Activity {
 			m_computer.SetScore(Tournament.GetComputerScore());
 			m_human.SetStonesAvailability(Tournament.GetHumanWhiteStonesCount(), Tournament.GetHumanBlackStonesCount(), Tournament.GetHumanClearStonesCount());
 			m_human.SetScore(Tournament.GetHumanScore());
+			m_computer.SetPreviousPlacements(Tournament.GetRowOfLastPlacement(), Tournament.GetColumnOfLastPlacement());
 		}
 
 		UpdatePlayerImages();
-		UpdateGameStatusView();
 		CreateBoard();
-
+		UpdateGameStatusView();
 	}
 
 	//Kill activity on pressing back button
@@ -355,15 +355,18 @@ public class GameActivity extends Activity {
 		//Saving current game status to the Tournament variables
 		Tournament.SaveCurrentGameStatus(m_humanStoneColor, m_computerStoneColor, m_human.GetWhiteStonesAvailable(), m_human.GetBlackStonesAvailable(), m_human.GetClearStonesAvailable(), m_computer.GetWhiteStonesAvailable(), m_computer.GetBlackStonesAvailable(), m_computer.GetClearStonesAvailable(), m_human.GetScore(), m_computer.GetScore());
 		if (m_turn == 0) {
-			Tournament.SetNextPlayer("computer");
+			Tournament.SetControls(m_computer.GetRowOfPreviousPlacement(), m_computer.GetColumnOfPreviousPlacement(), "computer");
 		}
 		else {
-			Tournament.SetNextPlayer("human");
+			Tournament.SetControls(m_human.GetRowOfPreviousPlacement(), m_human.GetColumnOfPreviousPlacement(), "human");
 		}
 
 		//Write to the file
 		Serializer serializer = new Serializer(HomeActivity.m_internalStorage);
-		serializer.WriteToFile("LastGame.txt", m_board);
+		if (serializer.WriteToFile("LastGame.txt", m_board)) {
+			//When saving is successful, dispatch a tap on the back button, booking handled by a function above
+			dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK));
+		}
 	}
 
 	private void SetStoneChoiceUsingRadioGroupListener() {

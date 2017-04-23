@@ -25,6 +25,10 @@ public final class Tournament {
 	//Wins overall in the tournament
 	private static int humanWins;
 	private static int computerWins;
+
+	//Game variables
+	private static int rowOfLastPlacement;
+	private static int columnOfLastPlacement;
 	private static String nextPlayer;   //"human" or "computer" all lower case
 
 	/**
@@ -44,6 +48,9 @@ public final class Tournament {
 		computerWins = 0;
 		humanStone = 'w';
 		computerStone = 'b';
+
+		rowOfLastPlacement = -1;
+		columnOfLastPlacement = -1;
 	}
 
 	public static int GetHumanWhiteStonesCount() { return humanWhiteStonesCount; }
@@ -94,6 +101,10 @@ public final class Tournament {
 		return computerWins;
 	}
 
+	public static int GetRowOfLastPlacement() { return rowOfLastPlacement; }
+
+	public static int GetColumnOfLastPlacement() { return columnOfLastPlacement; }
+
 	/**
 	 * Gets next player in case if the tournament is resumed from a saved state
 	 * @return Next Player
@@ -142,11 +153,10 @@ public final class Tournament {
 		computerWins = 0;
 	}
 
-	/**
-	 * Sets next player
-	 * @param player the next player ("computer" or "human")
-	 */
-	public static void SetNextPlayer(String player) {
+	public static void SetControls(int a_rowOfLastPlacement, int a_columnOfLastPlacement, String player) {
+		rowOfLastPlacement = a_rowOfLastPlacement;
+		columnOfLastPlacement = a_columnOfLastPlacement;
+
 		if (player == "computer" || player == "Computer") {
 			nextPlayer = "computer";
 		}

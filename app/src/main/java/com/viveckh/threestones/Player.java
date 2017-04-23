@@ -55,6 +55,11 @@ public class Player {
 		m_stoneOfPreviousPlacement = 'x';
 	}
 
+	public void SetPreviousPlacements(int a_row, int a_column) {
+		m_rowOfPreviousPlacement = a_row;
+		m_columnOfPreviousPlacement = a_column;
+	}
+
 	public void SetStonesAvailability( int a_whiteStonesAvailable, int a_blackStonesAvailable, int a_clearStonesAvailable) {
 		m_whiteStonesAvailable = (a_whiteStonesAvailable  <= 15) ? a_whiteStonesAvailable : 15;
 		m_blackStonesAvailable = (a_blackStonesAvailable  <= 15) ? a_blackStonesAvailable : 15;
