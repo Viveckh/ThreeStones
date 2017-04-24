@@ -2,21 +2,27 @@ package com.viveckh.threestones;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
 public class ResultsActivity extends Activity {
 
+	Bundle m_extras;
 	TextView m_txtViewGameResult;
 	Button m_btnHumanFinalScore;
 	Button m_btnComputerFinalScore;
 	Button m_btnHumanWins;
 	Button m_btnComputerWins;
+	ImageButton m_btnYes;
+	ImageButton m_btnNo;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +30,10 @@ public class ResultsActivity extends Activity {
 		setContentView(R.layout.activity_results);
 
 		//Getting the intent from previous activity
-		Bundle extras = getIntent().getExtras();
+		m_extras = getIntent().getExtras();
 
 		m_txtViewGameResult = (TextView)findViewById(R.id.txtViewGameResult);
-		m_txtViewGameResult.setText(extras.getString("winnerMsg"));
+		m_txtViewGameResult.setText(m_extras.getString("winnerMsg"));
 
 		m_btnHumanFinalScore = (Button)findViewById(R.id.btnHumanFinalScore);
 		m_btnHumanFinalScore.setText(String.valueOf(Tournament.GetHumanScore()));
@@ -40,6 +46,30 @@ public class ResultsActivity extends Activity {
 
 		m_btnComputerWins = (Button)findViewById(R.id.btnComputerWins);
 		m_btnComputerWins.setText(String.valueOf(Tournament.GetComputerWins()));
+
+		//Handle user choices to whether continue or end the tournament
+		m_btnYes = (ImageButton)findViewById(R.id.btnYes);
+		m_btnNo = (ImageButton)findViewById(R.id.btnNo);
+
+
+		//If user chooses to continue the tournament
+		m_btnYes.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(), GameActivity.class);
+				intent.putExtra("startMode", "new");
+				intent.putExtra("humanStone", m_extras.getChar("humanStone"));
+				intent.putExtra("computerStone", m_extras.getChar("computerStone"));
+				startActivity(intent);
+			}
+		});
+
+		//If user chooses to end the tournament
+		m_btnNo.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				//Dispatch an event to go back, the function below handles ending the tournament
+				dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK));
+			}
+		});
 	}
 
 	//Kill activity on pressing back button

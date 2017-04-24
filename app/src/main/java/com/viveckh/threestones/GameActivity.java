@@ -59,6 +59,8 @@ import java.io.File;
 public class GameActivity extends Activity {
 
 	//Declaring variables
+	private Bundle m_intentExtras;
+
 	final private Button[][] buttons = new Button[11][11];
 	private Board m_board;
 	private Human m_human;
@@ -69,6 +71,7 @@ public class GameActivity extends Activity {
 	private String m_stoneChoice;
 	private int m_turn;		//0 refers to computer's turn, 1 refers to human's turn
 	private int m_blankPic, m_whitePic, m_blackPic, m_clearPic;
+
 
 	//View objects
 	private Button btnComputerPlay, btnHelp, btnSave;
@@ -95,20 +98,20 @@ public class GameActivity extends Activity {
 		SetStoneChoiceUsingRadioGroupListener();
 
 		//Getting the intent from previous activity
-		Bundle extras = getIntent().getExtras();
+		m_intentExtras = getIntent().getExtras();
 
 		//If starting the game in restore mode, get content from Tournament static class, otherwise start a fresh game
-		if (extras.getString("startMode").equals("restore")) {
+		if (m_intentExtras.getString("startMode").equals("restore")) {
 			//If restoring the game, get contents from tournament class
-			m_board = new Board((Board)extras.getSerializable("gameBoard"));
+			m_board = new Board((Board)m_intentExtras.getSerializable("gameBoard"));
 			m_humanStoneColor = Tournament.GetHumanStone();
 			m_computerStoneColor = Tournament.GetComputerStone();
 		}
 		else {
 			//Initializing Variables for fresh game
 			m_board = new Board();
-			m_humanStoneColor = extras.getChar("humanStone");
-			m_computerStoneColor = extras.getChar("computerStone");
+			m_humanStoneColor = m_intentExtras.getChar("humanStone");
+			m_computerStoneColor = m_intentExtras.getChar("computerStone");
 		}
 
 		//Initializing turn value. 0 for computer, 1 for human
@@ -134,7 +137,7 @@ public class GameActivity extends Activity {
 		}
 
 		//Update the available stones count if the game is being restored
-		if (extras.getString("startMode").equals("restore")) {
+		if (m_intentExtras.getString("startMode").equals("restore")) {
 			m_computer.SetStonesAvailability(Tournament.GetComputerWhiteStonesCount(), Tournament.GetComputerBlackStonesCount(), Tournament.GetComputerClearStonesCount());
 			m_computer.SetScore(Tournament.GetComputerScore());
 			m_human.SetStonesAvailability(Tournament.GetHumanWhiteStonesCount(), Tournament.GetHumanBlackStonesCount(), Tournament.GetHumanClearStonesCount());
@@ -443,6 +446,8 @@ public class GameActivity extends Activity {
 						  Toast.LENGTH_LONG).show();
 				}
 
+				intent.putExtra("humanStone", m_intentExtras.getChar("humanStone"));
+				intent.putExtra("computerStone", m_intentExtras.getChar("computerStone"));
 				m_computer.ResetPreviousPlacements();
 
 				startActivity(intent);
