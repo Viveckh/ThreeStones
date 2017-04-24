@@ -150,12 +150,18 @@ public class GameActivity extends Activity {
 	//Kill activity on pressing back button
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
+		//If user taps back button
 		if ((keyCode == KeyEvent.KEYCODE_BACK))
 		{
 			m_computer.ResetPreviousPlacements();
 			finish();
 
 		}
+		//If user taps enter to perform computer move
+		if ((keyCode == KeyEvent.KEYCODE_SPACE)) {
+			btnComputerPlay.performClick();
+		}
+
 		return super.onKeyDown(keyCode, event);
 	}
 
