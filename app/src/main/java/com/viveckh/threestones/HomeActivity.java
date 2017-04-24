@@ -34,6 +34,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.content.Intent;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -107,11 +108,17 @@ public class HomeActivity extends Activity {
         Board board = new Board();
         Serializer serializer = new Serializer(HomeActivity.m_internalStorage);
         Tournament.ResetScores();
-        if (serializer.ReadFromFile("LastGame.txt", board)) {
+        if (serializer.ReadFromFile(a_fileName, board)) {
             Intent intent = new Intent(this, GameActivity.class);
             intent.putExtra("startMode", "restore");
             intent.putExtra("gameBoard", board);
+            Toast.makeText(getApplicationContext(), "Restoring your game...",
+                    Toast.LENGTH_LONG).show();
             startActivity(intent);
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Corrupt file! Restore failed.",
+                    Toast.LENGTH_LONG).show();
         }
     }
 

@@ -16,13 +16,19 @@ package com.viveckh.threestones;
  */
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
@@ -42,6 +48,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -352,21 +360,53 @@ public class GameActivity extends Activity {
 	}
 
 	private void SaveGame() {
-		//Saving current game status to the Tournament variables
-		Tournament.SaveCurrentGameStatus(m_humanStoneColor, m_computerStoneColor, m_human.GetWhiteStonesAvailable(), m_human.GetBlackStonesAvailable(), m_human.GetClearStonesAvailable(), m_computer.GetWhiteStonesAvailable(), m_computer.GetBlackStonesAvailable(), m_computer.GetClearStonesAvailable(), m_human.GetScore(), m_computer.GetScore());
-		if (m_turn == 0) {
-			Tournament.SetControls(m_computer.GetRowOfPreviousPlacement(), m_computer.GetColumnOfPreviousPlacement(), "computer");
-		}
-		else {
-			Tournament.SetControls(m_human.GetRowOfPreviousPlacement(), m_human.GetColumnOfPreviousPlacement(), "human");
-		}
+		// Display an alert dialog box to confirm the user wants to save and exit the game
+		AlertDialog.Builder alert = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
+		final EditText txtFileName = new EditText(getApplicationContext());
+		alert.setTitle("Saving your game...");
+		alert.setMessage("Enter a name to access it later:");
 
-		//Write to the file
-		Serializer serializer = new Serializer(HomeActivity.m_internalStorage);
-		if (serializer.WriteToFile("LastGame.txt", m_board)) {
-			//When saving is successful, dispatch a tap on the back button, booking handled by a function above
-			dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK));
-		}
+		alert.setView(txtFileName);
+
+		Typeface tfCaviar = Typeface.createFromAsset(getAssets(), "fonts/CaviarDreams_Bold.ttf");
+		txtFileName.setTypeface(tfCaviar);
+		txtFileName.setTextColor(Color.WHITE);
+
+		//If user chooses to move forward with saving the game
+		alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface a_dialog, int a_whichButton) {
+				//Retrieve the user entered file name
+				String fileName = txtFileName.getText().toString();
+
+				//Saving current game status to the Tournament variables
+				Tournament.SaveCurrentGameStatus(m_humanStoneColor, m_computerStoneColor, m_human.GetWhiteStonesAvailable(), m_human.GetBlackStonesAvailable(), m_human.GetClearStonesAvailable(), m_computer.GetWhiteStonesAvailable(), m_computer.GetBlackStonesAvailable(), m_computer.GetClearStonesAvailable(), m_human.GetScore(), m_computer.GetScore());
+				if (m_turn == 0) {
+					Tournament.SetControls(m_computer.GetRowOfPreviousPlacement(), m_computer.GetColumnOfPreviousPlacement(), "computer");
+				}
+				else {
+					Tournament.SetControls(m_human.GetRowOfPreviousPlacement(), m_human.GetColumnOfPreviousPlacement(), "human");
+				}
+
+				//Write to the file
+				Serializer serializer = new Serializer(HomeActivity.m_internalStorage);
+				if (serializer.WriteToFile(fileName + ".txt", m_board)) {
+					//When saving is successful, dispatch a tap on the back button, booking handled by a function above
+					Toast.makeText(getApplicationContext(), "Your game was successfully saved...",
+						  Toast.LENGTH_LONG).show();
+					dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK));
+
+				}
+			}
+		});
+
+		//If user decides to continue with game without saving
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface a_dialog, int a_whichButton) {
+				// Leave the game state as it is
+			}
+		});
+
+		alert.show();
 	}
 
 	private void SetStoneChoiceUsingRadioGroupListener() {
