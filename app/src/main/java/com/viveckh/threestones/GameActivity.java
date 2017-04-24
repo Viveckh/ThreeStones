@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -77,7 +78,7 @@ public class GameActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_results);
+		setContentView(R.layout.activity_game);
 
 		//Background for game board buttons
 		m_blankPic = getResources().getIdentifier("blank_circle", "drawable", "com.viveckh.threestones");
@@ -409,6 +410,26 @@ public class GameActivity extends Activity {
 		alert.show();
 	}
 
+	private void CheckIfGameOver() {
+		//Saving current game status to the Tournament variables
+		Tournament.SaveCurrentGameStatus(m_humanStoneColor, m_computerStoneColor, m_human.GetWhiteStonesAvailable(), m_human.GetBlackStonesAvailable(), m_human.GetClearStonesAvailable(), m_computer.GetWhiteStonesAvailable(), m_computer.GetBlackStonesAvailable(), m_computer.GetClearStonesAvailable(), m_human.GetScore(), m_computer.GetScore());
+		if (m_human.GetWhiteStonesAvailable() == 0 && m_human.GetBlackStonesAvailable() == 0 && m_human.GetClearStonesAvailable() == 0) {
+			if (m_computer.GetWhiteStonesAvailable() == 0 && m_computer.GetBlackStonesAvailable() == 0 && m_computer.GetClearStonesAvailable() == 0) {
+				//Increment Computer's tournament score if computer wins
+				if(m_computer.GetScore() > m_human.GetScore()) {
+					Tournament.IncrementComputerWinsBy(1);
+				}
+				//Increment Human's tournament score if human wins
+				if(m_computer.GetScore() < m_human.GetScore()) {
+					Tournament.IncrementHumanWinsBy(1);
+				}
+				m_computer.ResetPreviousPlacements();
+				Intent intent = new Intent(this, ResultsActivity.class);
+				startActivity(intent);
+			}
+		}
+	}
+
 	private void SetStoneChoiceUsingRadioGroupListener() {
 		radioStonePicker.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 			@Override
@@ -491,6 +512,7 @@ public class GameActivity extends Activity {
 	}
 
 	private void UpdateGameStatusView() {
+		CheckIfGameOver();
 		Button btnHumanScore = (Button)findViewById(R.id.btnHumanScore);
 		Button btnComputerScore = (Button)findViewById(R.id.btnComputerScore);
 		TextView labelHumanScore = (TextView)findViewById(R.id.labelHumanScore);

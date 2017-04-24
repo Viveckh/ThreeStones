@@ -74,14 +74,6 @@ public class Player {
 	 *	MOVE VALIDATION AND PLACEMENT RELATED FUNCTIONS
 	 */
 
-	//Is game over
-	protected boolean IsGameOver(){
-		if (m_whiteStonesAvailable == 0 && m_blackStonesAvailable == 0 && m_clearStonesAvailable == 0) {
-			return true;
-		}
-		return false;
-	}
-
 	//Places a stone on the given location in game board and updates the stone counts and score
 	protected boolean PlaceAStone(char a_stone, int a_row, int a_column, Board a_board) {
 		if (IsValidMove(a_stone, a_row, a_column, a_board)) {
