@@ -421,16 +421,30 @@ public class GameActivity extends Activity {
 		Tournament.SaveCurrentGameStatus(m_humanStoneColor, m_computerStoneColor, m_human.GetWhiteStonesAvailable(), m_human.GetBlackStonesAvailable(), m_human.GetClearStonesAvailable(), m_computer.GetWhiteStonesAvailable(), m_computer.GetBlackStonesAvailable(), m_computer.GetClearStonesAvailable(), m_human.GetScore(), m_computer.GetScore());
 		if (m_human.GetWhiteStonesAvailable() == 0 && m_human.GetBlackStonesAvailable() == 0 && m_human.GetClearStonesAvailable() == 0) {
 			if (m_computer.GetWhiteStonesAvailable() == 0 && m_computer.GetBlackStonesAvailable() == 0 && m_computer.GetClearStonesAvailable() == 0) {
+				Intent intent = new Intent(this, ResultsActivity.class);
 				//Increment Computer's tournament score if computer wins
 				if(m_computer.GetScore() > m_human.GetScore()) {
 					Tournament.IncrementComputerWinsBy(1);
+					intent.putExtra("winnerMsg", "BOT WON");
+					Toast.makeText(getApplicationContext(), "Bot won!",
+						  Toast.LENGTH_LONG).show();
 				}
 				//Increment Human's tournament score if human wins
 				if(m_computer.GetScore() < m_human.GetScore()) {
 					Tournament.IncrementHumanWinsBy(1);
+					intent.putExtra("winnerMsg", "YOU WON");
+					Toast.makeText(getApplicationContext(), "You won!",
+						  Toast.LENGTH_LONG).show();
 				}
+				//If a draw
+				if(m_computer.GetScore() == m_human.GetScore()) {
+					intent.putExtra("winnerMsg", "IT'S A DRAW");
+					Toast.makeText(getApplicationContext(), "It's a draw!",
+						  Toast.LENGTH_LONG).show();
+				}
+
 				m_computer.ResetPreviousPlacements();
-				Intent intent = new Intent(this, ResultsActivity.class);
+
 				startActivity(intent);
 			}
 		}

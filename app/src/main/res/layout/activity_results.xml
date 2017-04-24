@@ -12,9 +12,9 @@
     <ImageButton
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:id="@+id/imageButton"
+        android:id="@+id/imgGameOver"
         android:layout_row="0"
-        android:layout_column="1"
+        android:layout_column="2"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/game_over"/>
 
@@ -23,18 +23,19 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="TOURNAMENT"
-        android:id="@+id/textView3"
+        android:id="@+id/labelTournamentWins"
         android:layout_row="1"
-        android:layout_column="3"
+        android:layout_column="4"
         android:layout_gravity="center"
         android:layout_columnSpan="2"
-        android:layout_marginLeft="100dp"/>
+        android:layout_marginLeft="100dp"
+        android:textColor="#e8e8f7"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="YOU"
-        android:id="@+id/labelHumanScore"
+        android:id="@+id/labelHumanFinalScore"
         android:layout_row="2"
         android:layout_column="0"
         android:layout_gravity="center_horizontal"
@@ -43,9 +44,9 @@
     <ImageButton
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:id="@+id/imageButton2"
+        android:id="@+id/imgTournament"
         android:layout_row="0"
-        android:layout_column="3"
+        android:layout_column="4"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/tournament_stat"
         android:layout_columnSpan="2"
@@ -56,19 +57,20 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="GAME OVER"
-        android:id="@+id/labelFinalScore"
+        android:id="@+id/txtViewGameResult"
         android:layout_row="1"
-        android:layout_column="1"
+        android:layout_column="0"
         android:layout_gravity="center"
-        />
+        android:layout_columnSpan="4"
+        android:textColor="#e8e8f7"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="YOU"
-        android:id="@+id/textView"
+        android:id="@+id/labelHumanWins"
         android:layout_row="3"
-        android:layout_column="3"
+        android:layout_column="4"
         android:layout_gravity="center"
         android:layout_marginLeft="100dp"/>
 
@@ -76,7 +78,7 @@
         android:layout_width="68dp"
         android:layout_height="wrap_content"
         android:text="0"
-        android:id="@+id/btnHumanScore"
+        android:id="@+id/btnHumanFinalScore"
         android:layout_row="3"
         android:layout_column="0"
         android:layout_gravity="center"
@@ -87,10 +89,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="BOT"
-        android:id="@+id/labelComputerScore"
+        android:id="@+id/labelComputerFinalScore"
         android:layout_gravity="center_horizontal"
         android:layout_row="2"
-        android:layout_column="2"
+        android:layout_column="3"
         />
 
     <Button
@@ -98,9 +100,9 @@
         android:layout_width="68dp"
         android:layout_height="wrap_content"
         android:text="0"
-        android:id="@+id/btnComputerScore"
+        android:id="@+id/btnComputerFinalScore"
         android:layout_row="3"
-        android:layout_column="2"
+        android:layout_column="3"
         android:layout_gravity="center"
         android:background="@android:drawable/picture_frame"
         />
@@ -108,21 +110,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="WINNER"
-        android:id="@+id/textView2"
-        android:layout_row="4"
-        android:layout_column="0"
-        android:layout_gravity="center"
-        android:layout_columnSpan="3"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="BOT"
-        android:id="@+id/textView4"
+        android:id="@+id/labelComputerWins"
         android:layout_row="4"
-        android:layout_column="3"
+        android:layout_column="4"
         android:layout_gravity="center"
         android:layout_marginLeft="100dp"/>
 
@@ -131,32 +122,49 @@
         android:layout_width="68dp"
         android:layout_height="wrap_content"
         android:text="0"
-        android:id="@+id/button2"
+        android:id="@+id/btnComputerWins"
         android:layout_row="4"
-        android:layout_column="4"
+        android:layout_column="5"
         android:layout_gravity="center"
         android:background="@android:drawable/picture_frame"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:id="@+id/txtViewNotifications"
-        android:layout_row="9"
-        android:layout_column="2"
-        android:layout_columnSpan="4"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:textSize="10dp"
-        android:scrollIndicators="bottom|right"
-        android:layout_rowSpan="8"/>
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Do you want to continue this tournament?"
+        android:id="@+id/labelContinue"
+        android:layout_row="5"
+        android:layout_column="0"
+        android:layout_gravity="center_horizontal"
+        android:layout_columnSpan="5"
+        android:layout_marginTop="30dp"
+        android:textColor="#e8e8f7"/>
+
+    <ImageButton
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/btnYes"
+        android:layout_row="5"
+        android:layout_column="5"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/yes"/>
+
+    <ImageButton
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/btnNo"
+        android:layout_row="5"
+        android:layout_column="6"
+        android:layout_gravity="left|center_horizontal"
+        android:background="@drawable/no"/>
 
     <Button
         android:layout_width="68dp"
         android:layout_height="wrap_content"
         android:text="0"
-        android:id="@+id/button"
-        android:layout_column="4"
+        android:id="@+id/btnHumanWins"
+        android:layout_column="5"
         android:layout_gravity="center"
         android:background="@android:drawable/picture_frame"
         android:clickable="false"
