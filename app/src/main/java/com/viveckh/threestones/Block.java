@@ -3,7 +3,6 @@ package com.viveckh.threestones;
 /* Name: Vivek Pandey
  * Date: 3/3/2017
 */
-
 /* This class serves as a pouch in the game Board. It keeps a track of
 * A) X-Y Coordinate of the pouch in the board
 * B) Occupied/Unoccupied state of the pouch, stone contained (n(none), w(white), b(black), c(clear))

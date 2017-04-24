@@ -224,28 +224,24 @@ public class Player {
 			if (a_board.GetStoneAtLocation(a_placedInRow, a_placedInColumn) == a_stone || a_board.GetStoneAtLocation(a_placedInRow, a_placedInColumn - 1) == a_stone || a_board.GetStoneAtLocation(a_placedInRow, a_placedInColumn + 1) == a_stone) {
 				points++;
 				printStatus = printNotifications ? Notifications.Msg_CompletedArrangement("Left", "Right") : Notifications.Msg_NoMsg();
-				//System.out.println("Left and Right favorable");
 			}
 		}
 		if (IsTopFavorable(a_placedInRow, a_placedInColumn, true, a_board) && IsBottomFavorable(a_placedInRow, a_placedInColumn, true, a_board)) {
 			if (a_board.GetStoneAtLocation(a_placedInRow, a_placedInColumn) == a_stone || a_board.GetStoneAtLocation(a_placedInRow - 1, a_placedInColumn) == a_stone || a_board.GetStoneAtLocation(a_placedInRow + 1, a_placedInColumn) == a_stone) {
 				points++;
 				printStatus = printNotifications ? Notifications.Msg_CompletedArrangement("Top", "Bottom") : Notifications.Msg_NoMsg();
-				//System.out.println("Top and Bottom favorable");
 			}
 		}
 		if (IsTopLeftFavorable(a_placedInRow, a_placedInColumn, true, a_board) && IsBottomRightFavorable(a_placedInRow, a_placedInColumn, true, a_board)) {
 			if (a_board.GetStoneAtLocation(a_placedInRow, a_placedInColumn) == a_stone || a_board.GetStoneAtLocation(a_placedInRow - 1, a_placedInColumn  - 1) == a_stone || a_board.GetStoneAtLocation(a_placedInRow + 1, a_placedInColumn  + 1) == a_stone) {
 				points++;
 				printStatus = printNotifications ? Notifications.Msg_CompletedArrangement("TopLeft", "BottomRight") : Notifications.Msg_NoMsg();
-				//System.out.println("TopLeft and BottomRight favorable");
 			}
 		}
 		if (IsTopRightFavorable(a_placedInRow, a_placedInColumn, true, a_board) && IsBottomLeftFavorable(a_placedInRow, a_placedInColumn, true, a_board)) {
 			if (a_board.GetStoneAtLocation(a_placedInRow, a_placedInColumn) == a_stone || a_board.GetStoneAtLocation(a_placedInRow - 1, a_placedInColumn  + 1) == a_stone || a_board.GetStoneAtLocation(a_placedInRow + 1, a_placedInColumn  - 1) == a_stone) {
 				points++;
 				printStatus = printNotifications ? Notifications.Msg_CompletedArrangement("TopRight", "BottomLeft") : Notifications.Msg_NoMsg();
-				//System.out.println("TopRight and BottomLeft favorable");
 			}
 		}
 
@@ -254,7 +250,6 @@ public class Player {
 			if (a_board.GetStoneAtLocation(a_placedInRow, a_placedInColumn) == a_stone || a_board.GetStoneAtLocation(a_placedInRow, a_placedInColumn - 1) == a_stone || a_board.GetStoneAtLocation(a_placedInRow, a_placedInColumn  - 2) == a_stone) {
 				points++;
 				printStatus = printNotifications ? Notifications.Msg_CompletedArrangement("Left", "FarLeft") : Notifications.Msg_NoMsg();
-				//System.out.println("Left and farLeft favorable");
 			}
 
 		}
@@ -262,14 +257,12 @@ public class Player {
 			if (a_board.GetStoneAtLocation(a_placedInRow, a_placedInColumn) == a_stone || a_board.GetStoneAtLocation(a_placedInRow, a_placedInColumn + 1) == a_stone || a_board.GetStoneAtLocation(a_placedInRow, a_placedInColumn  + 2) == a_stone) {
 				points++;
 				printStatus = printNotifications ? Notifications.Msg_CompletedArrangement("Right", "FarRight") : Notifications.Msg_NoMsg();
-				//System.out.println("Right and farRight favorable");
 			}
 		}
 		if (IsTopFavorable(a_placedInRow, a_placedInColumn, true, a_board) && IsTopFavorable(a_placedInRow - 1, a_placedInColumn, false, a_board)) {
 			if (a_board.GetStoneAtLocation(a_placedInRow, a_placedInColumn) == a_stone || a_board.GetStoneAtLocation(a_placedInRow - 1, a_placedInColumn) == a_stone || a_board.GetStoneAtLocation(a_placedInRow - 2, a_placedInColumn) == a_stone) {
 				points++;
 				printStatus = printNotifications ? Notifications.Msg_CompletedArrangement("Top", "FarTop") : Notifications.Msg_NoMsg();
-				//System.out.println("Top and farTop favorable");
 			}
 
 		}
@@ -277,39 +270,33 @@ public class Player {
 			if (a_board.GetStoneAtLocation(a_placedInRow, a_placedInColumn) == a_stone || a_board.GetStoneAtLocation(a_placedInRow + 1, a_placedInColumn) == a_stone || a_board.GetStoneAtLocation(a_placedInRow + 2, a_placedInColumn) == a_stone) {
 				points++;
 				printStatus = printNotifications ? Notifications.Msg_CompletedArrangement("Bottom", "FarBottom") : Notifications.Msg_NoMsg();
-				//System.out.println("Bottom and farBottom favorable");
 			}
 		}
 		if (IsTopLeftFavorable(a_placedInRow, a_placedInColumn, true, a_board) && IsTopLeftFavorable(a_placedInRow - 1, a_placedInColumn - 1, false, a_board)) {
 			if (a_board.GetStoneAtLocation(a_placedInRow, a_placedInColumn) == a_stone || a_board.GetStoneAtLocation(a_placedInRow - 1, a_placedInColumn  - 1) == a_stone || a_board.GetStoneAtLocation(a_placedInRow - 2, a_placedInColumn  - 2) == a_stone) {
 				points++;
 				printStatus = printNotifications ? Notifications.Msg_CompletedArrangement("TopLeft", "FarTopLeft") : Notifications.Msg_NoMsg();
-				//System.out.println("TopLeft and farTopLeft favorable");
 			}
 		}
 		if (IsTopRightFavorable(a_placedInRow, a_placedInColumn, true, a_board) && IsTopRightFavorable(a_placedInRow - 1, a_placedInColumn + 1, false, a_board)) {
 			if (a_board.GetStoneAtLocation(a_placedInRow, a_placedInColumn) == a_stone || a_board.GetStoneAtLocation(a_placedInRow - 1, a_placedInColumn  + 1) == a_stone || a_board.GetStoneAtLocation(a_placedInRow - 2, a_placedInColumn  + 2) == a_stone) {
 				points++;
 				printStatus = printNotifications ? Notifications.Msg_CompletedArrangement("TopRight", "FarTopRight") : Notifications.Msg_NoMsg();
-				//System.out.println("TopRight and farTopRight favorable");
 			}
 		}
 		if (IsBottomLeftFavorable(a_placedInRow, a_placedInColumn, true, a_board) && IsBottomLeftFavorable(a_placedInRow + 1, a_placedInColumn - 1, false, a_board)) {
 			if (a_board.GetStoneAtLocation(a_placedInRow, a_placedInColumn) == a_stone || a_board.GetStoneAtLocation(a_placedInRow + 1, a_placedInColumn  - 1) == a_stone || a_board.GetStoneAtLocation(a_placedInRow + 2, a_placedInColumn  - 2) == a_stone) {
 				points++;
 				printStatus = printNotifications ? Notifications.Msg_CompletedArrangement("BottomLeft", "FarBottomLeft") : Notifications.Msg_NoMsg();
-				//System.out.println("BottomLeft and farBottomLeft favorable");
 			}
 		}
 		if (IsBottomRightFavorable(a_placedInRow, a_placedInColumn, true, a_board) && IsBottomRightFavorable(a_placedInRow + 1, a_placedInColumn + 1, false, a_board)) {
 			if (a_board.GetStoneAtLocation(a_placedInRow, a_placedInColumn) == a_stone || a_board.GetStoneAtLocation(a_placedInRow + 1, a_placedInColumn  + 1) == a_stone || a_board.GetStoneAtLocation(a_placedInRow + 2, a_placedInColumn  + 2) == a_stone) {
 				points++;
 				printStatus = printNotifications ? Notifications.Msg_CompletedArrangement("BottomRight", "FarBottomRight") : Notifications.Msg_NoMsg();
-				//System.out.println("BottomRight and farBottomRight favorable");
 			}
 		}
 		//Return only the change in score
-		//System.out.println("Points gained :" + points);
 		return points;
 	}
 

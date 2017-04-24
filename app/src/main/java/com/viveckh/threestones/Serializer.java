@@ -279,9 +279,6 @@ public class Serializer {
 		}
 	}
 
-
-
-
 	/**
 	 * Stores the game state in a multidimensional string array.
 	 * @param a_board The game board whose contents are to be stored into the class's multidimensional array for writing-to-file purposes

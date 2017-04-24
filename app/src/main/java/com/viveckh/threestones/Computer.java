@@ -8,15 +8,12 @@ public class Computer extends Player{
 	private char m_recommendedStoneColor;
 	private int m_recommendedRow, m_recommendedColumn;
 	private int m_highestScorePossible;
-	//int bestRowForPlacement = 0, bestColumnForPlacement = 0;
-	//char bestStoneForPlacement = 'x';	//Default value
 	
 	//Constructor
 	public Computer(char a_primaryColor) {
 		//m_primaryColor = a_primaryColor;
 		super(a_primaryColor);
 	}
-
 
 	/*
 		To get recommended move info. But gotta call the play function first before asking for recommended moves
@@ -36,7 +33,6 @@ public class Computer extends Player{
 	public int GetHighestScorePossible() {
 		return m_highestScorePossible;
 	}
-
 
 
 	//Calculate and display the best movement for the computer based on the calculations
@@ -143,8 +139,6 @@ public class Computer extends Player{
 		//Now that the computer has calculated its move, it is safe to print notifications
 		printNotifications = true;
 
-
-		//Minimax(a_board, m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, 3, 0, 0, true, 0);
 		//If the value of bestStone has been changed from default invalid one to something else, we have a move
 		if (!a_helpModeOn && bestStoneForPlacement != 'x') {
 			//Attempt the move and update the score if successful
@@ -163,112 +157,4 @@ public class Computer extends Player{
 		}
 		return false;
 	}
-
-
-	/*
-	//Populates the best placement details in the class variable
-	private int Minimax(Board a_board, int a_lastRowOfPlacement, int a_lastColumnOfPlacement, int a_depth, int a_ownBestPoints, int a_opponentWorstPoints, boolean a_maximizingPlayer, int a_heuristicVal) {
-
-		//STEP 1: HANDLE RETURN CONDITIONS
-		//If at least one vacant spot is found in the same row/column of last placement, then it is not a leaf node
-		boolean isLeafNode = true;
-		for (int row = 0; row < a_board.GetBoardDimension(); row++) {
-			for (int column = 0; column < a_board.GetBoardDimension(); column++) {
-				//If the current row/column matches the row/column of last placement
-				if (row == a_lastRowOfPlacement || column == a_lastColumnOfPlacement) {
-					//If the block in this location is not null and not occupied, then this node is not a leaf node
-					if (a_board.GetBlockAtLocation(row, column) != null && !a_board.IsLocationOccupied(row, column)) {
-						isLeafNode = false;
-					}
-				}
-			}
-		}
-
-		//If max depth is reached or the current node is a leaf node - meaning no vacant spots in the row and column of last placement, then return;
-		if (a_depth == 0 || isLeafNode) {
-			System.out.println("Returning heuristic Value of : " + a_heuristicVal);
-			return a_heuristicVal;
-		}
-
-		//STEP 2: CALL THE MINIMAX FUNCTION RECURSIVELY BY PASSING APPROPRIATE PARAMETERS
-		if (a_maximizingPlayer) {
-			int points = Integer.MIN_VALUE;
-
-			//GO THROUGH ALL THE CHILD NODES
-			for (int row = 0; row < a_board.GetBoardDimension(); row++) {
-				for (int column = 0; column < a_board.GetBoardDimension(); column++) {
-					//If the current row/column matches the row/column of last placement
-					if (row == a_lastRowOfPlacement || column == a_lastColumnOfPlacement) {
-						//If the block in this location is not null and not occupied, then this node is not a leaf node
-						if (a_board.GetBlockAtLocation(row, column) != null && !a_board.IsLocationOccupied(row, column)) {
-							Board tempBoard = new Board(a_board);
-
-							//Check best possible coordinate to place own stone
-							if (IsValidMove(m_ownStoneColor, row, column, tempBoard)) {
-								//Place the stone in this temp board and calculate what would the score look like
-								if (tempBoard.SetStoneAtLocation(row, column, m_ownStoneColor)) {
-									int ownPointsGained = CalculateScoreAfterMove(m_ownStoneColor, row, column, tempBoard);
-									int opponentPointsGained = CalculateScoreAfterMove(m_opponentStoneColor, row, column, tempBoard);
-									points = ownPointsGained - opponentPointsGained;
-									System.out.println("Points gained: " + points);
-									//If this is the best move so far, make a note of it
-									points = Math.max(points, Minimax(tempBoard, row, column, a_depth - 1,a_ownBestPoints, a_opponentWorstPoints, false, a_heuristicVal + points));
-									a_ownBestPoints = Math.max(a_ownBestPoints, points);
-									if (a_opponentWorstPoints <= a_ownBestPoints) {
-										break;
-									}
-									else {
-										bestRowForPlacement = row;
-										bestColumnForPlacement = column;
-										bestStoneForPlacement = m_ownStoneColor;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			return points;
-		}
-		else {
-			int points = Integer.MAX_VALUE;
-
-			//GO THROUGH ALL THE CHILD NODES
-			for (int row = 0; row < a_board.GetBoardDimension(); row++) {
-				for (int column = 0; column < a_board.GetBoardDimension(); column++) {
-					//If the current row/column matches the row/column of last placement
-					if (row == a_lastRowOfPlacement || column == a_lastColumnOfPlacement) {
-						//If the block in this location is not null and not occupied, then this node is not a leaf node
-						if (a_board.GetBlockAtLocation(row, column) != null && !a_board.IsLocationOccupied(row, column)) {
-							Board tempBoard = new Board(a_board);
-
-							//Check best possible coordinate to place own stone
-							if (IsValidMove(m_opponentStoneColor, row, column, tempBoard)) {
-								//Place the stone in this temp board and calculate what would the score look like
-								if (tempBoard.SetStoneAtLocation(row, column, m_opponentStoneColor)) {
-									int ownPointsGained = CalculateScoreAfterMove(m_ownStoneColor, row, column, tempBoard);
-									int opponentPointsGained = CalculateScoreAfterMove(m_opponentStoneColor, row, column, tempBoard);
-									points = ownPointsGained - opponentPointsGained;
-									//If this is the best move so far, make a note of it
-									points = Math.min(points, Minimax(tempBoard, row, column, a_depth - 1,a_ownBestPoints, a_opponentWorstPoints, true, a_heuristicVal + points));
-									a_opponentWorstPoints = Math.min(a_opponentWorstPoints, points);
-									if (a_opponentWorstPoints <= a_ownBestPoints) {
-										break;
-									}
-									else {
-										bestRowForPlacement = row;
-										bestColumnForPlacement = column;
-										bestStoneForPlacement = m_ownStoneColor;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			return points;
-		}
-	}
-
-	*/
 }

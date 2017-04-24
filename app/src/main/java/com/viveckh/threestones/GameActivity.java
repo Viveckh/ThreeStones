@@ -17,20 +17,13 @@ package com.viveckh.threestones;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.text.Editable;
 import android.view.ContextThemeWrapper;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,23 +31,15 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
-
-import java.io.File;
 
 public class GameActivity extends Activity {
 
@@ -65,7 +50,6 @@ public class GameActivity extends Activity {
 	private Board m_board;
 	private Human m_human;
 	private Computer m_computer;
-	private String[] m_stones;
 	private char m_humanStoneColor;
 	private char m_computerStoneColor;
 	private String m_stoneChoice;
@@ -169,17 +153,6 @@ public class GameActivity extends Activity {
 	}
 
 	public void CreateBoard() {
-
-		/*
-		//Setting up java counterparts for the android layout objects
-		final Spinner stonePicker = (Spinner)findViewById(R.id.stonePicker);
-		m_stones = getResources().getStringArray(R.array.stones);
-
-		//Setting up adapter for stone color picking dropdown
-		ArrayAdapter<String> stone_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, m_stones);
-		stone_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		stonePicker.setAdapter(stone_adapter);
-		*/
 		btnHelp.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 			if (m_computer.Play(true, m_board, m_human)) {
@@ -245,78 +218,21 @@ public class GameActivity extends Activity {
 
 				rowLayout.addView(buttons[i][j], p);
 
-				/*
-				//Listening to which colored stone to use
-				stonePicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-					@Override
-					public void onItemSelected(AdapterView<?> parent, View view,
-									   int position, long id) {
-						if(stonePicker.getSelectedItemPosition() == 0) {
-							if (m_turn == 0) { m_stoneChoice = m_computerStoneColor; }
-							if (m_turn == 1) { m_stoneChoice = m_humanStoneColor; }
-						}
-
-						else if (stonePicker.getSelectedItemPosition() == 1) {
-							if (m_turn == 0) { m_stoneChoice = m_humanStoneColor; }
-							if (m_turn == 1) { m_stoneChoice = m_computerStoneColor; }
-						}
-
-						else { m_stoneChoice = "clear"; }
-
-						UpdateGameStatusView();
-					}
-
-					@Override
-					public void onNothingSelected(AdapterView<?> arg0) {
-					}
-				});
-				*/
-
 				//Setting onclicklistener for buttons in the gameBoard
 				final int x = i;
 				final int y = j;
 				buttons[x][y].setOnClickListener(new OnClickListener() {
 					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						//
-						//Either human or computer's function can be used to check permission
-						//if (m_human.HasPermissionToOccupyVacantSpot(x, y, m_board)) {
-							if (m_turn == 1) {
-								//Human's turn
-								if (StoneFiller(buttons, x, y, m_stoneChoice)) {
-
-									//Handing control to the other player
-									m_turn = 0;
-									UpdateGameStatusView();
-									/*
-									if (stonePicker.getSelectedItemPosition() == 0) {
-										m_stoneChoice = m_computerStoneColor;
-									} else if (stonePicker.getSelectedItemPosition() == 1) {
-										m_stoneChoice = m_humanStoneColor;
-									} else {
-										m_stoneChoice = "clear";
-									}
-									*/
-								}
-							}
-							DisplayNotifications();
-							//NOTE: Job of updating the location where stone was last inserted is already done within Player class after insertion
-
-							// Game over
-							/*
-							if (humanPlayer.getWhite() == 0 && humanPlayer.getBlack() == 0 && humanPlayer.getClear() == 0
-								  && compPlayer.getWhite() == 0 && compPlayer.getBlack() == 0 && compPlayer.getClear() == 0) {
-								if (humanPlayer.getScore() > compPlayer.getScore()) {
-									turnMsg.setText("Game Over. You Win");
-								}
-								else if (humanPlayer.getScore() < compPlayer.getScore()){
-									turnMsg.setText("Game Over. The Computer Wins");
-								}
-								else {
-									turnMsg.setText("Game Over. It's a draw");
-								}
-							}
-							*/
+					if (m_turn == 1) {
+						//Human's turn
+						if (StoneFiller(buttons, x, y, m_stoneChoice)) {
+							//Handing control to the other player
+							m_turn = 0;
+							UpdateGameStatusView();
+						}
+					}
+					DisplayNotifications();
+					//NOTE: Job of updating the location where stone was last inserted is already done within Player class after insertion
 						}
 					//}
 				});
@@ -324,45 +240,35 @@ public class GameActivity extends Activity {
 				//If computer's play button is pressed
 				btnComputerPlay.setOnClickListener(new View.OnClickListener() {
 					public void onClick(View v) {
-						//Computer's turn
-						if (m_turn == 0) {
-							int rowOfPlacement = 0, columnOfPlacement = 0;
-							char stoneOfPlacement = 'x';
-							if (m_computer.Play(false, m_board, m_human)) {
-								rowOfPlacement = m_computer.GetRowOfPreviousPlacement();
-								columnOfPlacement = m_computer.GetColumnOfPreviousPlacement();
-								stoneOfPlacement = m_computer.GetStoneOfPreviousPlacement();
+					//Computer's turn
+					if (m_turn == 0) {
+						int rowOfPlacement = 0, columnOfPlacement = 0;
+						char stoneOfPlacement = 'x';
+						if (m_computer.Play(false, m_board, m_human)) {
+							rowOfPlacement = m_computer.GetRowOfPreviousPlacement();
+							columnOfPlacement = m_computer.GetColumnOfPreviousPlacement();
+							stoneOfPlacement = m_computer.GetStoneOfPreviousPlacement();
 
-								//Update Opponent's score as well
-								m_human.UpdateScoreAfterMove(m_human.GetPlayerStoneColor(), rowOfPlacement, columnOfPlacement, m_board);
-								buttons[rowOfPlacement][columnOfPlacement].setClickable(false);
+							//Update Opponent's score as well
+							m_human.UpdateScoreAfterMove(m_human.GetPlayerStoneColor(), rowOfPlacement, columnOfPlacement, m_board);
+							buttons[rowOfPlacement][columnOfPlacement].setClickable(false);
 
-								if (stoneOfPlacement == 'w') {
-									buttons[rowOfPlacement][columnOfPlacement].setBackgroundResource(m_whitePic);
-								}
-								if (stoneOfPlacement == 'b') {
-									buttons[rowOfPlacement][columnOfPlacement].setBackgroundResource(m_blackPic);
-								}
-								if (stoneOfPlacement == 'c') {
-									buttons[rowOfPlacement][columnOfPlacement].setBackgroundResource(m_clearPic);
-								}
+							if (stoneOfPlacement == 'w') {
+								buttons[rowOfPlacement][columnOfPlacement].setBackgroundResource(m_whitePic);
 							}
-
-							//Handing control to the other player
-							//ATTENTION: Do this only upon successful move, not default as now
-							m_turn = 1;
-							UpdateGameStatusView();
-							DisplayNotifications();
-							/*
-							if (stonePicker.getSelectedItemPosition() == 0) {
-								m_stoneChoice = m_humanStoneColor;
-							} else if (stonePicker.getSelectedItemPosition() == 1) {
-								m_stoneChoice = m_computerStoneColor;
-							} else {
-								m_stoneChoice = "clear";
+							if (stoneOfPlacement == 'b') {
+								buttons[rowOfPlacement][columnOfPlacement].setBackgroundResource(m_blackPic);
 							}
-							*/
+							if (stoneOfPlacement == 'c') {
+								buttons[rowOfPlacement][columnOfPlacement].setBackgroundResource(m_clearPic);
+							}
 						}
+
+						//Handing control to the other player
+						m_turn = 1;
+						UpdateGameStatusView();
+						DisplayNotifications();
+					}
 					}
 				});
 			}
@@ -487,7 +393,6 @@ public class GameActivity extends Activity {
 			stone = 'b';
 			newButtonBackground = m_blackPic;
 		}
-		//ATTENTION: Making the default case a clear stone (maybe don't do it?)
 		else {
 			stone = 'c';
 			newButtonBackground = m_clearPic;

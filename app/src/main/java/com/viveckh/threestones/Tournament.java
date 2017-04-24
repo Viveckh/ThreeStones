@@ -53,21 +53,37 @@ public final class Tournament {
 		columnOfLastPlacement = -1;
 	}
 
-	public static int GetHumanWhiteStonesCount() { return humanWhiteStonesCount; }
+	public static int GetHumanWhiteStonesCount() {
+		return humanWhiteStonesCount;
+	}
 
-	public static int GetHumanBlackStonesCount() { return humanBlackStonesCount; }
+	public static int GetHumanBlackStonesCount() {
+		return humanBlackStonesCount;
+	}
 
-	public static int GetHumanClearStonesCount() { return humanClearStonesCount; }
+	public static int GetHumanClearStonesCount() {
+		return humanClearStonesCount;
+	}
 
-	public static int GetComputerWhiteStonesCount() { return computerWhiteStonesCount; }
+	public static int GetComputerWhiteStonesCount() {
+		return computerWhiteStonesCount;
+	}
 
-	public static int GetComputerBlackStonesCount() { return computerBlackStonesCount; }
+	public static int GetComputerBlackStonesCount() {
+		return computerBlackStonesCount;
+	}
 
-	public static int GetComputerClearStonesCount() { return computerClearStonesCount; }
+	public static int GetComputerClearStonesCount() {
+		return computerClearStonesCount;
+	}
 
-	public static char GetHumanStone() { return humanStone; }
+	public static char GetHumanStone() {
+		return humanStone;
+	}
 
-	public static char GetComputerStone() { return computerStone; }
+	public static char GetComputerStone() {
+		return computerStone;
+	}
 
 	/**
 	 * Gets Human Score in the tournament
@@ -101,9 +117,13 @@ public final class Tournament {
 		return computerWins;
 	}
 
-	public static int GetRowOfLastPlacement() { return rowOfLastPlacement; }
+	public static int GetRowOfLastPlacement() {
+		return rowOfLastPlacement;
+	}
 
-	public static int GetColumnOfLastPlacement() { return columnOfLastPlacement; }
+	public static int GetColumnOfLastPlacement() {
+		return columnOfLastPlacement;
+	}
 
 	/**
 	 * Gets next player in case if the tournament is resumed from a saved state

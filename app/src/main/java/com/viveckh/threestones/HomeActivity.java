@@ -18,25 +18,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.content.Intent;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 public class HomeActivity extends Activity {
     private ImageButton m_btnStartNewGame;
@@ -49,7 +41,7 @@ public class HomeActivity extends Activity {
     private RadioButton m_radioWhite;
     private RadioButton m_radioBlack;
 
-    //Package public, location of internal storage
+    //Public location of internal storage
     public static File m_internalStorage;
 
     @Override

@@ -6,7 +6,6 @@ package com.viveckh.threestones;
 public class Human extends Player {
 	//Constructor
 	public Human(char a_primaryColor) {
-		//m_primaryColor = a_primaryColor;
 		super(a_primaryColor);
 	}
 
