@@ -103,10 +103,10 @@ public final class Notifications {
 
 	public static boolean Msg_PointsGained(char a_stone, int a_points) {
 		if (a_stone == 'w') {
-			m_notificationsList.add("•POINTS GAINED BY TEAM GDRIVE:\t" + a_points + "\n\n");
+			m_notificationsList.add("•POINTS GAINED BY TEAM DUCK:\t" + a_points + "\n\n");
 		}
 		if (a_stone == 'b') {
-			m_notificationsList.add("•POINTS GAINED BY TEAM DROPBOX:\t" + a_points + "\n\n");
+			m_notificationsList.add("•POINTS GAINED BY TEAM PENGUIN:\t" + a_points + "\n\n");
 		}
 		return true;
 	}
@@ -118,13 +118,13 @@ public final class Notifications {
 
 	public static boolean Msg_MoveDescription(char a_stone) {
 		if (a_stone == 'w') {
-			m_notificationsList.add("•MOVE: A GDrive stone " +
+			m_notificationsList.add("•MOVE: A Duck " +
 				  "was placed at the blinking location.\n\n");
 		} else if (a_stone == 'b') {
-			m_notificationsList.add("•MOVE: A Dropbox stone " +
+			m_notificationsList.add("•MOVE: A Penguin " +
 				  "was placed at the blinking location.\n\n");
 		} else {
-			m_notificationsList.add("•MOVE: A Github stone " +
+			m_notificationsList.add("•MOVE: Miller " +
 				  "was placed at the blinking location.\n\n");
 		}
 		return true;
@@ -133,11 +133,11 @@ public final class Notifications {
 	public static boolean Msg_HelpModeRecommendedMove(char a_stone, int a_pointsToEarn) {
 		m_notificationsList.add("•HELP MODE ACTIVATED\n");
 		if (a_stone == 'w') {
-			m_notificationsList.add("•Place a GDrive stone at rotating location.\n");
+			m_notificationsList.add("•Place a Duck at rotating location.\n");
 		} else if (a_stone == 'b') {
-			m_notificationsList.add("•Place a Dropbox stone at rotating location.\n");
+			m_notificationsList.add("•Place a Penguin at rotating location.\n");
 		} else {
-			m_notificationsList.add("•Place a Github stone at rotating location.\n");
+			m_notificationsList.add("•Place Miller at rotating location.\n");
 		}
 
 		if (a_pointsToEarn > 0) {

@@ -77,7 +77,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/radio_teamWhite"
             android:checked="true"
-            android:text="GDrive"
+            android:text="Duck"
             android:layout_weight="0.50"/>
 
         <RadioButton
@@ -86,7 +86,7 @@
             android:id="@+id/radio_teamBlack"
             android:checked="false"
             android:layout_weight="0.5"
-            android:text="Dropbox"/>
+            android:text="Penguin"/>
     </RadioGroup>
 
     <ImageButton
