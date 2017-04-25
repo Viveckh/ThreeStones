@@ -1,7 +1,7 @@
 package com.viveckh.threestones;
 
 /**
- * This class inherits from the Player class and expands on the features needed to handle moves made by human
+ * This class inherits from Player class and expands on the features needed to handle human moves
  */
 public class Human extends Player {
 	//Constructor
@@ -11,15 +11,18 @@ public class Human extends Player {
 
 	public boolean Play(char a_stone, int a_row, int a_column, Board a_board) {
 		printNotifications = true;
+
 		//If index out of bounds, move cannot be made
 		if (IndexOutOfBounds(a_row, a_column, a_board.GetBoardDimension())) {
-			printStatus = printNotifications ? Notifications.Msg_InputOutOfBounds() : Notifications.Msg_NoMsg();
+			printStatus = printNotifications ?
+				  Notifications.Msg_InputOutOfBounds() : Notifications.Msg_NoMsg();
 			return false;
 		}
 
 		//Attempt the move and update the score if successful
 		if (PlaceAStone(a_stone, a_row, a_column, a_board)) {
-			UpdateScoreAfterMove(m_primaryColor, m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, a_board);
+			UpdateScoreAfterMove(m_primaryColor,
+				  m_rowOfPreviousPlacement, m_columnOfPreviousPlacement, a_board);
 			return true;
 		}
 		return false;

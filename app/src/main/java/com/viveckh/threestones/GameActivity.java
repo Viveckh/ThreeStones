@@ -43,9 +43,8 @@ import android.widget.Toast;
 
 public class GameActivity extends Activity {
 
-	//Declaring variables
+	//Variable Declarations
 	private Bundle m_intentExtras;
-
 	final private Button[][] buttons = new Button[11][11];
 	private Board m_board;
 	private Human m_human;
@@ -68,10 +67,14 @@ public class GameActivity extends Activity {
 		setContentView(R.layout.activity_game);
 
 		//Background for game board buttons
-		m_blankPic = getResources().getIdentifier("blank_circle", "drawable", "com.viveckh.threestones");
-		m_whitePic = getResources().getIdentifier("white_circle", "drawable", "com.viveckh.threestones");
-		m_blackPic = getResources().getIdentifier("black_circle", "drawable", "com.viveckh.threestones");
-		m_clearPic = getResources().getIdentifier("clear_circle", "drawable", "com.viveckh.threestones");
+		m_blankPic = getResources().
+			  getIdentifier("blank_circle", "drawable", "com.viveckh.threestones");
+		m_whitePic = getResources().
+			  getIdentifier("white_circle", "drawable", "com.viveckh.threestones");
+		m_blackPic = getResources().
+			  getIdentifier("black_circle", "drawable", "com.viveckh.threestones");
+		m_clearPic = getResources().
+			  getIdentifier("clear_circle", "drawable", "com.viveckh.threestones");
 
 		//Initializing view objects
 		btnComputerPlay = (Button)findViewById(R.id.btnComputerPlay);
@@ -84,9 +87,8 @@ public class GameActivity extends Activity {
 		//Getting the intent from previous activity
 		m_intentExtras = getIntent().getExtras();
 
-		//If starting the game in restore mode, get content from Tournament static class, otherwise start a fresh game
+		//If restore mode, get content from Tournament class. Otherwise, start a fresh game
 		if (m_intentExtras.getString("startMode").equals("restore")) {
-			//If restoring the game, get contents from tournament class
 			m_board = new Board((Board)m_intentExtras.getSerializable("gameBoard"));
 			m_humanStoneColor = Tournament.GetHumanStone();
 			m_computerStoneColor = Tournament.GetComputerStone();
@@ -122,11 +124,18 @@ public class GameActivity extends Activity {
 
 		//Update the available stones count if the game is being restored
 		if (m_intentExtras.getString("startMode").equals("restore")) {
-			m_computer.SetStonesAvailability(Tournament.GetComputerWhiteStonesCount(), Tournament.GetComputerBlackStonesCount(), Tournament.GetComputerClearStonesCount());
+			m_computer.SetStonesAvailability(Tournament.GetComputerWhiteStonesCount(),
+				  Tournament.GetComputerBlackStonesCount(),
+				  Tournament.GetComputerClearStonesCount());
 			m_computer.SetScore(Tournament.GetComputerScore());
-			m_human.SetStonesAvailability(Tournament.GetHumanWhiteStonesCount(), Tournament.GetHumanBlackStonesCount(), Tournament.GetHumanClearStonesCount());
+
+			m_human.SetStonesAvailability(Tournament.GetHumanWhiteStonesCount(),
+				  Tournament.GetHumanBlackStonesCount(),
+				  Tournament.GetHumanClearStonesCount());
 			m_human.SetScore(Tournament.GetHumanScore());
-			m_computer.SetPreviousPlacements(Tournament.GetRowOfLastPlacement(), Tournament.GetColumnOfLastPlacement());
+
+			m_computer.SetPreviousPlacements(Tournament.GetRowOfLastPlacement(),
+				  Tournament.GetColumnOfLastPlacement());
 		}
 
 		UpdatePlayerImages();
@@ -153,17 +162,23 @@ public class GameActivity extends Activity {
 	}
 
 	public void CreateBoard() {
+		//Handle taps for Help Button
 		btnHelp.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 			if (m_computer.Play(true, m_board, m_human)) {
-				Notifications.Msg_HelpModeRecommendedMove(m_computer.GetRecommendedStone(), m_computer.GetHighestScorePossible());
+				Notifications.Msg_HelpModeRecommendedMove(m_computer.GetRecommendedStone(),
+					  m_computer.GetHighestScorePossible());
 				DisplayNotifications();
-				Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_around_center_point);
-				buttons[m_computer.GetRecommendedRow()][m_computer.GetRecommendedColumn()].startAnimation(animation);
+
+				Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
+					  R.anim.rotate_around_center_point);
+				buttons[m_computer.GetRecommendedRow()][m_computer.GetRecommendedColumn()].
+					  startAnimation(animation);
 			}
 			}
 		});
 
+		//Handle taps for Save Button
 		btnSave.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				SaveGame();
@@ -232,7 +247,6 @@ public class GameActivity extends Activity {
 						}
 					}
 					DisplayNotifications();
-					//NOTE: Job of updating the location where stone was last inserted is already done within Player class after insertion
 						}
 					//}
 				});
@@ -245,22 +259,31 @@ public class GameActivity extends Activity {
 						int rowOfPlacement = 0, columnOfPlacement = 0;
 						char stoneOfPlacement = 'x';
 						if (m_computer.Play(false, m_board, m_human)) {
-							rowOfPlacement = m_computer.GetRowOfPreviousPlacement();
-							columnOfPlacement = m_computer.GetColumnOfPreviousPlacement();
-							stoneOfPlacement = m_computer.GetStoneOfPreviousPlacement();
+							rowOfPlacement = m_computer.
+								  GetRowOfPreviousPlacement();
+							columnOfPlacement = m_computer.
+								  GetColumnOfPreviousPlacement();
+							stoneOfPlacement = m_computer.
+								  GetStoneOfPreviousPlacement();
 
 							//Update Opponent's score as well
-							m_human.UpdateScoreAfterMove(m_human.GetPlayerStoneColor(), rowOfPlacement, columnOfPlacement, m_board);
-							buttons[rowOfPlacement][columnOfPlacement].setClickable(false);
+							m_human.UpdateScoreAfterMove(m_human.GetPlayerStoneColor(),
+								  rowOfPlacement, columnOfPlacement, m_board);
+							buttons[rowOfPlacement][columnOfPlacement].
+								  setClickable(false);
 
+							//Set background for the button clicked
 							if (stoneOfPlacement == 'w') {
-								buttons[rowOfPlacement][columnOfPlacement].setBackgroundResource(m_whitePic);
+								buttons[rowOfPlacement][columnOfPlacement].
+									  setBackgroundResource(m_whitePic);
 							}
 							if (stoneOfPlacement == 'b') {
-								buttons[rowOfPlacement][columnOfPlacement].setBackgroundResource(m_blackPic);
+								buttons[rowOfPlacement][columnOfPlacement].
+									  setBackgroundResource(m_blackPic);
 							}
 							if (stoneOfPlacement == 'c') {
-								buttons[rowOfPlacement][columnOfPlacement].setBackgroundResource(m_clearPic);
+								buttons[rowOfPlacement][columnOfPlacement].
+									  setBackgroundResource(m_clearPic);
 							}
 						}
 
@@ -277,14 +300,15 @@ public class GameActivity extends Activity {
 
 	private void SaveGame() {
 		// Display an alert dialog box to confirm the user wants to save and exit the game
-		AlertDialog.Builder alert = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
+		AlertDialog.Builder alert = new AlertDialog
+			  .Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
 		final EditText txtFileName = new EditText(getApplicationContext());
 		alert.setTitle("Saving your game...");
 		alert.setMessage("Enter a name to access it later:");
 
 		alert.setView(txtFileName);
 
-		Typeface tfCaviar = Typeface.createFromAsset(getAssets(), "fonts/CaviarDreams_Bold.ttf");
+		Typeface tfCaviar = Typeface.createFromAsset(getAssets(),"fonts/CaviarDreams_Bold.ttf");
 		txtFileName.setTypeface(tfCaviar);
 		txtFileName.setTextColor(Color.WHITE);
 
@@ -295,22 +319,32 @@ public class GameActivity extends Activity {
 				String fileName = txtFileName.getText().toString();
 
 				//Saving current game status to the Tournament variables
-				Tournament.SaveCurrentGameStatus(m_humanStoneColor, m_computerStoneColor, m_human.GetWhiteStonesAvailable(), m_human.GetBlackStonesAvailable(), m_human.GetClearStonesAvailable(), m_computer.GetWhiteStonesAvailable(), m_computer.GetBlackStonesAvailable(), m_computer.GetClearStonesAvailable(), m_human.GetScore(), m_computer.GetScore());
+				Tournament.SaveCurrentGameStatus(m_humanStoneColor, m_computerStoneColor,
+					  m_human.GetWhiteStonesAvailable(),
+					  m_human.GetBlackStonesAvailable(),
+					  m_human.GetClearStonesAvailable(),
+					  m_computer.GetWhiteStonesAvailable(),
+					  m_computer.GetBlackStonesAvailable(),
+					  m_computer.GetClearStonesAvailable(),
+					  m_human.GetScore(), m_computer.GetScore());
 				if (m_turn == 0) {
-					Tournament.SetControls(m_computer.GetRowOfPreviousPlacement(), m_computer.GetColumnOfPreviousPlacement(), "computer");
+					Tournament.SetControls(m_computer.GetRowOfPreviousPlacement(),
+						  m_computer.GetColumnOfPreviousPlacement(), "computer");
 				}
 				else {
-					Tournament.SetControls(m_human.GetRowOfPreviousPlacement(), m_human.GetColumnOfPreviousPlacement(), "human");
+					Tournament.SetControls(m_human.GetRowOfPreviousPlacement(),
+						  m_human.GetColumnOfPreviousPlacement(), "human");
 				}
 
 				//Write to the file
 				Serializer serializer = new Serializer(HomeActivity.m_internalStorage);
 				if (serializer.WriteToFile(fileName + ".txt", m_board)) {
-					//When saving is successful, dispatch a tap on the back button, booking handled by a function above
-					Toast.makeText(getApplicationContext(), "Your game was successfully saved...",
+					//On success, dispatch a tap on the back button
+					Toast.makeText(getApplicationContext(),
+						  "Your game was successfully saved...",
 						  Toast.LENGTH_LONG).show();
-					dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK));
-
+					dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
+						  KeyEvent.KEYCODE_BACK));
 				}
 			}
 		});
@@ -327,9 +361,24 @@ public class GameActivity extends Activity {
 
 	private void CheckIfGameOver() {
 		//Saving current game status to the Tournament variables
-		Tournament.SaveCurrentGameStatus(m_humanStoneColor, m_computerStoneColor, m_human.GetWhiteStonesAvailable(), m_human.GetBlackStonesAvailable(), m_human.GetClearStonesAvailable(), m_computer.GetWhiteStonesAvailable(), m_computer.GetBlackStonesAvailable(), m_computer.GetClearStonesAvailable(), m_human.GetScore(), m_computer.GetScore());
-		if (m_human.GetWhiteStonesAvailable() == 0 && m_human.GetBlackStonesAvailable() == 0 && m_human.GetClearStonesAvailable() == 0) {
-			if (m_computer.GetWhiteStonesAvailable() == 0 && m_computer.GetBlackStonesAvailable() == 0 && m_computer.GetClearStonesAvailable() == 0) {
+		Tournament.SaveCurrentGameStatus(m_humanStoneColor, m_computerStoneColor,
+			  m_human.GetWhiteStonesAvailable(),
+			  m_human.GetBlackStonesAvailable(),
+			  m_human.GetClearStonesAvailable(),
+			  m_computer.GetWhiteStonesAvailable(),
+			  m_computer.GetBlackStonesAvailable(),
+			  m_computer.GetClearStonesAvailable(),
+			  m_human.GetScore(), m_computer.GetScore());
+
+		//If all the stones of both the players are over, the game is over
+		if (m_human.GetWhiteStonesAvailable() == 0 && m_human.GetBlackStonesAvailable() == 0 &&
+			m_human.GetClearStonesAvailable() == 0)
+		{
+
+			if (m_computer.GetWhiteStonesAvailable() == 0 &&
+				 m_computer.GetBlackStonesAvailable() == 0 &&
+				 m_computer.GetClearStonesAvailable() == 0)
+			{
 				Intent intent = new Intent(this, ResultsActivity.class);
 				//Increment Computer's tournament score if computer wins
 				if(m_computer.GetScore() > m_human.GetScore()) {
@@ -345,7 +394,7 @@ public class GameActivity extends Activity {
 					Toast.makeText(getApplicationContext(), "You won!",
 						  Toast.LENGTH_LONG).show();
 				}
-				//If a draw
+				//Don't increase anyone's tournament score if a draw
 				if(m_computer.GetScore() == m_human.GetScore()) {
 					intent.putExtra("winnerMsg", "IT'S A DRAW");
 					Toast.makeText(getApplicationContext(), "It's a draw!",
@@ -365,23 +414,24 @@ public class GameActivity extends Activity {
 		radioStonePicker.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				switch (checkedId) {
-					case R.id.radioButton1:
-						m_stoneChoice = "white";
-						break;
-					case R.id.radioButton2:
-						m_stoneChoice = "black";
-						break;
-					case R.id.radioButton3:
-						m_stoneChoice = "clear";
-						break;
-				}
+			switch (checkedId) {
+				case R.id.radioButton1:
+					m_stoneChoice = "white";
+					break;
+				case R.id.radioButton2:
+					m_stoneChoice = "black";
+					break;
+				case R.id.radioButton3:
+					m_stoneChoice = "clear";
+					break;
+			}
 			}
 		});
 	}
 
-	// This function fills the chosen stone in the given pouch and updates the necessary properties in the model class.
-	public boolean StoneFiller(Button[][] a_buttons, int a_row, int a_column, String a_stoneChoice) {
+	// This function fills the chosen stone in the given pouch and updates necessary properties
+	public boolean StoneFiller(Button[][] a_buttons, int a_row, int a_column, String a_stoneChoice)
+	{
 		//Retrieve the passed values and convert them in the proper form
 		char stone;
 		int newButtonBackground;
@@ -398,13 +448,16 @@ public class GameActivity extends Activity {
 			newButtonBackground = m_clearPic;
 		}
 
-		//Setting up the necessary flags/values in the view upon success in model
-		//THE PLACEASTONE FUNCTION SHOULD BE CALLED IN CONJUNCTION WITH THE UPDATESCORESAFTERMOVE FUNCTION FOR EACH PLAYER
+		/*Setting up the necessary flags/values in the view upon success in model
+		* THE PLACEASTONE FUNCTION SHOULD BE CALLED IN CONJUNCTION WITH THE
+		* UPDATESCORESAFTERMOVE FUNCTION FOR EACH PLAYER*/
+
 		//If Human's turn
 		if (m_turn == 1) {
 			if (m_human.Play(stone, a_row, a_column, m_board)) {
 				//Update Opponent's score as well
-				m_computer.UpdateScoreAfterMove(m_computer.GetPlayerStoneColor(), a_row, a_column, m_board);
+				m_computer.UpdateScoreAfterMove(m_computer.GetPlayerStoneColor(),
+					  a_row, a_column, m_board);
 				a_buttons[a_row][a_column].setClickable(false);
 				a_buttons[a_row][a_column].setBackgroundResource(newButtonBackground);
 				return true;
@@ -426,7 +479,7 @@ public class GameActivity extends Activity {
 		Notifications.ClearNotificationsList();
 	}
 
-	//Sets the stone images for each player in the scoreboard. Supposed to be called once the stone values read from previous intent
+	//Sets the stone images for each player in the scoreboard. Call once knowing stone values
 	private void UpdatePlayerImages() {
 		ImageButton imgHumanStone = (ImageButton)findViewById(R.id.imgHumanStone);
 		ImageButton imgComputerStone = (ImageButton)findViewById(R.id.imgComputerStone);
@@ -462,9 +515,9 @@ public class GameActivity extends Activity {
 		//Setting up animations for turns
 		Animation turnHighlighter = new AlphaAnimation(1, 0.2f);
 		turnHighlighter.setDuration(200);
-		turnHighlighter.setInterpolator(new AccelerateDecelerateInterpolator()); // do not alter animation rate
+		turnHighlighter.setInterpolator(new AccelerateDecelerateInterpolator());
 		turnHighlighter.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
-		turnHighlighter.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
+		turnHighlighter.setRepeatMode(Animation.REVERSE); //Reverse animation to fade back in
 
 		//Displaying images next to the radiobuttons
 		Drawable resized_white_circle = getResources().getDrawable(m_whitePic);
@@ -479,7 +532,7 @@ public class GameActivity extends Activity {
 
 		//Setting the fonts
 		Typeface tfRoboto = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
-		Typeface tfCaviar = Typeface.createFromAsset(getAssets(), "fonts/CaviarDreams_Bold.ttf");
+		Typeface tfCaviar = Typeface.createFromAsset(getAssets(),"fonts/CaviarDreams_Bold.ttf");
 		Typeface tfSeaside = Typeface.createFromAsset(getAssets(), "fonts/SeasideResortNF.ttf");
 
 		//Set fonts of section headers
@@ -544,7 +597,8 @@ public class GameActivity extends Activity {
 		btnComputerScore.setText(String.valueOf(m_computer.GetScore()));
 
 		//Animate the buttons
-		AnimateValidCells(m_computer.GetRowOfPreviousPlacement(), m_computer.GetColumnOfPreviousPlacement());
+		AnimateValidCells(m_computer.GetRowOfPreviousPlacement(),
+			  m_computer.GetColumnOfPreviousPlacement());
 	}
 
 	private void AnimateValidCells(int a_row, int a_column) {
@@ -554,25 +608,28 @@ public class GameActivity extends Activity {
 				// Prepare the animation for highlighting latest placement
 				Animation moveHighlighter = new AlphaAnimation(1, 0.2f);
 				moveHighlighter.setDuration(1000);
-				moveHighlighter.setInterpolator(new AccelerateDecelerateInterpolator()); // do not alter animation rate
-				moveHighlighter.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
-				moveHighlighter.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
+				moveHighlighter.setInterpolator(new AccelerateDecelerateInterpolator());
+				moveHighlighter.setRepeatCount(Animation.INFINITE);
+				moveHighlighter.setRepeatMode(Animation.REVERSE);
 
 				//Prepare the animation for blurring invalid buttons
-				Animation animation = new AlphaAnimation(0.3f, 0.3f);     // Change alpha from fully visible to invisible
-				animation.setDuration(10000); // duration - half a second
-				animation.setInterpolator(new AccelerateDecelerateInterpolator()); // do not alter animation rate
-				animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
-				animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
+				Animation animation = new AlphaAnimation(0.3f, 0.3f);
+				animation.setDuration(10000);
+				animation.setInterpolator(new AccelerateDecelerateInterpolator());
+				animation.setRepeatCount(Animation.INFINITE);
+				animation.setRepeatMode(Animation.REVERSE);
 
 				//Check if all the blocks in the row/column of last placement are occupied.
 				//If so, the player has the option to place stone anywhere on board
 				boolean doNotOpenEntireBoardForPlacement = false;
 				for (int row = 0; row < m_board.GetBoardDimension(); row++) {
 					for (int col = 0; col < m_board.GetBoardDimension(); col++) {
-						//if at least one spot is vacant in the row/column of last placement
+						//if one spot is vacant in the row/column of last placement
 						if (row == a_row || col == a_column) {
-							if (m_board.GetBlockAtLocation(row, col) != null && m_board.GetBlockAtLocation(row, col).IsInitialized() && !m_board.GetBlockAtLocation(row, col).IsOccupied()) {
+							if (m_board.GetBlockAtLocation(row, col) != null &&
+								m_board.GetBlockAtLocation(row, col).IsInitialized()
+								&& !m_board.GetBlockAtLocation(row, col).IsOccupied())
+							{
 								doNotOpenEntireBoardForPlacement = true;
 							}
 						}
@@ -583,18 +640,22 @@ public class GameActivity extends Activity {
 				for (int row = 0; row < m_board.GetBoardDimension(); row++) {
 					for (int col = 0; col < m_board.GetBoardDimension(); col++) {
 
-						//If 'doNotOpenEntireBoardForPlacement' is true, then only enable blocks in 1 row and column for placement
+						/*If 'doNotOpenEntireBoardForPlacement' is true,
+						* then only enable blocks in 1 row and column for placement*/
 						if (doNotOpenEntireBoardForPlacement) {
 							//First blur all the buttons on the board
 							buttons[row][col].startAnimation(animation);
 
-							//Now, clear blur effect from valid row and column for next move
+							//Now, clear blur from valid row/column for next move
 							if (row == a_row || col == a_column) {
 								buttons[row][col].clearAnimation();
 							}
 
-							//Now, clear blur effect from already occupied blocks as well
-							if (m_board.GetBlockAtLocation(row, col) != null && m_board.GetBlockAtLocation(row, col).IsInitialized() && m_board.GetBlockAtLocation(row, col).IsOccupied()) {
+							//Now, clear blur effect from occupied blocks as well
+							if (m_board.GetBlockAtLocation(row, col) != null
+								&& m_board.GetBlockAtLocation(row, col).IsInitialized()
+								&& m_board.GetBlockAtLocation(row, col).IsOccupied())
+							{
 								buttons[row][col].clearAnimation();
 							}
 						}
@@ -603,7 +664,7 @@ public class GameActivity extends Activity {
 							buttons[row][col].clearAnimation();
 						}
 
-						//Now, start move highlighting animation in the block where stone was last placed
+						//Now, start highlighting block where stone was last placed
 						if (row == a_row && col == a_column) {
 							buttons[row][col].startAnimation(moveHighlighter);
 						}

@@ -5,10 +5,8 @@ package com.viveckh.threestones;
 */
 
 /*
-The Home activity extends the Activity and sets up the Home Screen of the application.
-On creation, it sets up the layout to activity_start_screen which prompts the user to do the coin toss.
-Depending on the toss, appropriate colors are assigned to the Computer & Human Player. And the intent is passed
-to Home activity.
+* The Home activity is the starting point of application and allows user to start a fresh tournament
+* through toss or restore a previously saved tournament
 */
 
 import java.io.File;
@@ -31,6 +29,7 @@ import android.content.Intent;
 import android.widget.Toast;
 
 public class HomeActivity extends Activity {
+    //Variable Declarations
     private ImageButton m_btnStartNewGame;
     private ImageButton m_btnProceedToGame;
     private ImageButton m_btnRestoreGame;
@@ -40,9 +39,7 @@ public class HomeActivity extends Activity {
     private RadioGroup m_radioGrpTeams;
     private RadioButton m_radioWhite;
     private RadioButton m_radioBlack;
-
-    //Public location of internal storage
-    public static File m_internalStorage;
+    public static File m_internalStorage;	//Storage location within device
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +60,7 @@ public class HomeActivity extends Activity {
         m_radioGrpTeams.setVisibility(View.INVISIBLE);
 
         UpdateControlViews();
+
         //If user chooses to start a new game, conduct toss and activate the proceed to game button
         m_btnStartNewGame.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -83,20 +81,23 @@ public class HomeActivity extends Activity {
 
         // Get the files in the given folder and display in the ListView (For restoring saved game)
         ArrayList<String> filesInFolder = GetFiles(m_dataStorageDirectory);
-        final ListView listView_SerializationFiles = (ListView) findViewById(R.id.listView_SerializationFiles);
-        listView_SerializationFiles.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, filesInFolder));
+        final ListView listView_SerializationFiles =
+		    (ListView) findViewById(R.id.listView_SerializationFiles);
+        listView_SerializationFiles.setAdapter(new ArrayAdapter<String>(this,
+		    android.R.layout.simple_list_item_1, filesInFolder));
 
         listView_SerializationFiles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 // Clicking on items
-                String selectedItem = (String) (listView_SerializationFiles.getItemAtPosition(position));
+                String selectedItem =
+				(String)(listView_SerializationFiles.getItemAtPosition(position));
                 RestoreGame(selectedItem);
             }
         });
     }
 
     private void RestoreGame(String a_fileName) {
-        //Read from file
+        //Read saved game from selected file and start GameActivity with the content to restore
         Board board = new Board();
         Serializer serializer = new Serializer(HomeActivity.m_internalStorage);
         Tournament.ResetScores();
@@ -123,8 +124,8 @@ public class HomeActivity extends Activity {
      */
     private ArrayList<String> GetFiles(String a_directoryName) {
         ArrayList<String> dataFiles = new ArrayList<String>();
-
         Context context = getApplicationContext();
+
         //Create the data storage folder if it doesn't exist yet
         File folder = context.getDir(a_directoryName, Context.MODE_PRIVATE);
         boolean success = false;
@@ -137,6 +138,7 @@ public class HomeActivity extends Activity {
         m_internalStorage = folder;
         m_dataStorageDirectory = folder.getAbsolutePath();
 
+	  //Gather the file names
         if (success) {
             File[] files = folder.listFiles();
             if (files != null) {
@@ -154,9 +156,10 @@ public class HomeActivity extends Activity {
      */
     public void ProceedToGame(View view) {
         Intent intent = new Intent(this, GameActivity.class);
-        intent.putExtra("startMode", "new");
-        //Next player is already passed through Tournament's static variable
-        //Whichever radio button is checked is human's choice of stone
+	  intent.putExtra("startMode", "new");
+
+	  //Next player is already passed through Tournament's static variable
+	  //Whichever radio button is checked is human's choice of stone
         if (m_radioWhite.isChecked()) {
             intent.putExtra("humanStone", 'w');
             intent.putExtra("computerStone", 'b');
@@ -169,7 +172,8 @@ public class HomeActivity extends Activity {
     }
 
     /**
-     * Does a toss until one side wins, refreshes view with the toss result and sets the necessary values in static Tournament class regarding which side is the next player
+     * Does a toss until one side wins, refreshes view with the toss result and
+     * sets the necessary values in static Tournament class regarding which side is the next player
      */
     private void TossToBegin() {
         Random rand = new Random();
@@ -184,10 +188,12 @@ public class HomeActivity extends Activity {
         // Whoever has the highest number on top - wins the toss
         if (humanDieToss > botDieToss) {
             Tournament.SetControls(-1, -1, "human");
-            m_txtViewTossResults.setText("Toss Results:\nBot: " + botDieToss + ", You: " + humanDieToss + "\nYou won the toss.");
-        } else {
+            m_txtViewTossResults.setText("Toss Results:\nBot: " + botDieToss +
+			  ", You: " + humanDieToss + "\nYou won the toss.");
+	  } else {
             Tournament.SetControls(-1, -1, "computer");
-            m_txtViewTossResults.setText("Toss Results:\nBot: " + botDieToss + ", You: " + humanDieToss + "\nBot won the toss.");
+            m_txtViewTossResults.setText("Toss Results:\nBot: " + botDieToss +
+			  ", You: " + humanDieToss + "\nBot won the toss.");
         }
     }
 

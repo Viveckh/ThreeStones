@@ -9,8 +9,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+// This activity display the results of the game/tournament and prompts user to quit/continue
+
 public class ResultsActivity extends Activity {
 
+	//Variable Declarations
 	Bundle m_extras;
 	TextView m_txtViewGameResult;
 	Button m_btnHumanFinalScore;
@@ -28,18 +31,15 @@ public class ResultsActivity extends Activity {
 		//Getting the intent from previous activity
 		m_extras = getIntent().getExtras();
 
+		//Setting the display elements to reflect the scores and wins so far
 		m_txtViewGameResult = (TextView)findViewById(R.id.txtViewGameResult);
 		m_txtViewGameResult.setText(m_extras.getString("winnerMsg"));
-
 		m_btnHumanFinalScore = (Button)findViewById(R.id.btnHumanFinalScore);
 		m_btnHumanFinalScore.setText(String.valueOf(Tournament.GetHumanScore()));
-
 		m_btnComputerFinalScore = (Button)findViewById(R.id.btnComputerFinalScore);
 		m_btnComputerFinalScore.setText(String.valueOf(Tournament.GetComputerScore()));
-
 		m_btnHumanWins = (Button)findViewById(R.id.btnHumanWins);
 		m_btnHumanWins.setText(String.valueOf(Tournament.GetHumanWins()));
-
 		m_btnComputerWins = (Button)findViewById(R.id.btnComputerWins);
 		m_btnComputerWins.setText(String.valueOf(Tournament.GetComputerWins()));
 
@@ -47,8 +47,7 @@ public class ResultsActivity extends Activity {
 		m_btnYes = (ImageButton)findViewById(R.id.btnYes);
 		m_btnNo = (ImageButton)findViewById(R.id.btnNo);
 
-
-		//If user chooses to continue the tournament
+		//If user chooses to continue the tournament, start GameActivity
 		m_btnYes.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(getApplicationContext(), GameActivity.class);
@@ -59,10 +58,10 @@ public class ResultsActivity extends Activity {
 			}
 		});
 
-		//If user chooses to end the tournament
+		//If user chooses to end the tournament, go back to the HomeActivity
 		m_btnNo.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				//Dispatch an event to go back, the function below handles ending the tournament
+				//Dispatch an event to go back, onKeyDown function handles what to do
 				dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK));
 			}
 		});

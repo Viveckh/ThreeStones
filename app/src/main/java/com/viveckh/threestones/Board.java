@@ -4,30 +4,30 @@ package com.viveckh.threestones;
  * Date: 3/3/2017
 */
 
-/* This class serves as the Game Board. It creates a 11*11 multim_DIMENSIONal array of pouches and initializes
-* only those pouches that fall in the Octagonal game board. Once initialized, it sets all the necessary relationship between
-* the pouches so that the link can help in the tree formation later.
-* The score function calculates and returns the change in score after each stone insertion in the board.
+/* This class serves as the Game Board. It creates a 11*11 multidimensional array of pouches
+* and initializes only those pouches that fall in the Octagonal game board.
+* Once initialized, it sets all the necessary relationship between the pouches
+* so that the link can help in the tree formation later.
 */
 
 import java.io.Serializable;
 
 public class Board implements Serializable {
-	//Variables
+	//Variable Declarations
 	private static final int m_DIMENSION = 11;
-	Block[][] m_gameBoard; //Package Public
+	Block[][] m_gameBoard;
 
 	//Default Constructor
 	public Board() {
-		//Since certain indexes in the multidimensional board need to be nullified to obtain an octagonal board
+		/*Since certain indexes in the multidimensional board need to be nullified
+		to obtain an octagonal board*/
 		int startingColumn = 4;
 		int rowLength = 3;
 
-		//Initialize the game board
+		//Initializing the indexes of game board that fall in the octagonal region
 		m_gameBoard = new Block[m_DIMENSION][m_DIMENSION];
-
 		for (int row = 0; row < m_DIMENSION; row++) {
-			for (int column = startingColumn; column < (startingColumn + rowLength); column++) {
+			for (int column = startingColumn; column < (startingColumn+rowLength); column++) {
 				if (row == m_DIMENSION / 2 && column == m_DIMENSION / 2) {
 					// Leave the center blank
 				} else {
@@ -51,31 +51,30 @@ public class Board implements Serializable {
 
 	//Copy Constructor
 	public Board(Board a_board) {
-		//Initialize the game board
+		//Initializing the game board
 		m_gameBoard = new Block[m_DIMENSION][m_DIMENSION];
 
 		//Copy all the indexes from the board passed as parameter
 		for (int row = 0; row < m_DIMENSION; row++) {
 			for (int column = 0; column < m_DIMENSION; column++) {
-				//If an index in the passed gameboard isn't null
+				/*If an index in the passed game board isn't null,
+				copy construct a block object on the corresponding index in this board*/
 				if (a_board.m_gameBoard[row][column] != null) {
-					//Copy construct a block object on the corresponding index in this board
-					m_gameBoard[row][column] = new Block(a_board.m_gameBoard[row][column]);
+					m_gameBoard[row][column] =new Block(a_board.m_gameBoard[row][column]);
 				}
 			}
 		}
 	}
 
-	//Draw board
+	//Print board to console for purposes of debugging
 	public void DrawBoard() {
-		//Copy all the indexes from the board passed as parameter
 		for (int row = 0; row < m_DIMENSION; row++) {
 			for (int column = 0; column < m_DIMENSION; column++) {
-				//If an index in the passed gameboard isn't null
+				//If an index in the passed board isn't null, and is occupied - Print it
 				if (m_gameBoard[row][column] != null) {
-					//Mention it is occupied
 					if (m_gameBoard[row][column].IsOccupied()) {
-						System.out.println("(" + m_gameBoard[row][column].GetX() + ", " + m_gameBoard[row][column].GetY() + ")");
+						System.out.println("(" + m_gameBoard[row][column].GetX() + ", "
+							  + m_gameBoard[row][column].GetY() + ")");
 					}
 				}
 			}
@@ -87,9 +86,9 @@ public class Board implements Serializable {
 		return m_DIMENSION;
 	}
 
-	//Setting a stone somewhere on the gameboard
+	//Setts a stone somewhere on the board
 	public boolean SetStoneAtLocation(int a_row, int a_column, char a_stone) {
-		//If trying to attempt uninitialized no-go indexes
+		//If trying to set uninitialized no-go indexes, return false. Else, set the stone
 		if (m_gameBoard[a_row][a_column] == null) {
 			return false;
 		}
@@ -98,14 +97,14 @@ public class Board implements Serializable {
 
 	//Returns the occupancy state of a location on the board
 	public boolean IsLocationOccupied(int a_row, int a_column) {
-		//If trying to attempt uninitialized no-go indexes
+		//If trying to access uninitialized no-go indexes, return that true as well.
 		if (m_gameBoard[a_row][a_column] == null) {
 			return true;
 		}
 		return m_gameBoard[a_row][a_column].IsOccupied();
 	}
 
-	//Gets block at a given location in board, returns null if trying to attempt invalid coordinates
+	//Gets block at a given location in board, returns null if accessing invalid coordinates
 	public Block GetBlockAtLocation(int a_row, int a_column) {
 		if (m_gameBoard[a_row][a_column] == null) {
 			return null;
@@ -117,7 +116,7 @@ public class Board implements Serializable {
 
 	//Gets the stone of a particular location on the board
 	public char GetStoneAtLocation(int a_row, int a_column) {
-		//If trying to attempt uninitialized no-go indexes
+		//If trying to attempt uninitialized no-go indexes, return 'e', else return the stone
 		if (m_gameBoard[a_row][a_column] == null) {
 			return 'e';
 		}

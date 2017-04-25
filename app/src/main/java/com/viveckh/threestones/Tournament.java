@@ -2,16 +2,17 @@ package com.viveckh.threestones;
 
 /**
  * Tournament Class
- * Static class that keeps a track of the tournament scores and next player throughout the tournament.
+ * Static class that keeps a track of the tournament wins, and also current game play variables.
  * Author: Vivek Pandey
  * Last Modified on: 04/17/2017
  */
 public final class Tournament {
-	// VARIABLES
-	//Primary stone color in current game
+	// VARIABLE DECLARATIONS
+	//Variables to store primary stone color in current game
 	private static char humanStone;
 	private static char computerStone;
 
+	//Variables to store the available stones for both players in current game
 	private static int humanWhiteStonesCount;
 	private static int humanBlackStonesCount;
 	private static int humanClearStonesCount;
@@ -19,14 +20,14 @@ public final class Tournament {
 	private static int computerBlackStonesCount;
 	private static int computerClearStonesCount;
 
-	//Scores in current game in progress
+	//Variables to store the scores of current game
 	private static int humanScore;
 	private static int computerScore;
-	//Wins overall in the tournament
+	//Variables to store the overall wins by each player in the tournament
 	private static int humanWins;
 	private static int computerWins;
 
-	//Game variables
+	//Variables necessary for implementing Game rules
 	private static int rowOfLastPlacement;
 	private static int columnOfLastPlacement;
 	private static String nextPlayer;   //"human" or "computer" all lower case
@@ -133,7 +134,14 @@ public final class Tournament {
 		return nextPlayer;
 	}
 
-	public static void SaveCurrentGameStatus(char a_humanStone, char a_computerStone, int a_humanWhiteStonesCount, int a_humanBlackStonesCount, int a_humanClearStonesCount, int a_computerWhiteStonesCount, int a_computerBlackStonesCount, int a_computerClearStonesCount, int a_humanScore, int a_computerScore) {
+	public static void SaveCurrentGameStatus(char a_humanStone, char a_computerStone,
+							     int a_humanWhiteStonesCount,
+							     int a_humanBlackStonesCount,
+							     int a_humanClearStonesCount,
+							     int a_computerWhiteStonesCount,
+							     int a_computerBlackStonesCount,
+							     int a_computerClearStonesCount,
+							     int a_humanScore, int a_computerScore) {
 		humanWhiteStonesCount = a_humanWhiteStonesCount;
 		humanBlackStonesCount = a_humanBlackStonesCount;
 		humanClearStonesCount = a_humanClearStonesCount;
@@ -173,11 +181,12 @@ public final class Tournament {
 		computerWins = 0;
 	}
 
-	public static void SetControls(int a_rowOfLastPlacement, int a_columnOfLastPlacement, String player) {
+	public static void SetControls(int a_rowOfLastPlacement, int a_columnOfLastPlacement,
+						 String player) {
 		rowOfLastPlacement = a_rowOfLastPlacement;
 		columnOfLastPlacement = a_columnOfLastPlacement;
 
-		if (player == "computer" || player == "Computer") {
+		if (player.equals("computer") || player.equals("Computer")) {
 			nextPlayer = "computer";
 		}
 		else {

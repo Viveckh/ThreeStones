@@ -13,7 +13,7 @@ import java.io.Serializable;
 
 public class Block implements Serializable {
 
-    // Variables
+    // Variable Declarations
     private int m_initialized;
     private int m_xAxis, m_yAxis;
     private boolean m_occupied;
@@ -21,20 +21,20 @@ public class Block implements Serializable {
 
     // Constructor
     // assigns the passed coordinates, sets occupied state to false.
-    // Sets the default stone to 'n' i.e. none
     public Block(int a_xAxis, int a_yAxis) {
         m_initialized = 1;
         m_xAxis = a_xAxis;
         m_yAxis = a_yAxis;
         m_occupied = false;
-        m_stone = 'n';
+        m_stone = 'n';  // default stone to 'n' i.e. none
     }
 
     //Copy Constructor
     public Block(Block a_block) {
-        //Copying the variables from passed block object
-        //Handling null cases so that issues don't come up while trying to copy construct Block using null object references
+        /*Handling null cases so that issues don't come up while trying to copy construct
+	   Block using null object references*/
         if (a_block != null) {
+            //Copying the property values from passed block object
             m_initialized = a_block.m_initialized;
             m_xAxis = a_block.m_xAxis;
             m_yAxis = a_block.m_yAxis;
