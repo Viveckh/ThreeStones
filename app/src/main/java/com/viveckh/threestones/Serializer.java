@@ -6,23 +6,27 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 
 /**
- * Serializer Class
- * Contains necessary member functions to serialize or restore a tournament to and from a text file.
- * Author: Vivek Pandey
- * Last Modified on: 04/24/2017
+ * <h1>Serializer Model Class</h1>
+ * It contains necessary member functions to save or restore a tournament to/from a text file.
+ *
+ * @author Vivek Pandey
+ * @since 2017-04-25
  */
-
 public class Serializer {
-	//CONSTANTS
+	//Constant for Board dimension
 	private final int m_DIMENSION = 11;
 
 	//Variable declarations
-	private char[][] m_serializedGameBoard;
+	private char[][] m_serializedGameBoard;      //Game board will be stored here before read/write
 	private String m_fileName;
 	private File m_storageLocation;
 
 	/**
-	 * DEFAULT CONSTRUCTOR
+	 * Serializer Constructor,
+	 * Sets up a string multidimensional array with default values which will be used for purposes
+	 * of reading and writing the Game Board from/to the storage later
+	 *
+	 * @param a_storageLocation File, Root storage location within the device to save game files
 	 */
 	public Serializer(File a_storageLocation) {
 		m_storageLocation = a_storageLocation;
@@ -38,15 +42,19 @@ public class Serializer {
 	}
 
 	/**
-	 * Writing serialized game state along with tournament history results to file
-	 * @param a_fileName The name of file to which the current game state should be written to
-	 * @param a_board The game board to be written
+	 * WriteToFile(),
+	 * Writes the game board along with current tournament details to file
+	 *
+	 * @param a_fileName String, filename to which the current game state should be written to
+	 * @param a_board    Board, the game board to be written
 	 * @return true if the writing is successful; false if any exceptions arise
+	 * @author Vivek Pandey
+	 * @since 2017-04-25
 	 */
 	public boolean WriteToFile(String a_fileName, Board a_board) {
 		// Setup the proper location to write the game state to
 		m_fileName = a_fileName;
-		File dir =  new File (m_storageLocation.getAbsoluteFile().toString());
+		File dir = new File(m_storageLocation.getAbsoluteFile().toString());
 		dir.mkdirs();
 		File file = new File(dir, m_fileName);
 
@@ -60,7 +68,7 @@ public class Serializer {
 			outputStream.write("Board\n".getBytes());
 			for (int row = 0; row < m_DIMENSION; row++) {
 				for (int col = 0; col < m_DIMENSION; col++) {
-					outputStream.write((m_serializedGameBoard[row][col]+"\t").getBytes());
+					outputStream.write((m_serializedGameBoard[row][col] + "\t").getBytes());
 				}
 				outputStream.write("\n".getBytes());
 			}
@@ -101,20 +109,24 @@ public class Serializer {
 				  Tournament.GetNextPlayer() + "\n").getBytes());
 			outputStream.close();
 			return true;
-		} catch(Exception e) {
+		} catch (Exception e) {
 			return false;
 		}
 	}
 
 	/**
+	 * ReadFromFile(),
 	 * Reads a serialization file, stores tournament and game state into a multidimensional
 	 * string array and sets the provided board accordingly
-	 * @param a_fileName Name of the file from which the tournament state should be read from
-	 * @param a_board The game board that needs to be set based on the contents from file
+	 *
+	 * @param a_fileName String, Filename from which the tournament state should be read from
+	 * @param a_board    Board, Game board that needs to be set based on the contents from file
 	 * @return true if the restoration is successful; false otherwise
+	 * @author Vivek Pandey
+	 * @since 2017-04-25
 	 */
 	public boolean ReadFromFile(String a_fileName, Board a_board) {
-		File dir =  new File (m_storageLocation.getAbsoluteFile().toString());
+		File dir = new File(m_storageLocation.getAbsoluteFile().toString());
 		File file = new File(dir, a_fileName);
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -162,85 +174,76 @@ public class Serializer {
 				// Continue if the line is not empty
 				if (!line.trim().isEmpty()) {
 					//Parse computer's and human's choice of stone
-					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Ss]tone(.*)"))
-					{
+					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Ss]tone(.*)")) {
 						if (line.matches("(.*):(.*)[Ww](.*)")) {
 							computerPrimaryStone = 'w';
 							humanPrimaryStone = 'b';
-						}
-						else {
+						} else {
 							computerPrimaryStone = 'b';
 							humanPrimaryStone = 'w';
 						}
 					}
 
 					//Parse number of available white stones for computer
-					if(line.matches("(\\s*)[Cc]omputer(\\s+)[Ww]hite(\\s+)[Ss]tones(.*)"))
+					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Ww]hite(\\s+)[Ss]tones(.*)"))
 					{
 						computerWhiteStones = Integer.
 							  parseInt(line.replaceAll("[\\D]", ""));
 					}
 
 					//Parse number of available black stones for computer
-					if(line.matches("(\\s*)[Cc]omputer(\\s+)[Bb]lack(\\s+)[Ss]tones(.*)"))
+					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Bb]lack(\\s+)[Ss]tones(.*)"))
 					{
 						computerBlackStones = Integer.
 							  parseInt(line.replaceAll("[\\D]", ""));
 					}
 
 					//Parse number of available clear stones for computer
-					if(line.matches("(\\s*)[Cc]omputer(\\s+)[Cc]lear(\\s+)[Ss]tones(.*)"))
+					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Cc]lear(\\s+)[Ss]tones(.*)"))
 					{
 						computerClearStones = Integer.
 							  parseInt(line.replaceAll("[\\D]", ""));
 					}
 
 					//Parse number of available white stones for human
-					if (line.matches("(\\s*)[Hh]uman(\\s+)[Ww]hite(\\s+)[Ss]tones(.*)"))
-					{
+					if (line.matches("(\\s*)[Hh]uman(\\s+)[Ww]hite(\\s+)[Ss]tones(.*)")) {
 						humanWhiteStones = Integer.
 							  parseInt(line.replaceAll("[\\D]", ""));
 					}
 
 					//Parse number of available black stones for human
-					if (line.matches("(\\s*)[Hh]uman(\\s+)[Bb]lack(\\s+)[Ss]tones(.*)"))
-					{
+					if (line.matches("(\\s*)[Hh]uman(\\s+)[Bb]lack(\\s+)[Ss]tones(.*)")) {
 						humanBlackStones = Integer.
 							  parseInt(line.replaceAll("[\\D]", ""));
 					}
 
 					//Parse number of available clear stones for human
-					if (line.matches("(\\s*)[Hh]uman(\\s+)[Cc]lear(\\s+)[Ss]tones(.*)"))
-					{
+					if (line.matches("(\\s*)[Hh]uman(\\s+)[Cc]lear(\\s+)[Ss]tones(.*)")) {
 						humanClearStones = Integer.
 							  parseInt(line.replaceAll("[\\D]", ""));
 					}
 
 					// Parse computer score in running game
-					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Ss]core(.*)"))
-					{
+					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Ss]core(.*)")) {
 						computerScore = Integer.
 							  parseInt(line.replaceAll("[\\D]", ""));
 					}
 
 					// Parse human score in running game
-					if (line.matches("(\\s*)[Hh]uman(\\s+)[Ss]core(.*)"))
-					{
+					if (line.matches("(\\s*)[Hh]uman(\\s+)[Ss]core(.*)")) {
 						humanScore = Integer.
 							  parseInt(line.replaceAll("[\\D]", ""));
 					}
 
 					// Parse number of computer wins
-					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Ww]ins(.*)"))
-					{
+					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Ww]ins(.*)")) {
 						int botWins = Integer.parseInt(line.replaceAll("[\\D]", ""));
 						//assuming the wins are initially set to zero
 						Tournament.IncrementComputerWinsBy(botWins);
 					}
 
 					// Parse number of human wins
-					if (line.matches("(\\s*)[Hh]uman(\\s+)[Ww]ins(.*)"))
-					{
+					if (line.matches("(\\s*)[Hh]uman(\\s+)[Ww]ins(.*)")) {
 						int humanWins = Integer.parseInt(line.replaceAll("[\\D]", ""));
 						//assuming the wins are initially set to zero
 						Tournament.IncrementHumanWinsBy(humanWins);
@@ -248,26 +251,23 @@ public class Serializer {
 
 
 					//Parse row of last placement
-					if (line.matches("(\\s*)[Ll]ast(\\s+)[Pp]lacement(\\s+)[Rr]ow(.*)"))
-					{
+					if (line.matches("(\\s*)[Ll]ast(\\s+)[Pp]lacement(\\s+)[Rr]ow(.*)")) {
 						//Pattern gets rid of "Any character except a digit or a '-' "
 						lastRow = Integer.parseInt(line.replaceAll("[^\\d-]", ""));
 					}
 
 					//Parse column of last placement
-					if(line.matches("(\\s*)[Ll]ast(\\s+)[Pp]lacement(\\s+)[Cc]olumn(.*)"))
+					if (line.matches("(\\s*)[Ll]ast(\\s+)[Pp]lacement(\\s+)[Cc]olumn(.*)"))
 					{
 						//Pattern gets rid of "Any character except a digit or a '-' "
 						lastColumn = Integer.parseInt(line.replaceAll("[^\\d-]", ""));
 					}
 
 					// Parse the next player
-					if (line.matches("(\\s*)[Nn]ext(\\s+)[Pp]layer(.*)"))
-					{
+					if (line.matches("(\\s*)[Nn]ext(\\s+)[Pp]layer(.*)")) {
 						if (line.matches("(.*):(.*)[Cc]omputer(.*)")) {
 							nextPlayer = "computer";
-						}
-						else {
+						} else {
 							nextPlayer = "human";
 						}
 					}
@@ -280,23 +280,25 @@ public class Serializer {
 				  humanScore, computerScore);
 			Tournament.SetControls(lastRow, lastColumn, nextPlayer);
 			reader.close();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			return false;
 		}
 		return true;
 	}
 
 	/**
-	 * Sets the given board based on the contents of the string array restored by reading file
+	 * SetBoard(),
+	 * Sets the given board based on the contents of the string array filled by reading file
+	 *
 	 * @param a_board Board that needs to be set using the contents of multidimensional str array
+	 * @author Vivek Pandey
+	 * @since 2017-04-25
 	 */
 	private void SetBoard(Board a_board) {
 		// Go through every index of the serialized board and update the actual game board
 		for (int row = 0; row < m_DIMENSION; row++) {
 			for (int col = 0; col < m_DIMENSION; col++) {
-				switch (m_serializedGameBoard[row][col])
-				{
+				switch (m_serializedGameBoard[row][col]) {
 					case 'x':
 						//Since this refers to an uninitialized index in board
 						break;
@@ -323,13 +325,14 @@ public class Serializer {
 
 	/**
 	 * Stores the game state in a multidimensional string array.
+	 *
 	 * @param a_board Board whose contents are to be stored in the class's multidimensional array
 	 */
 	private void UpdateSerializedBoard(Board a_board) {
 		for (int row = 0; row < m_DIMENSION; row++) {
 			for (int col = 0; col < m_DIMENSION; col++) {
 				if (a_board.GetBlockAtLocation(row, col) != null) {
-					m_serializedGameBoard[row][col] =a_board.GetStoneAtLocation(row, col);
+					m_serializedGameBoard[row][col] = a_board.GetStoneAtLocation(row, col);
 				}
 			}
 		}

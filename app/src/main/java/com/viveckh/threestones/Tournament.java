@@ -1,10 +1,13 @@
 package com.viveckh.threestones;
 
 /**
- * Tournament Class
- * Static class that keeps a track of the tournament wins, and also current game play variables.
- * Author: Vivek Pandey
- * Last Modified on: 04/17/2017
+ * <h1>Tournament Model Class</h1>
+ * This Singleton class keeps a track of the tournament wins, along with attributes associated with
+ * current game like the primary stone of each player, available stones, scores and info about last
+ * placement. It comes in handy while saving and restoring a tournament.
+ *
+ * @author Vivek Pandey
+ * @since 2017-04-25
  */
 public final class Tournament {
 	// VARIABLE DECLARATIONS
@@ -33,7 +36,8 @@ public final class Tournament {
 	private static String nextPlayer;   //"human" or "computer" all lower case
 
 	/**
-	 * PRIVATE CONSTRUCTOR
+	 * Tournament Default Constructor
+	 * Privately initializes the class and sets the class variables to the default values
 	 */
 	private Tournament() {
 		humanWhiteStonesCount = 15;
@@ -54,41 +58,82 @@ public final class Tournament {
 		columnOfLastPlacement = -1;
 	}
 
+	/**
+	 * Gets available white stones of human player
+	 *
+	 * @return Integer, Human player's available white stones
+	 */
 	public static int GetHumanWhiteStonesCount() {
 		return humanWhiteStonesCount;
 	}
 
+	/**
+	 * Gets available black stones of human player
+	 *
+	 * @return Integer, Human player's available black stones
+	 */
 	public static int GetHumanBlackStonesCount() {
 		return humanBlackStonesCount;
 	}
 
+	/**
+	 * Gets available clear stones of human player
+	 *
+	 * @return Integer, Human player's available clear stones
+	 */
 	public static int GetHumanClearStonesCount() {
 		return humanClearStonesCount;
 	}
 
+	/**
+	 * Gets available white stones of Computer player
+	 *
+	 * @return Integer, Computer player's available white stones
+	 */
 	public static int GetComputerWhiteStonesCount() {
 		return computerWhiteStonesCount;
 	}
 
+	/**
+	 * Gets available black stones of Computer player
+	 *
+	 * @return Integer, Computer player's available black stones
+	 */
 	public static int GetComputerBlackStonesCount() {
 		return computerBlackStonesCount;
 	}
 
+	/**
+	 * Gets available clear stones of Computer player
+	 *
+	 * @return Integer, Computer player's available clear stones
+	 */
 	public static int GetComputerClearStonesCount() {
 		return computerClearStonesCount;
 	}
 
+	/**
+	 * Gets human player's primary stone
+	 *
+	 * @return Character, Human player's primary stone
+	 */
 	public static char GetHumanStone() {
 		return humanStone;
 	}
 
+	/**
+	 * Gets Computer player's primary stone
+	 *
+	 * @return Character, Computer player's primary stone
+	 */
 	public static char GetComputerStone() {
 		return computerStone;
 	}
 
 	/**
-	 * Gets Human Score in the tournament
-	 * @return human score
+	 * Gets Human Score in the current game
+	 *
+	 * @return Integer, Human player's score in current game
 	 */
 	public static int GetHumanScore() {
 		return humanScore;
@@ -96,44 +141,74 @@ public final class Tournament {
 
 	/**
 	 * Gets computer score in the tournament
-	 * @return computer score
+	 *
+	 * @return Integer, Computer player's score in current game
 	 */
 	public static int GetComputerScore() {
 		return computerScore;
 	}
 
 	/**
-	 * Gets Human wins in the tournament
-	 * @return human wins
+	 * Gets total number of Human wins in the tournament so far
+	 *
+	 * @return Integer, human player's wins so far in the tournament
 	 */
 	public static int GetHumanWins() {
 		return humanWins;
 	}
 
 	/**
-	 * Gets computer wins in the tournament
-	 * @return computer wins
+	 * Gets total number of computer wins in the tournament so far
+	 *
+	 * @return Integer, computer player's wins in the tournament
 	 */
 	public static int GetComputerWins() {
 		return computerWins;
 	}
 
+	/**
+	 * Gets the row where the last stone was placed in the game
+	 *
+	 * @return Integer, row of last stone placement in game
+	 */
 	public static int GetRowOfLastPlacement() {
 		return rowOfLastPlacement;
 	}
 
+	/**
+	 * Gets the column where the last stone was placed in the game
+	 *
+	 * @return Integer, column of last stone placement in game
+	 */
 	public static int GetColumnOfLastPlacement() {
 		return columnOfLastPlacement;
 	}
 
 	/**
-	 * Gets next player in case if the tournament is resumed from a saved state
-	 * @return Next Player
+	 * Gets next player in the game (useful for serialization)
+	 *
+	 * @return String, next player in the game
 	 */
 	public static String GetNextPlayer() {
 		return nextPlayer;
 	}
 
+	/**
+	 * SaveCurrentGame() - Stores the values associated with the current game
+	 *
+	 * @param a_humanStone               Character, primary stone of human player
+	 * @param a_computerStone            Character, primary stone of computer player
+	 * @param a_humanWhiteStonesCount    Integer, available white stones of human player
+	 * @param a_humanBlackStonesCount    Integer, available black stones of human player
+	 * @param a_humanClearStonesCount    Integer, available clear stones of human player
+	 * @param a_computerWhiteStonesCount Integer, available white stones of computer player
+	 * @param a_computerBlackStonesCount Integer, available black stones of computer player
+	 * @param a_computerClearStonesCount Integer, available clear stones of computer player
+	 * @param a_humanScore               Integer, current human player score in game
+	 * @param a_computerScore            Integer, current computer player score in game
+	 * @author Vivek Pandey
+	 * @since 2017-04-25
+	 */
 	public static void SaveCurrentGameStatus(char a_humanStone, char a_computerStone,
 							     int a_humanWhiteStonesCount,
 							     int a_humanBlackStonesCount,
@@ -156,16 +231,18 @@ public final class Tournament {
 	}
 
 	/**
-	 * Increments Human Wins by certain points
-	 * @param a_bumpWinsBy Value to bump Human wins by
+	 * Increments Human Wins in tournament by given value.
+	 *
+	 * @param a_bumpWinsBy Value to bump Human wins by. Should be 1 under normal conditions.
 	 */
 	public static void IncrementHumanWinsBy(int a_bumpWinsBy) {
 		humanWins += a_bumpWinsBy;
 	}
 
 	/**
-	 * Increments Computer Wins by certain points
-	 * @param a_bumpWinsBy Value to bump Computer wins by
+	 * Increments Computer Wins in tournament by given value
+	 *
+	 * @param a_bumpWinsBy Value to bump Computer wins by. Should be 1 under normal conditions
 	 */
 	public static void IncrementComputerWinsBy(int a_bumpWinsBy) {
 		computerWins += a_bumpWinsBy;
@@ -181,6 +258,13 @@ public final class Tournament {
 		computerWins = 0;
 	}
 
+	/**
+	 * Stores the variables associated with the current game controls in tournament
+	 *
+	 * @param a_rowOfLastPlacement    Integer, row of last stone placement
+	 * @param a_columnOfLastPlacement Integer, column of last stone placement
+	 * @param player                  String, next player to make the move
+	 */
 	public static void SetControls(int a_rowOfLastPlacement, int a_columnOfLastPlacement,
 						 String player) {
 		rowOfLastPlacement = a_rowOfLastPlacement;
@@ -188,8 +272,7 @@ public final class Tournament {
 
 		if (player.equals("computer") || player.equals("Computer")) {
 			nextPlayer = "computer";
-		}
-		else {
+		} else {
 			nextPlayer = "human";
 		}
 	}
