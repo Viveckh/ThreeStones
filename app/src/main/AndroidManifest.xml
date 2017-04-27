@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- Android Manifest File for the Application
+
+ @author Vivek Pandey
+ @since 2017-04-26 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.viveckh.threestones">
 

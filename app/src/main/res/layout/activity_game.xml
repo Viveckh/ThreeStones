@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- View Layout file for GameActivity
+ Contains xml layout for the game board, score board, player controls, and notifications
+ Refer to the element type and its ID which will give you an idea about what each element points to
+ For a better visual representation, drop the xml file in Android Studio or Eclipse designer and
+ click on the view element to get redirected to its corresponding code content.
+
+ @author Vivek Pandey
+ @since 2017-04-26 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
@@ -8,233 +17,232 @@
 
     <LinearLayout
         android:id="@+id/linear_layout1"
-        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
     </LinearLayout>
 
     <GridLayout
         android:id="@+id/linear_layout2"
-        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
         android:layout_weight="1"
         android:columnCount="32"
-        android:layout_marginLeft="10dp"
-        >
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/labelScoreBoard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="SCOREBOARD"
-            android:id="@+id/labelScoreBoard"
-            android:layout_row="0"
             android:layout_column="2"
             android:layout_columnSpan="4"
-            android:layout_marginLeft="20dp"
             android:layout_gravity="center"
-            android:background="#397e87"/>
+            android:layout_marginLeft="20dp"
+            android:layout_row="0"
+            android:background="#397e87"
+            android:text="SCOREBOARD"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
 
         <TextView
+            android:id="@+id/labelHumanScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="YOU"
-            android:id="@+id/labelHumanScore"
-            android:layout_row="1"
             android:layout_column="3"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="5dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="BOT"
-            android:id="@+id/labelComputerScore"
-            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
             android:layout_row="1"
-            android:layout_column="4"
-            android:layout_marginTop="5dp"/>
+            android:text="YOU"/>
 
         <TextView
+            android:id="@+id/labelComputerScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Pick a stone"
-            android:layout_row="5"
-            android:layout_column="2"
-            android:layout_marginLeft="20dp"
+            android:layout_column="4"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:layout_row="1"
+            android:text="BOT"/>
+
+        <TextView
             android:id="@+id/labelStonePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="2"
             android:layout_columnSpan="4"
-            android:layout_marginTop="5dp"/>
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_row="5"
+            android:text="Pick a stone"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
 
         <RadioGroup
+            android:id="@+id/radioStonePicker"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_row="6"
             android:layout_column="2"
             android:layout_columnSpan="5"
             android:layout_marginLeft="20dp"
-            android:id="@+id/radioStonePicker"
+            android:layout_row="6"
             android:orientation="horizontal">
 
             <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="15"
                 android:id="@+id/radioButton1"
-                android:checked="false"/>
-
-            <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="15"
-                android:id="@+id/radioButton2"
                 android:checked="false"
-                android:layout_marginLeft="15dp"/>
+                android:text="15"/>
 
             <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:checked="false"
+                android:text="15"/>
+
+            <RadioButton
+                android:id="@+id/radioButton3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="6"
-                android:id="@+id/radioButton3"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="15dp"
                 android:checked="false"
-                android:layout_marginLeft="15dp"/>
+                android:text="6"/>
 
         </RadioGroup>
 
         <TextView
+            android:id="@+id/labelNotifications"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="NOTIFICATIONS"
-            android:id="@+id/labelNotifications"
-            android:layout_row="7"
             android:layout_column="2"
             android:layout_columnSpan="4"
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="5dp"
-            android:background="#397e87"/>
+            android:layout_row="7"
+            android:background="#397e87"
+            android:text="NOTIFICATIONS"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
 
         <ImageButton
+            android:id="@+id/imgHumanStone"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:id="@+id/imgHumanStone"
-            android:layout_row="2"
             android:layout_column="2"
-            android:scaleType="fitCenter"
-            android:background="@drawable/white_circle"
             android:layout_gravity="center"
-            android:layout_marginLeft="20dp"/>
+            android:layout_marginLeft="20dp"
+            android:layout_row="2"
+            android:background="@drawable/white_circle"
+            android:scaleType="fitCenter"/>
 
         <Button
+            android:id="@+id/btnHelp"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:text="HELP"
-            android:id="@+id/btnHelp"
-            android:layout_gravity="center"
-            android:layout_row="4"
             android:layout_column="2"
-            android:background="@drawable/notify_panel_notification_icon_bg"
-            android:textColor="#ffffff"
-            android:layout_marginTop="5dp"
+            android:layout_gravity="center"
             android:layout_marginLeft="20dp"
-            android:clickable="true"/>
+            android:layout_marginTop="5dp"
+            android:layout_row="4"
+            android:background="@drawable/notify_panel_notification_icon_bg"
+            android:clickable="true"
+            android:text="HELP"
+            android:textColor="#ffffff"/>
 
         <Button
+            android:id="@+id/btnHumanScore"
             android:layout_width="68dp"
             android:layout_height="wrap_content"
-            android:text="0"
-            android:id="@+id/btnHumanScore"
-            android:layout_row="2"
             android:layout_column="3"
             android:layout_gravity="center"
+            android:layout_row="2"
             android:background="@android:drawable/picture_frame"
-            android:clickable="false"/>
+            android:clickable="false"
+            android:text="0"/>
 
         <Button
+            android:id="@+id/btnComputerScore"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="68dp"
             android:layout_height="wrap_content"
-            android:text="0"
-            android:id="@+id/btnComputerScore"
-            android:layout_row="2"
             android:layout_column="4"
             android:layout_gravity="center"
+            android:layout_row="2"
             android:background="@android:drawable/picture_frame"
+            android:text="0"
             />
 
         <ImageButton
+            android:id="@+id/imgComputerStone"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:id="@+id/imgComputerStone"
-            android:layout_row="2"
             android:layout_column="5"
-            android:scaleType="fitCenter"
+            android:layout_row="2"
             android:background="@drawable/black_circle"
+            android:scaleType="fitCenter"
             />
 
         <TextView
+            android:id="@+id/labelControls"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="CONTROLS"
-            android:id="@+id/labelControls"
-            android:layout_row="3"
             android:layout_column="2"
             android:layout_columnSpan="4"
             android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="5dp"
+            android:layout_row="3"
             android:background="#397e87"
-            android:layout_marginLeft="20dp"/>
+            android:text="CONTROLS"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
 
         <Button
+            android:id="@+id/btnSave"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:text="SAVE"
-            android:id="@+id/btnSave"
-            android:layout_gravity="center"
-            android:layout_row="4"
             android:layout_column="3"
-            android:background="@drawable/notify_panel_notification_icon_bg"
-            android:textColor="#ffffff"
+            android:layout_gravity="center"
             android:layout_marginTop="5dp"
-            android:clickable="true"/>
+            android:layout_row="4"
+            android:background="@drawable/notify_panel_notification_icon_bg"
+            android:clickable="true"
+            android:text="SAVE"
+            android:textColor="#ffffff"/>
 
         <Button
+            android:id="@+id/btnComputerPlay"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:text="BOT.PLAY()"
-            android:id="@+id/btnComputerPlay"
-            android:layout_gravity="center"
-            android:layout_row="4"
             android:layout_column="4"
-            android:background="@drawable/notify_panel_notification_icon_bg"
-            android:textColor="#ffffff"
             android:layout_columnSpan="2"
+            android:layout_gravity="center"
             android:layout_marginTop="5dp"
-            android:clickable="true"/>
+            android:layout_row="4"
+            android:background="@drawable/notify_panel_notification_icon_bg"
+            android:clickable="true"
+            android:text="BOT.PLAY()"
+            android:textColor="#ffffff"/>
 
         <TextView
+            android:id="@+id/txtViewNotifications"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/txtViewNotifications"
-            android:layout_row="8"
             android:layout_column="2"
             android:layout_columnSpan="4"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
-            android:textSize="10dp"
+            android:layout_row="8"
+            android:layout_rowSpan="8"
             android:scrollIndicators="bottom|right"
-            android:layout_rowSpan="8"/>
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="10dp"/>
 
     </GridLayout>
 

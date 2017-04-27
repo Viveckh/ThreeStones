@@ -1,3 +1,8 @@
+<!-- String Values used in the Application
+
+ @author Vivek Pandey
+ @since 2017-04-26 -->
+
 <resources>
     <string name="app_name">ThreeStones</string>
     <string name="action_settings">Settings</string>

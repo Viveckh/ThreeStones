@@ -1,172 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- View Layout file for ResultsActivity
+ Contains xml layout for the results page of the application.
+ Refer to the element type and its ID which will give you an idea about what each element points to.
+ For a better visual representation, drop the xml file in Android Studio or Eclipse designer and
+ click on the view element to get redirected to its corresponding code content.
+
+ @author Vivek Pandey
+ @since 2017-04-26 -->
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-            android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/stone_wallpaper"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            tools:context="com.viveckh.threestones.HomeActivity"
-            android:background="@drawable/stone_wallpaper"
-    >
+            tools:context="com.viveckh.threestones.HomeActivity">
 
     <ImageButton
+        android:id="@+id/imgGameOver"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:id="@+id/imgGameOver"
-        android:layout_row="0"
         android:layout_column="2"
         android:layout_gravity="center_horizontal"
+        android:layout_row="0"
         android:background="@drawable/game_over"/>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="TOURNAMENT"
         android:id="@+id/labelTournamentWins"
-        android:layout_row="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_column="4"
-        android:layout_gravity="center"
         android:layout_columnSpan="2"
+        android:layout_gravity="center"
         android:layout_marginLeft="100dp"
-        android:textColor="#e8e8f7"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="YOU"
-        android:id="@+id/labelHumanFinalScore"
-        android:layout_row="2"
-        android:layout_column="0"
-        android:layout_gravity="center_horizontal"
-        />
-
-    <ImageButton
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:id="@+id/imgTournament"
-        android:layout_row="0"
-        android:layout_column="4"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/tournament_stat"
-        android:layout_columnSpan="2"
-        android:layout_marginLeft="100dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="GAME OVER"
-        android:id="@+id/txtViewGameResult"
         android:layout_row="1"
-        android:layout_column="0"
-        android:layout_gravity="center"
-        android:layout_columnSpan="4"
+        android:text="TOURNAMENT"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#e8e8f7"/>
 
     <TextView
+        android:id="@+id/labelHumanFinalScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="YOU"
-        android:id="@+id/labelHumanWins"
-        android:layout_row="3"
-        android:layout_column="4"
-        android:layout_gravity="center"
-        android:layout_marginLeft="100dp"/>
-
-    <Button
-        android:layout_width="68dp"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:id="@+id/btnHumanFinalScore"
-        android:layout_row="3"
         android:layout_column="0"
-        android:layout_gravity="center"
-        android:background="@android:drawable/picture_frame"
-        android:clickable="false"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="BOT"
-        android:id="@+id/labelComputerFinalScore"
         android:layout_gravity="center_horizontal"
         android:layout_row="2"
+        android:text="YOU"
+        />
+
+    <ImageButton
+        android:id="@+id/imgTournament"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_column="4"
+        android:layout_columnSpan="2"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="100dp"
+        android:layout_row="0"
+        android:background="@drawable/tournament_stat"/>
+
+    <TextView
+        android:id="@+id/txtViewGameResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_columnSpan="4"
+        android:layout_gravity="center"
+        android:layout_row="1"
+        android:text="GAME OVER"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#e8e8f7"/>
+
+    <TextView
+        android:id="@+id/labelHumanWins"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="4"
+        android:layout_gravity="center"
+        android:layout_marginLeft="100dp"
+        android:layout_row="3"
+        android:text="YOU"/>
+
+    <Button
+        android:id="@+id/btnHumanFinalScore"
+        android:layout_width="68dp"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_gravity="center"
+        android:layout_row="3"
+        android:background="@android:drawable/picture_frame"
+        android:clickable="false"
+        android:text="0"/>
+
+    <TextView
+        android:id="@+id/labelComputerFinalScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_column="3"
+        android:layout_gravity="center_horizontal"
+        android:layout_row="2"
+        android:text="BOT"
         />
 
     <Button
+        android:id="@+id/btnComputerFinalScore"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="68dp"
         android:layout_height="wrap_content"
-        android:text="0"
-        android:id="@+id/btnComputerFinalScore"
-        android:layout_row="3"
         android:layout_column="3"
         android:layout_gravity="center"
-        android:background="@android:drawable/picture_frame"/>
+        android:layout_row="3"
+        android:background="@android:drawable/picture_frame"
+        android:text="0"/>
 
     <TextView
+        android:id="@+id/labelComputerWins"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="BOT"
-        android:id="@+id/labelComputerWins"
-        android:layout_row="4"
         android:layout_column="4"
         android:layout_gravity="center"
-        android:layout_marginLeft="100dp"/>
+        android:layout_marginLeft="100dp"
+        android:layout_row="4"
+        android:text="BOT"/>
 
     <Button
+        android:id="@+id/btnComputerWins"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="68dp"
         android:layout_height="wrap_content"
-        android:text="0"
-        android:id="@+id/btnComputerWins"
-        android:layout_row="4"
         android:layout_column="5"
         android:layout_gravity="center"
-        android:background="@android:drawable/picture_frame"/>
+        android:layout_row="4"
+        android:background="@android:drawable/picture_frame"
+        android:text="0"/>
 
     <TextView
+        android:id="@+id/labelContinue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Do you want to continue this tournament?"
-        android:id="@+id/labelContinue"
-        android:layout_row="5"
         android:layout_column="0"
-        android:layout_gravity="center_horizontal"
         android:layout_columnSpan="5"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
+        android:layout_row="5"
+        android:text="Do you want to continue this tournament?"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#e8e8f7"/>
 
     <ImageButton
+        android:id="@+id/btnYes"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:id="@+id/btnYes"
-        android:layout_row="5"
         android:layout_column="5"
         android:layout_gravity="center_horizontal"
+        android:layout_row="5"
         android:background="@drawable/yes"/>
 
     <ImageButton
+        android:id="@+id/btnNo"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:id="@+id/btnNo"
-        android:layout_row="5"
         android:layout_column="6"
         android:layout_gravity="left|center_horizontal"
+        android:layout_row="5"
         android:background="@drawable/no"/>
 
     <Button
+        android:id="@+id/btnHumanWins"
         android:layout_width="68dp"
         android:layout_height="wrap_content"
-        android:text="0"
-        android:id="@+id/btnHumanWins"
         android:layout_column="5"
         android:layout_gravity="center"
+        android:layout_row="3"
         android:background="@android:drawable/picture_frame"
         android:clickable="false"
-        android:layout_row="3"/>
+        android:text="0"/>
 
 </GridLayout>
