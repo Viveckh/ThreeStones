@@ -127,7 +127,7 @@ public final class Notifications {
 	 * @return true when the msg is added to the vector
 	 */
 	public static boolean Msg_CompletedArrangement(String a_position1, String a_position2) {
-		m_notificationsList.add("•1 POINT: " + a_position1 + "-" + a_position2 + "\n");
+		//m_notificationsList.add("•1 POINT: " + a_position1 + "-" + a_position2 + "\n");
 		return true;
 	}
 

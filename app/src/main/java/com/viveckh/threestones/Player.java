@@ -204,7 +204,7 @@ public class Player {
 	 * @author Vivek Pandey
 	 * @since 2017-04-25
 	 */
-	public boolean IsValidMove(char a_stone, int a_row, int a_column, Board a_board) {
+	protected boolean IsValidMove(char a_stone, int a_row, int a_column, Board a_board) {
 		//NOTIFICATION: A LOT OF NOTIFICATIONS NEED TO BE SET HERE NEXT TO EVERY IF STATEMENT
 		//First, make sure the coordinate doesn't fall within the blocked territories
 		if (a_board.m_gameBoard[a_row][a_column] != null) {
@@ -239,14 +239,15 @@ public class Player {
 	/**
 	 * HasPermissionToOccupyVacantSpot() - Verifies if the player has the right to place a stone
 	 * in the attempted row/column
-	 * @param a_row Integer, row where the stone is to be placed
+	 *
+	 * @param a_row    Integer, row where the stone is to be placed
 	 * @param a_column Integer, column where the stone is to be placed
-	 * @param a_board Board, the game board in context
+	 * @param a_board  Board, the game board in context
 	 * @return true if the the player has permission to occupy the spot, false otherwise
 	 * @author Vivek Pandey
 	 * @since 2017-04-25
 	 */
-	public boolean HasPermissionToOccupyVacantSpot(int a_row, int a_column, Board a_board) {
+	protected boolean HasPermissionToOccupyVacantSpot(int a_row, int a_column, Board a_board) {
 		//Permission granted if not a single placement has been made so far
 		if (m_rowOfPreviousPlacement < 0 && m_columnOfPreviousPlacement < 0) {
 			return true;
@@ -273,6 +274,7 @@ public class Player {
 
 	/**
 	 * IsStoneAvailable() - Checks if a stone is available for use
+	 *
 	 * @param a_stone Character, stone that needs to be checked
 	 * @return true if stone is available, false otherwise
 	 * @author Vivek Pandey
@@ -306,6 +308,7 @@ public class Player {
 
 	/**
 	 * UseAStone() - Updates the available stones count based on the stone that is used
+	 *
 	 * @param a_stone Character, stone that is being used
 	 */
 	protected void UseAStone(char a_stone) {
@@ -339,10 +342,11 @@ public class Player {
 
 	/**
 	 * UpdateScoreAfterMove() - Updates score for the player of given stone color after a move
-	 * @param a_stone Character, primary stone color of the player
-	 * @param a_placedInRow Integer, row where the move was last made
+	 *
+	 * @param a_stone          Character, primary stone color of the player
+	 * @param a_placedInRow    Integer, row where the move was last made
 	 * @param a_placedInColumn Integer, column where the move was last made
-	 * @param a_board Board, the game board in context
+	 * @param a_board          Board, the game board in context
 	 * @return Integer, the total score of the player
 	 * @author Vivek Pandey
 	 * @since 2017-04-25
@@ -358,10 +362,11 @@ public class Player {
 
 	/**
 	 * CalculateScoreAfterMove() - Calculates the change in score for a player after a move
-	 * @param a_stone Character, primary stone color of the player
-	 * @param a_placedInRow Integer, row where the move was last made
+	 *
+	 * @param a_stone          Character, primary stone color of the player
+	 * @param a_placedInRow    Integer, row where the move was last made
 	 * @param a_placedInColumn Integer, column where the move was last made
-	 * @param a_board Board, the game board in context
+	 * @param a_board          Board, the game board in context
 	 * @return Integer, the scores earned from the last move
 	 * @author Vivek Pandey
 	 * @since 2017-04-25
@@ -536,16 +541,17 @@ public class Player {
 
 	/**
 	 * IsLeftFavorable() - Checks whether the left block is favorable to current block
-	 * @param a_currentRow Integer, row of current block
-	 * @param a_currentCol Integer, column of current block
+	 *
+	 * @param a_currentRow   Integer, row of current block
+	 * @param a_currentCol   Integer, column of current block
 	 * @param a_checkFarther Boolean, whether to use farLeft block for calculations
-	 * @param a_board Board, the game board in context
+	 * @param a_board        Board, the game board in context
 	 * @return true if left block favorable, false otherwise
 	 * @author Vivek Pandey
 	 * @since 2017-04-25
 	 */
-	boolean IsLeftFavorable(int a_currentRow, int a_currentCol,
-					boolean a_checkFarther, Board a_board) {
+	private boolean IsLeftFavorable(int a_currentRow, int a_currentCol,
+						  boolean a_checkFarther, Board a_board) {
 		Block current = new Block(a_board.GetBlockAtLocation(a_currentRow, a_currentCol));
 		Block left = (a_currentCol > 0) ?
 			  new Block(a_board.GetBlockAtLocation(a_currentRow, a_currentCol - 1)) : null;
@@ -593,16 +599,17 @@ public class Player {
 
 	/**
 	 * IsRightFavorable() - Checks whether the right block is favorable to current block
-	 * @param a_currentRow Integer, row of current block
-	 * @param a_currentCol Integer, column of current block
+	 *
+	 * @param a_currentRow   Integer, row of current block
+	 * @param a_currentCol   Integer, column of current block
 	 * @param a_checkFarther Boolean, whether to use farRight block for calculations
-	 * @param a_board Board, the game board in context
+	 * @param a_board        Board, the game board in context
 	 * @return true if right block favorable, false otherwise
 	 * @author Vivek Pandey
 	 * @since 2017-04-25
 	 */
-	public boolean IsRightFavorable(int a_currentRow, int a_currentCol,
-						  boolean a_checkFarther, Board a_board) {
+	private boolean IsRightFavorable(int a_currentRow, int a_currentCol,
+						   boolean a_checkFarther, Board a_board) {
 		Block current = new Block(a_board.GetBlockAtLocation(a_currentRow, a_currentCol));
 		Block left = (a_currentCol > 0) ?
 			  new Block(a_board.GetBlockAtLocation(a_currentRow, a_currentCol - 1)) : null;
@@ -650,16 +657,17 @@ public class Player {
 
 	/**
 	 * IsTopFavorable() - Checks whether the top block is favorable to current block
-	 * @param a_currentRow Integer, row of current block
-	 * @param a_currentCol Integer, column of current block
+	 *
+	 * @param a_currentRow   Integer, row of current block
+	 * @param a_currentCol   Integer, column of current block
 	 * @param a_checkFarther Boolean, whether to use farTop block for calculations
-	 * @param a_board Board, the game board in context
+	 * @param a_board        Board, the game board in context
 	 * @return true if top block favorable, false otherwise
 	 * @author Vivek Pandey
 	 * @since 2017-04-25
 	 */
-	public boolean IsTopFavorable(int a_currentRow, int a_currentCol,
-						boolean a_checkFarther, Board a_board) {
+	private boolean IsTopFavorable(int a_currentRow, int a_currentCol,
+						 boolean a_checkFarther, Board a_board) {
 		Block current = new Block(a_board.GetBlockAtLocation(a_currentRow, a_currentCol));
 		Block top = (a_currentRow > 0) ?
 			  new Block(a_board.GetBlockAtLocation(a_currentRow - 1, a_currentCol)) : null;
@@ -707,16 +715,17 @@ public class Player {
 
 	/**
 	 * IsBottomFavorable() - Checks whether the Bottom block is favorable to current block
-	 * @param a_currentRow Integer, row of current block
-	 * @param a_currentCol Integer, column of current block
+	 *
+	 * @param a_currentRow   Integer, row of current block
+	 * @param a_currentCol   Integer, column of current block
 	 * @param a_checkFarther Boolean, whether to use farBottom block for calculations
-	 * @param a_board Board, the game board in context
+	 * @param a_board        Board, the game board in context
 	 * @return true if bottom block favorable, false otherwise
 	 * @author Vivek Pandey
 	 * @since 2017-04-25
 	 */
-	public boolean IsBottomFavorable(int a_currentRow, int a_currentCol,
-						   boolean a_checkFarther, Board a_board) {
+	private boolean IsBottomFavorable(int a_currentRow, int a_currentCol,
+						    boolean a_checkFarther, Board a_board) {
 		Block current = new Block(a_board.GetBlockAtLocation(a_currentRow, a_currentCol));
 		Block top = (a_currentRow > 0) ?
 			  new Block(a_board.GetBlockAtLocation(a_currentRow - 1, a_currentCol)) : null;
@@ -764,16 +773,17 @@ public class Player {
 
 	/**
 	 * IsTopLeftFavorable() - Checks whether the TopLeft block is favorable to current block
-	 * @param a_currentRow Integer, row of current block
-	 * @param a_currentCol Integer, column of current block
+	 *
+	 * @param a_currentRow   Integer, row of current block
+	 * @param a_currentCol   Integer, column of current block
 	 * @param a_checkFarther Boolean, whether to use farTopLeft block for calculations
-	 * @param a_board Board, the game board in context
+	 * @param a_board        Board, the game board in context
 	 * @return true if topLeft block favorable, false otherwise
 	 * @author Vivek Pandey
 	 * @since 2017-04-25
 	 */
-	public boolean IsTopLeftFavorable(int a_currentRow, int a_currentCol,
-						    boolean a_checkFarther, Board a_board) {
+	private boolean IsTopLeftFavorable(int a_currentRow, int a_currentCol,
+						     boolean a_checkFarther, Board a_board) {
 		Block current = new Block(a_board.GetBlockAtLocation(a_currentRow, a_currentCol));
 		Block topLeft = (a_currentRow > 0 && a_currentCol > 0) ?
 			  new Block(a_board.GetBlockAtLocation(a_currentRow - 1, a_currentCol - 1)) : null;
@@ -821,16 +831,17 @@ public class Player {
 
 	/**
 	 * IsTopRightFavorable() - Checks whether the topRight block is favorable to current block
-	 * @param a_currentRow Integer, row of current block
-	 * @param a_currentCol Integer, column of current block
+	 *
+	 * @param a_currentRow   Integer, row of current block
+	 * @param a_currentCol   Integer, column of current block
 	 * @param a_checkFarther Boolean, whether to use farTopRight block for calculations
-	 * @param a_board Board, the game board in context
+	 * @param a_board        Board, the game board in context
 	 * @return true if topRight block favorable, false otherwise
 	 * @author Vivek Pandey
 	 * @since 2017-04-25
 	 */
-	public boolean IsTopRightFavorable(int a_currentRow, int a_currentCol,
-						     boolean a_checkFarther, Board a_board) {
+	private boolean IsTopRightFavorable(int a_currentRow, int a_currentCol,
+							boolean a_checkFarther, Board a_board) {
 		Block current = new Block(a_board.GetBlockAtLocation(a_currentRow, a_currentCol));
 		Block topRight = (a_currentRow > 0 && a_currentCol < a_board.GetBoardDimension() - 1) ?
 			  new Block(a_board.GetBlockAtLocation(a_currentRow - 1, a_currentCol + 1)) : null;
@@ -878,16 +889,17 @@ public class Player {
 
 	/**
 	 * IsBottomLeftFavorable() - Checks whether the bottomLeft block is favorable to current block
-	 * @param a_currentRow Integer, row of current block
-	 * @param a_currentCol Integer, column of current block
+	 *
+	 * @param a_currentRow   Integer, row of current block
+	 * @param a_currentCol   Integer, column of current block
 	 * @param a_checkFarther Boolean, whether to use farBottomLeft block for calculations
-	 * @param a_board Board, the game board in context
+	 * @param a_board        Board, the game board in context
 	 * @return true if bottomLeft block favorable, false otherwise
 	 * @author Vivek Pandey
 	 * @since 2017-04-25
 	 */
-	public boolean IsBottomLeftFavorable(int a_currentRow, int a_currentCol,
-							 boolean a_checkFarther, Board a_board) {
+	private boolean IsBottomLeftFavorable(int a_currentRow, int a_currentCol,
+							  boolean a_checkFarther, Board a_board) {
 		Block current = new Block(a_board.GetBlockAtLocation(a_currentRow, a_currentCol));
 		Block topRight = (a_currentRow > 0 && a_currentCol < a_board.GetBoardDimension() - 1) ?
 			  new Block(a_board.GetBlockAtLocation(a_currentRow - 1, a_currentCol + 1)) : null;
@@ -935,15 +947,16 @@ public class Player {
 
 	/**
 	 * IsBottomRightFavorable() - Checks whether the bottomRight block is favorable to current block
-	 * @param a_currentRow Integer, row of current block
-	 * @param a_currentCol Integer, column of current block
+	 *
+	 * @param a_currentRow   Integer, row of current block
+	 * @param a_currentCol   Integer, column of current block
 	 * @param a_checkFarther Boolean, whether to use farBottomRight block for calculations
-	 * @param a_board Board, the game board in context
+	 * @param a_board        Board, the game board in context
 	 * @return true if bottomRight block favorable, false otherwise
 	 * @author Vivek Pandey
 	 * @since 2017-04-25
 	 */
-	public boolean IsBottomRightFavorable(int a_currentRow, int a_currentCol, boolean a_checkFarther, Board a_board) {
+	private boolean IsBottomRightFavorable(int a_currentRow, int a_currentCol, boolean a_checkFarther, Board a_board) {
 		Block current = new Block(a_board.GetBlockAtLocation(a_currentRow, a_currentCol));
 		Block topLeft = (a_currentRow > 0 && a_currentCol > 0) ?
 			  new Block(a_board.GetBlockAtLocation(a_currentRow - 1, a_currentCol - 1)) : null;

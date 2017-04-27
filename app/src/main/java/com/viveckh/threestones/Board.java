@@ -111,37 +111,6 @@ public class Board implements Serializable {
 	}
 
 	/**
-	 * SetStoneAtLocation() - Sets the occupying stone of a specific Block in the Board object
-	 *
-	 * @param a_row    Integer row within the Board where stone needs to be placed
-	 * @param a_column Integer column within the Board where stone needs to be placed
-	 * @param a_stone  A character representing the stone to set. n, w, b, c are valid inputs
-	 * @return true if the stone is successfully set, false if a failure
-	 */
-	public boolean SetStoneAtLocation(int a_row, int a_column, char a_stone) {
-		//If trying to set uninitialized no-go indexes, return false. Else, set the stone
-		if (m_gameBoard[a_row][a_column] == null) {
-			return false;
-		}
-		return m_gameBoard[a_row][a_column].SetStone(a_stone);
-	}
-
-	/**
-	 * IsLocationOccupied() - Returns the occupancy state of the Block within the Board
-	 *
-	 * @param a_row    Integer row within the Board where occupancy needs to be checked
-	 * @param a_column Integer column within Board where occupancy needs to be checked
-	 * @return true if location is occupied, false if empty
-	 */
-	public boolean IsLocationOccupied(int a_row, int a_column) {
-		//If trying to access uninitialized no-go indexes, return that true as well.
-		if (m_gameBoard[a_row][a_column] == null) {
-			return true;
-		}
-		return m_gameBoard[a_row][a_column].IsOccupied();
-	}
-
-	/**
 	 * Gets block at a given location in board, returns null if accessing invalid coordinates
 	 *
 	 * @param a_row    Integer row within the Board whose Block needs to be accessed
@@ -169,5 +138,36 @@ public class Board implements Serializable {
 			return 'e';
 		}
 		return m_gameBoard[a_row][a_column].GetStone();
+	}
+
+	/**
+	 * IsLocationOccupied() - Returns the occupancy state of the Block within the Board
+	 *
+	 * @param a_row    Integer row within the Board where occupancy needs to be checked
+	 * @param a_column Integer column within Board where occupancy needs to be checked
+	 * @return true if location is occupied, false if empty
+	 */
+	public boolean IsLocationOccupied(int a_row, int a_column) {
+		//If trying to access uninitialized no-go indexes, return that true as well.
+		if (m_gameBoard[a_row][a_column] == null) {
+			return true;
+		}
+		return m_gameBoard[a_row][a_column].IsOccupied();
+	}
+
+	/**
+	 * SetStoneAtLocation() - Sets the occupying stone of a specific Block in the Board object
+	 *
+	 * @param a_row    Integer row within the Board where stone needs to be placed
+	 * @param a_column Integer column within the Board where stone needs to be placed
+	 * @param a_stone  A character representing the stone to set. n, w, b, c are valid inputs
+	 * @return true if the stone is successfully set, false if a failure
+	 */
+	public boolean SetStoneAtLocation(int a_row, int a_column, char a_stone) {
+		//If trying to set uninitialized no-go indexes, return false. Else, set the stone
+		if (m_gameBoard[a_row][a_column] == null) {
+			return false;
+		}
+		return m_gameBoard[a_row][a_column].SetStone(a_stone);
 	}
 }

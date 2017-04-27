@@ -12,50 +12,50 @@ package com.viveckh.threestones;
 public final class Tournament {
 	// VARIABLE DECLARATIONS
 	//Variables to store primary stone color in current game
-	private static char humanStone;
-	private static char computerStone;
+	private static char m_humanStone;
+	private static char m_computerStone;
 
 	//Variables to store the available stones for both players in current game
-	private static int humanWhiteStonesCount;
-	private static int humanBlackStonesCount;
-	private static int humanClearStonesCount;
-	private static int computerWhiteStonesCount;
-	private static int computerBlackStonesCount;
-	private static int computerClearStonesCount;
+	private static int m_humanWhiteStonesCount;
+	private static int m_humanBlackStonesCount;
+	private static int m_humanClearStonesCount;
+	private static int m_computerWhiteStonesCount;
+	private static int m_computerBlackStonesCount;
+	private static int m_computerClearStonesCount;
 
 	//Variables to store the scores of current game
-	private static int humanScore;
-	private static int computerScore;
+	private static int m_humanScore;
+	private static int m_computerScore;
 	//Variables to store the overall wins by each player in the tournament
-	private static int humanWins;
-	private static int computerWins;
+	private static int m_humanWins;
+	private static int m_computerWins;
 
 	//Variables necessary for implementing Game rules
-	private static int rowOfLastPlacement;
-	private static int columnOfLastPlacement;
-	private static String nextPlayer;   //"human" or "computer" all lower case
+	private static int m_rowOfLastPlacement;
+	private static int m_columnOfLastPlacement;
+	private static String m_nextPlayer;   //"human" or "computer" all lower case
 
 	/**
 	 * Tournament Default Constructor
 	 * Privately initializes the class and sets the class variables to the default values
 	 */
 	private Tournament() {
-		humanWhiteStonesCount = 15;
-		humanBlackStonesCount = 15;
-		humanClearStonesCount = 6;
-		computerWhiteStonesCount = 15;
-		computerBlackStonesCount = 15;
-		computerClearStonesCount = 6;
+		m_humanWhiteStonesCount = 15;
+		m_humanBlackStonesCount = 15;
+		m_humanClearStonesCount = 6;
+		m_computerWhiteStonesCount = 15;
+		m_computerBlackStonesCount = 15;
+		m_computerClearStonesCount = 6;
 
-		humanScore = 0;
-		computerScore = 0;
-		humanWins = 0;
-		computerWins = 0;
-		humanStone = 'w';
-		computerStone = 'b';
+		m_humanScore = 0;
+		m_computerScore = 0;
+		m_humanWins = 0;
+		m_computerWins = 0;
+		m_humanStone = 'w';
+		m_computerStone = 'b';
 
-		rowOfLastPlacement = -1;
-		columnOfLastPlacement = -1;
+		m_rowOfLastPlacement = -1;
+		m_columnOfLastPlacement = -1;
 	}
 
 	/**
@@ -64,7 +64,7 @@ public final class Tournament {
 	 * @return Integer, Human player's available white stones
 	 */
 	public static int GetHumanWhiteStonesCount() {
-		return humanWhiteStonesCount;
+		return m_humanWhiteStonesCount;
 	}
 
 	/**
@@ -73,7 +73,7 @@ public final class Tournament {
 	 * @return Integer, Human player's available black stones
 	 */
 	public static int GetHumanBlackStonesCount() {
-		return humanBlackStonesCount;
+		return m_humanBlackStonesCount;
 	}
 
 	/**
@@ -82,7 +82,7 @@ public final class Tournament {
 	 * @return Integer, Human player's available clear stones
 	 */
 	public static int GetHumanClearStonesCount() {
-		return humanClearStonesCount;
+		return m_humanClearStonesCount;
 	}
 
 	/**
@@ -91,7 +91,7 @@ public final class Tournament {
 	 * @return Integer, Computer player's available white stones
 	 */
 	public static int GetComputerWhiteStonesCount() {
-		return computerWhiteStonesCount;
+		return m_computerWhiteStonesCount;
 	}
 
 	/**
@@ -100,7 +100,7 @@ public final class Tournament {
 	 * @return Integer, Computer player's available black stones
 	 */
 	public static int GetComputerBlackStonesCount() {
-		return computerBlackStonesCount;
+		return m_computerBlackStonesCount;
 	}
 
 	/**
@@ -109,7 +109,7 @@ public final class Tournament {
 	 * @return Integer, Computer player's available clear stones
 	 */
 	public static int GetComputerClearStonesCount() {
-		return computerClearStonesCount;
+		return m_computerClearStonesCount;
 	}
 
 	/**
@@ -118,7 +118,7 @@ public final class Tournament {
 	 * @return Character, Human player's primary stone
 	 */
 	public static char GetHumanStone() {
-		return humanStone;
+		return m_humanStone;
 	}
 
 	/**
@@ -127,7 +127,7 @@ public final class Tournament {
 	 * @return Character, Computer player's primary stone
 	 */
 	public static char GetComputerStone() {
-		return computerStone;
+		return m_computerStone;
 	}
 
 	/**
@@ -136,7 +136,7 @@ public final class Tournament {
 	 * @return Integer, Human player's score in current game
 	 */
 	public static int GetHumanScore() {
-		return humanScore;
+		return m_humanScore;
 	}
 
 	/**
@@ -145,7 +145,7 @@ public final class Tournament {
 	 * @return Integer, Computer player's score in current game
 	 */
 	public static int GetComputerScore() {
-		return computerScore;
+		return m_computerScore;
 	}
 
 	/**
@@ -154,7 +154,7 @@ public final class Tournament {
 	 * @return Integer, human player's wins so far in the tournament
 	 */
 	public static int GetHumanWins() {
-		return humanWins;
+		return m_humanWins;
 	}
 
 	/**
@@ -163,7 +163,7 @@ public final class Tournament {
 	 * @return Integer, computer player's wins in the tournament
 	 */
 	public static int GetComputerWins() {
-		return computerWins;
+		return m_computerWins;
 	}
 
 	/**
@@ -172,7 +172,7 @@ public final class Tournament {
 	 * @return Integer, row of last stone placement in game
 	 */
 	public static int GetRowOfLastPlacement() {
-		return rowOfLastPlacement;
+		return m_rowOfLastPlacement;
 	}
 
 	/**
@@ -181,7 +181,7 @@ public final class Tournament {
 	 * @return Integer, column of last stone placement in game
 	 */
 	public static int GetColumnOfLastPlacement() {
-		return columnOfLastPlacement;
+		return m_columnOfLastPlacement;
 	}
 
 	/**
@@ -190,7 +190,7 @@ public final class Tournament {
 	 * @return String, next player in the game
 	 */
 	public static String GetNextPlayer() {
-		return nextPlayer;
+		return m_nextPlayer;
 	}
 
 	/**
@@ -217,17 +217,17 @@ public final class Tournament {
 							     int a_computerBlackStonesCount,
 							     int a_computerClearStonesCount,
 							     int a_humanScore, int a_computerScore) {
-		humanWhiteStonesCount = a_humanWhiteStonesCount;
-		humanBlackStonesCount = a_humanBlackStonesCount;
-		humanClearStonesCount = a_humanClearStonesCount;
-		computerWhiteStonesCount = a_computerWhiteStonesCount;
-		computerBlackStonesCount = a_computerBlackStonesCount;
-		computerClearStonesCount = a_computerClearStonesCount;
+		m_humanWhiteStonesCount = a_humanWhiteStonesCount;
+		m_humanBlackStonesCount = a_humanBlackStonesCount;
+		m_humanClearStonesCount = a_humanClearStonesCount;
+		m_computerWhiteStonesCount = a_computerWhiteStonesCount;
+		m_computerBlackStonesCount = a_computerBlackStonesCount;
+		m_computerClearStonesCount = a_computerClearStonesCount;
 
-		humanStone = a_humanStone;
-		computerStone = a_computerStone;
-		humanScore = a_humanScore;
-		computerScore = a_computerScore;
+		m_humanStone = a_humanStone;
+		m_computerStone = a_computerStone;
+		m_humanScore = a_humanScore;
+		m_computerScore = a_computerScore;
 	}
 
 	/**
@@ -236,7 +236,7 @@ public final class Tournament {
 	 * @param a_bumpWinsBy Value to bump Human wins by. Should be 1 under normal conditions.
 	 */
 	public static void IncrementHumanWinsBy(int a_bumpWinsBy) {
-		humanWins += a_bumpWinsBy;
+		m_humanWins += a_bumpWinsBy;
 	}
 
 	/**
@@ -245,17 +245,17 @@ public final class Tournament {
 	 * @param a_bumpWinsBy Value to bump Computer wins by. Should be 1 under normal conditions
 	 */
 	public static void IncrementComputerWinsBy(int a_bumpWinsBy) {
-		computerWins += a_bumpWinsBy;
+		m_computerWins += a_bumpWinsBy;
 	}
 
 	/**
 	 * Resets scores for a fresh start
 	 */
 	public static void ResetScores() {
-		humanScore = 0;
-		computerScore = 0;
-		humanWins = 0;
-		computerWins = 0;
+		m_humanScore = 0;
+		m_computerScore = 0;
+		m_humanWins = 0;
+		m_computerWins = 0;
 	}
 
 	/**
@@ -267,13 +267,13 @@ public final class Tournament {
 	 */
 	public static void SetControls(int a_rowOfLastPlacement, int a_columnOfLastPlacement,
 						 String player) {
-		rowOfLastPlacement = a_rowOfLastPlacement;
-		columnOfLastPlacement = a_columnOfLastPlacement;
+		m_rowOfLastPlacement = a_rowOfLastPlacement;
+		m_columnOfLastPlacement = a_columnOfLastPlacement;
 
 		if (player.equals("computer") || player.equals("Computer")) {
-			nextPlayer = "computer";
+			m_nextPlayer = "computer";
 		} else {
-			nextPlayer = "human";
+			m_nextPlayer = "human";
 		}
 	}
 }

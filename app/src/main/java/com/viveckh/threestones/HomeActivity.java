@@ -135,48 +135,13 @@ public class HomeActivity extends Activity {
 	}
 
 	/**
-	 * GetFiles() - Gets the names of files in a given directory and puts them into an array list
-	 *
-	 * @param a_directoryName String, name of directory whose files are to be listed
-	 * @return ArrayList that consists of all the names of files in the directory
-	 * @author Vivek Pandey
-	 * @since 2017-04-26
-	 */
-	private ArrayList<String> GetFiles(String a_directoryName) {
-		//Initialize and array to store file names and get the application context
-		ArrayList<String> dataFiles = new ArrayList<String>();
-		Context context = getApplicationContext();
-
-		//Create the data storage folder if it doesn't exist yet
-		File folder = context.getDir(a_directoryName, Context.MODE_PRIVATE);
-		boolean success = false;
-		if (!folder.exists()) {
-			success = folder.mkdirs();
-		} else {
-			success = true;
-		}
-		m_internalStorage = folder;
-		m_dataStorageDirectory = folder.getAbsolutePath();
-
-		//Gather the file names
-		if (success) {
-			File[] files = folder.listFiles();
-			if (files != null) {
-				for (int i = 0; i < files.length; i++)
-					dataFiles.add(files[i].getName());
-			}
-		}
-		return dataFiles;
-	}
-
-	/**
 	 * ProceedToGame() - Starts next activity and passes necessary intents to start a fresh game
 	 *
 	 * @param view button whose click instigates the function
 	 * @author Vivek Pandey
 	 * @since 2017-04-26
 	 */
-	public void ProceedToGame(View view) {
+	private void ProceedToGame(View view) {
 		Intent intent = new Intent(this, GameActivity.class);
 		intent.putExtra("startMode", "new");
 
@@ -247,5 +212,40 @@ public class HomeActivity extends Activity {
 		resized_black_circle.setBounds(0, 0, 110, 110);
 		m_radioWhite.setCompoundDrawables(resized_white_circle, null, null, null);
 		m_radioBlack.setCompoundDrawables(resized_black_circle, null, null, null);
+	}
+
+	/**
+	 * GetFiles() - Gets the names of files in a given directory and puts them into an array list
+	 *
+	 * @param a_directoryName String, name of directory whose files are to be listed
+	 * @return ArrayList that consists of all the names of files in the directory
+	 * @author Vivek Pandey
+	 * @since 2017-04-26
+	 */
+	private ArrayList<String> GetFiles(String a_directoryName) {
+		//Initialize and array to store file names and get the application context
+		ArrayList<String> dataFiles = new ArrayList<String>();
+		Context context = getApplicationContext();
+
+		//Create the data storage folder if it doesn't exist yet
+		File folder = context.getDir(a_directoryName, Context.MODE_PRIVATE);
+		boolean success = false;
+		if (!folder.exists()) {
+			success = folder.mkdirs();
+		} else {
+			success = true;
+		}
+		m_internalStorage = folder;
+		m_dataStorageDirectory = folder.getAbsolutePath();
+
+		//Gather the file names
+		if (success) {
+			File[] files = folder.listFiles();
+			if (files != null) {
+				for (int i = 0; i < files.length; i++)
+					dataFiles.add(files[i].getName());
+			}
+		}
+		return dataFiles;
 	}
 }

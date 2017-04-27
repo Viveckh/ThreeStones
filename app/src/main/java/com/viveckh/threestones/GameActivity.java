@@ -46,7 +46,7 @@ public class GameActivity extends Activity {
 
 	//Variable Declarations
 	private Bundle m_intentExtras;      //to save intent information passed from previous activty
-	final private Button[][] buttons = new Button[11][11];      //The game board in view
+	final private Button[][] m_buttons = new Button[11][11];      //The game board in view
 	private Board m_board;
 	private Human m_human;
 	private Computer m_computer;
@@ -57,9 +57,9 @@ public class GameActivity extends Activity {
 	private int m_blankPic, m_whitePic, m_blackPic, m_clearPic;
 
 	//Initializing view objects
-	private Button btnComputerPlay, btnHelp, btnSave;
-	private RadioGroup radioStonePicker;
-	TextView txtViewNotifications;
+	private Button m_btnComputerPlay, m_btnHelp, m_btnSave;
+	private RadioGroup m_radioStonePicker;
+	TextView m_txtViewNotifications;
 
 	/**
 	 * Overridden onCreate method
@@ -86,11 +86,11 @@ public class GameActivity extends Activity {
 			  getIdentifier("clear_circle", "drawable", "com.viveckh.threestones");
 
 		//Initializing class variables such that they point to their corresponding view objects
-		btnComputerPlay = (Button) findViewById(R.id.btnComputerPlay);
-		btnHelp = (Button) findViewById(R.id.btnHelp);
-		btnSave = (Button) findViewById(R.id.btnSave);
-		txtViewNotifications = (TextView) findViewById(R.id.txtViewNotifications);
-		radioStonePicker = (RadioGroup) findViewById(R.id.radioStonePicker);
+		m_btnComputerPlay = (Button) findViewById(R.id.btnComputerPlay);
+		m_btnHelp = (Button) findViewById(R.id.btnHelp);
+		m_btnSave = (Button) findViewById(R.id.btnSave);
+		m_txtViewNotifications = (TextView) findViewById(R.id.txtViewNotifications);
+		m_radioStonePicker = (RadioGroup) findViewById(R.id.radioStonePicker);
 		SetStoneChoiceUsingRadioGroupListener();
 
 		//Getting the intent from previous activity
@@ -120,12 +120,12 @@ public class GameActivity extends Activity {
 			m_human = new Human('b');
 			m_computer = new Computer('w');
 			//Selecting black stone choice by default for the human using radio button.
-			radioStonePicker.check(R.id.radioButton2);
+			m_radioStonePicker.check(R.id.radioButton2);
 		} else {
 			m_human = new Human('w');
 			m_computer = new Computer('b');
 			//Selecting white stone choice by default for the human using the radio button
-			radioStonePicker.check(R.id.radioButton1);
+			m_radioStonePicker.check(R.id.radioButton1);
 		}
 
 		//Update the available stones count if the game is being restored
@@ -170,7 +170,7 @@ public class GameActivity extends Activity {
 		}
 		//If user taps enter to perform computer move
 		if ((keyCode == KeyEvent.KEYCODE_SPACE)) {
-			btnComputerPlay.performClick();
+			m_btnComputerPlay.performClick();
 		}
 
 		return super.onKeyDown(keyCode, event);
@@ -183,9 +183,9 @@ public class GameActivity extends Activity {
 	 * @author Vivek Pandey
 	 * @since 2017-04-26
 	 */
-	public void CreateBoard() {
+	private void CreateBoard() {
 		//Handle presses on the help button
-		btnHelp.setOnClickListener(new View.OnClickListener() {
+		m_btnHelp.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				//Call computer's play button under Help mode and retrieve recommended moves
 				if (m_computer.Play(true, m_board, m_human)) {
@@ -196,14 +196,14 @@ public class GameActivity extends Activity {
 
 					Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
 						  R.anim.rotate_around_center_point);
-					buttons[m_computer.GetRecommendedRow()][m_computer.GetRecommendedColumn()].
+					m_buttons[m_computer.GetRecommendedRow()][m_computer.GetRecommendedColumn()].
 						  startAnimation(animation);
 				}
 			}
 		});
 
 		//Handle taps for Save Button by saving the game
-		btnSave.setOnClickListener(new View.OnClickListener() {
+		m_btnSave.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				SaveGame();
 			}
@@ -231,36 +231,36 @@ public class GameActivity extends Activity {
 				count = count - 11;
 			}
 			for (int j = 0; j < 11; j++) {
-				buttons[i][j] = new Button(this);
+				m_buttons[i][j] = new Button(this);
 				if (m_board.GetBlockAtLocation(i, j) == null) {
 					//Disable the unnecessary cells from the Multidimensional Board
-					buttons[i][j].setEnabled(false);
-					buttons[i][j].setBackgroundResource(R.drawable.disabled_buttons);
+					m_buttons[i][j].setEnabled(false);
+					m_buttons[i][j].setBackgroundResource(R.drawable.disabled_buttons);
 				} else {
 					//If restoring a non-empty board, ensure the buttons reflect changes
 					if (m_board.GetStoneAtLocation(i, j) == 'w') {
-						buttons[i][j].setBackgroundResource(R.drawable.white_circle);
+						m_buttons[i][j].setBackgroundResource(R.drawable.white_circle);
 					} else if (m_board.GetStoneAtLocation(i, j) == 'b') {
-						buttons[i][j].setBackgroundResource(R.drawable.black_circle);
+						m_buttons[i][j].setBackgroundResource(R.drawable.black_circle);
 					} else if (m_board.GetStoneAtLocation(i, j) == 'c') {
-						buttons[i][j].setBackgroundResource(R.drawable.clear_circle);
+						m_buttons[i][j].setBackgroundResource(R.drawable.clear_circle);
 					} else {
-						buttons[i][j].setBackgroundResource(R.drawable.blank_circle);
+						m_buttons[i][j].setBackgroundResource(R.drawable.blank_circle);
 					}
 				}
 
 
-				rowLayout.addView(buttons[i][j], p);
+				rowLayout.addView(m_buttons[i][j], p);
 
 				//Setting onclicklistener for buttons in the gameBoard
 				final int x = i;
 				final int y = j;
 				//On tapping a pouch, initiate a move on behalf of the human player
-				buttons[x][y].setOnClickListener(new OnClickListener() {
+				m_buttons[x][y].setOnClickListener(new OnClickListener() {
 					public void onClick(View v) {
 						if (m_turn == 1) {
 							//Human's turn
-							if (StoneFiller(buttons, x, y, m_stoneChoice)) {
+							if (StoneFiller(m_buttons, x, y, m_stoneChoice)) {
 								//Handing control to the other player
 								m_turn = 0;
 								UpdateGameStatusView();
@@ -272,7 +272,7 @@ public class GameActivity extends Activity {
 
 				//If computer's play button is pressed,
 				//Call computer's play function and update the view based on the move
-				btnComputerPlay.setOnClickListener(new View.OnClickListener() {
+				m_btnComputerPlay.setOnClickListener(new View.OnClickListener() {
 					public void onClick(View v) {
 						//Verify it is Computer's turn
 						if (m_turn == 0) {
@@ -291,20 +291,20 @@ public class GameActivity extends Activity {
 								//Update Opponent's score as well
 								m_human.UpdateScoreAfterMove(m_human.GetPlayerStoneColor(),
 									  rowOfPlacement, columnOfPlacement, m_board);
-								buttons[rowOfPlacement][columnOfPlacement].
+								m_buttons[rowOfPlacement][columnOfPlacement].
 									  setClickable(false);
 
 								//Set background for the button clicked
 								if (stoneOfPlacement == 'w') {
-									buttons[rowOfPlacement][columnOfPlacement].
+									m_buttons[rowOfPlacement][columnOfPlacement].
 										  setBackgroundResource(m_whitePic);
 								}
 								if (stoneOfPlacement == 'b') {
-									buttons[rowOfPlacement][columnOfPlacement].
+									m_buttons[rowOfPlacement][columnOfPlacement].
 										  setBackgroundResource(m_blackPic);
 								}
 								if (stoneOfPlacement == 'c') {
-									buttons[rowOfPlacement][columnOfPlacement].
+									m_buttons[rowOfPlacement][columnOfPlacement].
 										  setBackgroundResource(m_clearPic);
 								}
 							}
@@ -457,7 +457,7 @@ public class GameActivity extends Activity {
 	 * @since 2017-04-26
 	 */
 	private void SetStoneChoiceUsingRadioGroupListener() {
-		radioStonePicker.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+		m_radioStonePicker.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
 				switch (checkedId) {
@@ -537,7 +537,7 @@ public class GameActivity extends Activity {
 				  .replace(",", "")
 				  .replace("[", "")
 				  .replace("]", "");
-			txtViewNotifications.setText(msgToDisplay);
+			m_txtViewNotifications.setText(msgToDisplay);
 		}
 		Notifications.ClearNotificationsList();
 	}
@@ -633,16 +633,16 @@ public class GameActivity extends Activity {
 		btnComputerScore.setTypeface(tfCaviar);
 
 		//Setting font of gameplay controls
-		btnComputerPlay.setTypeface(tfSeaside);
-		btnHelp.setTypeface(tfSeaside);
-		btnSave.setTypeface(tfSeaside);
+		m_btnComputerPlay.setTypeface(tfSeaside);
+		m_btnHelp.setTypeface(tfSeaside);
+		m_btnSave.setTypeface(tfSeaside);
 		labelStonePicker.setTypeface(tfCaviar);
 		radioButton1.setTypeface(tfCaviar);
 		radioButton2.setTypeface(tfCaviar);
 		radioButton3.setTypeface(tfCaviar);
 
 		//Set font for notifications board
-		txtViewNotifications.setTypeface(tfRoboto);
+		m_txtViewNotifications.setTypeface(tfRoboto);
 
 		//If computer's turn, run MoveHighlighter animation on proper view object, make
 		//computer play button visible, hide help button, and disable radiobuttons for stone
@@ -653,8 +653,8 @@ public class GameActivity extends Activity {
 			labelComputerScore.startAnimation(turnHighlighter);
 
 			//Hide/un-hide necessary controls
-			btnComputerPlay.setVisibility(View.VISIBLE);
-			btnHelp.setVisibility(View.INVISIBLE);
+			m_btnComputerPlay.setVisibility(View.VISIBLE);
+			m_btnHelp.setVisibility(View.INVISIBLE);
 
 			//Disable radiobuttons for stone picking
 			for (int i = 0; i < radioStonePicker.getChildCount(); i++) {
@@ -675,8 +675,8 @@ public class GameActivity extends Activity {
 			labelHumanScore.startAnimation(turnHighlighter);
 
 			//Hide/un-hide necessary controls
-			btnHelp.setVisibility(View.VISIBLE);
-			btnComputerPlay.setVisibility(View.INVISIBLE);
+			m_btnHelp.setVisibility(View.VISIBLE);
+			m_btnComputerPlay.setVisibility(View.INVISIBLE);
 
 			//Enable radiobuttons for stone selection
 			for (int i = 0; i < radioStonePicker.getChildCount(); i++) {
@@ -711,7 +711,7 @@ public class GameActivity extends Activity {
 	 */
 	private void AnimateValidCells(int a_row, int a_column) {
 		//If buttons on the board are initialized, then go ahead with rest of the function
-		if (buttons[0][0] != null) {
+		if (m_buttons[0][0] != null) {
 			if (a_row >= 0 && a_column >= 0) {
 				// Prepare the animation for highlighting latest placement, it's a blinker
 				Animation moveHighlighter = new AlphaAnimation(1, 0.2f);
@@ -751,27 +751,27 @@ public class GameActivity extends Activity {
 						* then only enable blocks in 1 row and column for placement*/
 						if (doNotOpenEntireBoardForPlacement) {
 							//First blur all the buttons on the board
-							buttons[row][col].startAnimation(animation);
+							m_buttons[row][col].startAnimation(animation);
 
 							//Now, clear blur from valid row/column for next move
 							if (row == a_row || col == a_column) {
-								buttons[row][col].clearAnimation();
+								m_buttons[row][col].clearAnimation();
 							}
 
 							//Now, clear blur effect from occupied blocks as well
 							if (m_board.GetBlockAtLocation(row, col) != null
 								  && m_board.GetBlockAtLocation(row, col).IsInitialized()
 								  && m_board.GetBlockAtLocation(row, col).IsOccupied()) {
-								buttons[row][col].clearAnimation();
+								m_buttons[row][col].clearAnimation();
 							}
 						} else {
 							//Clear all forms of previous animations
-							buttons[row][col].clearAnimation();
+							m_buttons[row][col].clearAnimation();
 						}
 
 						//Now, start highlighting block where stone was last placed
 						if (row == a_row && col == a_column) {
-							buttons[row][col].startAnimation(moveHighlighter);
+							m_buttons[row][col].startAnimation(moveHighlighter);
 						}
 					}
 				}

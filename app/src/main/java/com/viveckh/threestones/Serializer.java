@@ -185,22 +185,19 @@ public class Serializer {
 					}
 
 					//Parse number of available white stones for computer
-					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Ww]hite(\\s+)[Ss]tones(.*)"))
-					{
+					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Ww]hite(\\s+)[Ss]tones(.*)")) {
 						computerWhiteStones = Integer.
 							  parseInt(line.replaceAll("[\\D]", ""));
 					}
 
 					//Parse number of available black stones for computer
-					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Bb]lack(\\s+)[Ss]tones(.*)"))
-					{
+					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Bb]lack(\\s+)[Ss]tones(.*)")) {
 						computerBlackStones = Integer.
 							  parseInt(line.replaceAll("[\\D]", ""));
 					}
 
 					//Parse number of available clear stones for computer
-					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Cc]lear(\\s+)[Ss]tones(.*)"))
-					{
+					if (line.matches("(\\s*)[Cc]omputer(\\s+)[Cc]lear(\\s+)[Ss]tones(.*)")) {
 						computerClearStones = Integer.
 							  parseInt(line.replaceAll("[\\D]", ""));
 					}
@@ -257,8 +254,7 @@ public class Serializer {
 					}
 
 					//Parse column of last placement
-					if (line.matches("(\\s*)[Ll]ast(\\s+)[Pp]lacement(\\s+)[Cc]olumn(.*)"))
-					{
+					if (line.matches("(\\s*)[Ll]ast(\\s+)[Pp]lacement(\\s+)[Cc]olumn(.*)")) {
 						//Pattern gets rid of "Any character except a digit or a '-' "
 						lastColumn = Integer.parseInt(line.replaceAll("[^\\d-]", ""));
 					}
