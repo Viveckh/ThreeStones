@@ -1,0 +1,30 @@
+Board
+x	x	x	x	b	w	b	x	x	x	x	
+x	x	x	b	b	w	w	w	x	x	x	
+x	x	b	b	b	b	w	w	w	x	x	
+x	b	b	w	b	w	w	w	n	n	x	
+b	b	b	n	w	b	w	w	n	n	n	
+n	n	n	n	n	x	n	n	n	n	n	
+n	n	n	n	n	n	n	n	n	n	n	
+x	n	n	n	n	n	n	n	n	n	x	
+x	x	n	n	n	n	n	n	n	x	x	
+x	x	x	n	n	n	n	n	x	x	x	
+x	x	x	x	n	n	n	x	x	x	x	
+
+computer stone: b
+computer score: 12
+computer wins: 0
+computer white stones: 15
+computer black stones: 0
+computer clear stones: 6
+
+human stone: w
+human score: 12
+human wins: 0
+human white stones: 1
+human black stones: 15
+human clear stones: 6
+
+last placement row: 4
+last placement column: 2
+next player: human
